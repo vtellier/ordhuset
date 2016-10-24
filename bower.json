@@ -1,10 +1,20 @@
 {
   "name": "ordhuset",
   "description": "A smart NO-EN / EN-NO dictionary.",
+  "entrypoint": "index.html",
+  "shell": "src/ordhuset-app/ordhuset-app.html",
   "main": "index.html",
   "dependencies": {
     "polymer": "Polymer/polymer#^1.4.0"
   },
+  "sources": [
+    "src/**/*",
+    "images/**/*",
+    "bower.json"
+  ],
+  "includeDependencies": [
+    "bower_components/webcomponentsjs/webcomponents-lite.min.js"
+  ],
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",

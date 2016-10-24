@@ -1,6 +1,6 @@
 {
-  "name": "ordhuset",
-  "short_name": "ordhuset",
+  "name": "Ordhuset",
+  "short_name": "Oh!",
   "description": "A smart NO-EN / EN-NO dictionary.",
   "start_url": "/",
   "display": "standalone"

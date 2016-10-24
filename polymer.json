@@ -1,0 +1,13 @@
+{
+  "entrypoint": "index.html",
+  "shell": "src/ordhuset-app/ordhuset-app.html",
+  "sources": [
+    "src/**/*",
+    "images/**/*",
+    "bower.json",
+    "manifest.json"
+  ],
+  "includeDependencies": [
+    "bower_components/webcomponentsjs/webcomponents-lite.min.js"
+  ]
+}
