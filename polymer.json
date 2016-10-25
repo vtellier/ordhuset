@@ -7,6 +7,10 @@
     "bower.json",
     "manifest.json"
   ],
+  "fragments": [
+    "src/ordhuset-app/search-page.html",
+    "src/ordhuset-app/list-page.html"
+  ],
   "includeDependencies": [
     "bower_components/webcomponentsjs/webcomponents-lite.min.js"
   ]

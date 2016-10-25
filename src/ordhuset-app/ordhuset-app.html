@@ -5,6 +5,12 @@
 <link rel="import" href="oh-toolbar.html">
 <link rel="import" href="oh-login.html">
 
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="search-page.html">
+<link rel="import" href="list-page.html">
+
 <dom-module id="ordhuset-app">
   <template>
     <style>
@@ -34,8 +40,32 @@
         signed-in="[[signedIn]]"
         disabled="[[!online]]">
     </oh-login>
+    
+    <app-location route="{{route}}"></app-location>
+    <app-route
+        route="{{route}}"
+        pattern="/:page"
+        data="{{routeData}}"
+        tail="{{subroute}}"></app-route>
+    
     <h2>Hello World!</h2>
     <p>You are online, and it's [[online]]</p>
+    
+    <iron-pages id="pages"
+        role="main"
+        selected="[[routeData.page]]"
+        selected-attribute="active"
+        attr-for-selected="name"
+        fallback-selection="search">
+      <search-page
+          name="search"
+          subroute="[[subroute]]">
+      </search-page>
+      <list-page
+          name="list"
+          subroute="[[subroute]]">
+      </list-page>
+    </iron-pages>
   </template>
 
   <script>
