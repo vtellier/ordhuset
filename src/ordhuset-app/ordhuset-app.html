@@ -1,4 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="oh-toolbar.html">
+<link rel="import" href="oh-login.html">
 
 <dom-module id="ordhuset-app">
   <template>
@@ -7,6 +10,14 @@
         display: block;
       }
     </style>
+    <firebase-app
+        name="ordhuset"
+        api-key="AIzaSyCh0p0DgdzkdGYn-nmy_KGJkWk9mr9A46w"
+        auth-domain="ordhuset-5e76d.firebaseapp.com"
+        database-url="https://ordhuset-5e76d.firebaseio.com">
+    </firebase-app>
+    <oh-toolbar></oh-toolbar>
+    <oh-login></oh-login>
     <h2>Hello [[prop1]]</h2>
   </template>
 
