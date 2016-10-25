@@ -1,0 +1,22 @@
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+
+<dom-module id="shared-styles">
+  <template>
+    <style>
+      :host {
+        display: block;
+        background-color: #e8e8e8;
+        height: 100vh;
+        @apply(--paper-font-common-base);
+        --paper-fab-background: var(--paper-teal-500);
+      }
+      paper-fab {
+        position: absolute;
+        bottom: 1em;
+        right: 1em;
+      }
+      @media (min-width: 640px) {
+      }
+    </style>
+  </template>
+</dom-module>

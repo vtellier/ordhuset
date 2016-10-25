@@ -1,5 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="oh-behavior.html">
 <link rel="import" href="oh-toolbar.html">
 <link rel="import" href="oh-login.html">
 
@@ -16,9 +18,24 @@
         auth-domain="ordhuset-5e76d.firebaseapp.com"
         database-url="https://ordhuset-5e76d.firebaseio.com">
     </firebase-app>
-    <oh-toolbar></oh-toolbar>
-    <oh-login></oh-login>
-    <h2>Hello [[prop1]]</h2>
+    <firebase-auth
+        id="auth"
+        app-name="ordhuset"
+        provider="google"
+        signed-in="{{signedIn}}"
+        user="{{user}}">
+    </firebase-auth>
+    <oh-toolbar
+        signed-in="[[signedIn]]"
+        on-sign-out="signOut">
+    </oh-toolbar>
+    <oh-login
+        on-sign-in="signIn"
+        signed-in="[[signedIn]]"
+        disabled="[[!online]]">
+    </oh-login>
+    <h2>Hello World!</h2>
+    <p>You are online, and it's [[online]]</p>
   </template>
 
   <script>
@@ -26,13 +43,11 @@
 
       is: 'ordhuset-app',
 
-      properties: {
-        prop1: {
-          type: String,
-          value: 'ordhuset-app',
-        },
-      },
-
+      behaviors: [Polymer.OrdhusetBehavior],
+      
+      signIn: function() {
+        this.$.auth.signInWithPopup();
+      }
     });
   </script>
 </dom-module>
