@@ -1,12 +1,24 @@
 
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="shared-style.html">
+
 <dom-module id="search-page">
   <template>
-    <style>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        padding: 10px;
+      }
     </style>
-    <h2>Search page!</h2>
-    <p>You are currently looking for: [[subroute.path]].</p>
+    
+    <div class="card">
+      <div class="circle">1</div>
+      <h2>Search page!</h2>
+      <p>You are currently looking for: [[subroute.path]].</p>
+    </div>
+    
   </template>
+  
   <script>
     Polymer({
       is: 'search-page',
