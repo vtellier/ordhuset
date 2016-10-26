@@ -4,32 +4,32 @@
     'use strict';
     Polymer.OrdhusetBehaviorImpl = {
       properties: {
-        editableNoteId: {
+        editableSubstantiveId: {
           type: String,
           notify: true
         }
       },
-      get notesPath() {
+      get substantivesPath() {
         return '';
       },
       get isEditable() {
         return true;
       },
-      toEditableId: function(noteId) {
-        return noteId;
+      toEditableSubstantiveId: function(substantiveId) {
+        return substantiveId;
       },
       edit: function(event) {
         if (this.isEditable) {
-          var noteElement = Polymer.dom(event).localTarget;
-          this.editableNoteId = this.toEditableId(noteElement.id);
+          var substantiveElement = Polymer.dom(event).localTarget;
+          this.editableSubstantiveId = this.toEditableId(substantiveElement.id);
           this.$.document.transactionsComplete.then(function() {
-            this.$.editor.open(noteElement);
+            this.$.editor.open(substantiveElement);
           }.bind(this));
         }
       },
       create: function() {
         if (this.isEditable) {
-          this.editableNoteId = null;
+          this.editableSubstantiveId = null;
           this.$.editor.open();
         }
       },
@@ -54,9 +54,9 @@
       },
       save: function() {
         if (this.$.document.isNew &&
-            (this.editableNote.title ||
-             this.editableNote.body)) {
-          return this.$.document.save(this.notesPath).then(function() {
+            (this.editableSubstantive.english ||
+             this.editableSubstantive.norwegian)) {
+          return this.$.document.save(this.substantivesPath).then(function() {
             this.$.document.reset();
           }.bind(this));
         }

@@ -1,5 +1,8 @@
 
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="oh-substantive-editor.html">
 <link rel="import" href="shared-style.html">
 
 
@@ -12,17 +15,49 @@
       }
     </style>
     
+    <firebase-document
+        id="document"
+        app-name="ordhuset"
+        path="[[editableSubstantiveId]]"
+        data="{{editableSubstantive}}">
+    </firebase-document>
+    
     <div class="card">
-      <div class="circle">1</div>
-      <h2>Search page!</h2>
+      <div class="circle">2</div>
+      <h2>List page!</h2>
       <p>You are currently on the list page.</p>
     </div>
+    
+    <oh-substantive-editor
+        id="editor"
+        substantive="{{editableSubstantive}}"
+        on-close="commitChange">
+    </oh-substantive-editor>
+    
+    <paper-fab
+        icon="add"
+        on-tap="create"
+        disabled="[[!online]]"
+        aria-label="Add a word">
+    </paper-fab>
+    
   </template>
   <script>
     Polymer({
       is: 'list-page',
+      
+      behaviors: [Polymer.OrdhusetBehavior],
+      
       properties: {
           subroute: Object
+      },
+      
+      get substantivesPath() {
+        return '/substantives/'/* + this.user.uid*/;
+      },
+  
+      toEditableId: function(substantiveId) {
+        return this.substantivesPath + '/' + substantiveId;
       }
     });
   </script>
