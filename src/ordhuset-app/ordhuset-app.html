@@ -1,6 +1,8 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-app.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../../bower_components/platinum-sw/platinum-sw-elements.html">
+
 <link rel="import" href="oh-behavior.html">
 <link rel="import" href="oh-login.html">
 
@@ -67,7 +69,6 @@
       }
     </style>
     
-    
     <!-- Firebase -->
     <firebase-app
         name="ordhuset"
@@ -82,6 +83,18 @@
         signed-in="{{signedIn}}"
         user="{{user}}">
     </firebase-auth>
+    
+    <!-- Servie worker -->
+    <platinum-sw-register
+        auto-register
+        skip-waiting
+        clients-claim
+        reload-on-install
+        href="sw-import.js">
+      <platinum-sw-cache
+          default-cache-strategy="networkFirst">
+      </platinum-sw-cache>
+    </platinum-sw-register>
     
     <!-- Routing -->
     <app-location route="{{route}}"></app-location>
