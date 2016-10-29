@@ -1,0 +1,132 @@
+
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="oh-substantive.html">
+<link rel="import" href="shared-style.html">
+
+<dom-module id="oh-substantive-editor">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        padding: 10px;
+      }
+    </style>
+    
+    <div class="card">
+      <oh-substantive
+          id="substantive"
+          english="[[substantive.english]]"
+          norwegian="[[substantive.norwegian]]"
+          editable>
+      </oh-substantive>
+      <div class="controls">
+        <paper-button on-tap="delete">Delete</paper-button>
+        <paper-button on-tap="save">Done</paper-button>
+      </div>
+    </div>
+    
+  </template>
+  
+  <script>
+    Polymer({
+      is: 'oh-substantive-editor',
+      
+      properties: {
+        substantive: {
+          type: Object,
+          notify: true
+        },
+        opened: {
+          type: Boolean,
+          reflectToAttribute: true,
+          readOnly: true,
+          value: false
+        },
+      },
+      
+      open: function(substantiveElement) {
+        this._setOpened(true);
+        this.__editedSubstantiveElement = substantiveElement;
+        if (substantiveElement) {
+          substantiveElement.style.opacity = 0;
+          //this.transitionInFrom(substantiveElement.getBoundingClientRect());
+        } else {
+          this.create();
+        }
+      },
+      
+      close: function(detail) {
+        if (this.__editedSubstantiveElement) {
+          this.__editedSubstantiveElement.style.opacity = 1;
+          this.__editedSubstantiveElement = null;
+        }
+        this.fire('close', detail, { bubbles: false });
+        /*this.transitionOut().then(function() {
+          Polymer.dom(this).classList.remove('open');
+          this._setOpened(false);
+        }.bind(this));*/
+      },
+      
+      create: function() {
+        this._setOpened(true);
+        this.substantive = { english: 'en', norwegian: 'no' };
+        //this.transitionInFrom(this.getBoundingClientRect());
+      },
+      
+      save: function() {
+        this.close('save');
+      },
+      
+      delete: function() {
+        this.close('delete');
+      },
+      
+      /*
+      transitionInFrom: function(rect) {
+        var targetRect = this.getBoundingClientRect();
+        var targetLeft = targetRect.width > 500 ?
+            targetRect.width / 2 - 240 : 10;
+        var targetWidth = targetRect.width > 500 ?
+            '480px' : 'calc(100vw - 20px)'
+        var noteAnimation = this.$.substantive.animate([{
+          transform: `translate(${rect.left}px,${rect.top - 46}px)`,
+          width: `${rect.width}px`,
+          easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
+        }, {
+          transform: `translate(${targetLeft}px, 0px)`,
+          width: targetWidth
+        }], 500);
+        var backgroundAnimation = this.$.background.animate([{
+          transform: `translate(${rect.left + rect.width / 2 - 128}px, ${rect.top - 46 + rect.height / 2 - 128}px) scale(0.1)`,
+          easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
+        }, {
+          transform: `scale(${targetRect.width / 256 * 4})`
+        }], 800);
+        noteAnimation.addEventListener('finish', function() {
+          Polymer.dom(this).classList.add('open');
+        }.bind(this));
+      },
+      
+      transitionOut: function() {
+        var animation = this.animate([{
+          opacity: 1,
+          easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
+        }, {
+          opacity: 0
+        }], 300);
+        this.$.substantive.animate([{
+          transform: 'translateY(0) scale(1)',
+          opacity: 1,
+          easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
+        }, {
+          transform: 'translateY(10px) scale(0.9)',
+          opacity: 0
+        }], 500);
+        return new Promise(function(resolve) {
+          animation.addEventListener('finish', resolve);
+        }.bind(this));
+      }
+      */
+    });
+  </script>
+</dom-module>
