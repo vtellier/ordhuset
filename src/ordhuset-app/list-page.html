@@ -1,5 +1,6 @@
 
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="oh-substantive-editor.html">
@@ -22,10 +23,37 @@
         data="{{editableSubstantive}}">
     </firebase-document>
     
+    <firebase-query
+        id="query"
+        app-name="ordhuset"
+        path="/substantives"
+        data="{{data}}">
+    </firebase-query>
+    
     <div class="card">
       <div class="circle">2</div>
       <h2>List page!</h2>
       <p>You are currently on the list page.</p>
+    </div>
+    
+    <div class="card">
+      <table>
+        <tr>
+          <th>English</th>
+          <th>Norwegian</th>
+        </tr>
+        <template is="dom-repeat" items="{{data}}" as="substantive">
+          <tr>
+            <td>{{substantive.english}}</td>
+            <td>{{substantive.norwegian}}</td>
+          <!--<oh-substantive
+              english="{{substantive.english}}"
+              norwegian="{{substantive.norwegian}}"
+              on-tap="edit">
+          </oh-substantive>-->
+          </tr>
+        </template>
+      </table>
     </div>
     
     <oh-substantive-editor
@@ -49,7 +77,22 @@
       behaviors: [Polymer.OrdhusetBehavior],
       
       properties: {
-          subroute: Object
+          subroute: Object,
+          data: {
+            type: Object,
+            observer: 'dataChanged'
+          },
+      },
+      
+      dataChanged: function (newData, oldData) {
+        //alert("data changed! " + JSON.stringify(newData) + " ; " + JSON.stringify(oldData));
+      },
+      
+      ready: function() {
+        if(this.$.query && this.$.query.refresh) {
+          alert("created");
+          this.$.query.refresh();
+        }
       },
       
       get substantivesPath() {
