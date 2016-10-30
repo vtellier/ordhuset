@@ -12,26 +12,19 @@
       get substantivesPath() {
         return '';
       },
-      get isEditable() {
-        return true;
-      },
       toEditableSubstantiveId: function(substantiveId) {
         return substantiveId;
       },
       edit: function(event) {
-        if (this.isEditable) {
-          var substantiveElement = Polymer.dom(event).localTarget;
-          this.editableSubstantiveId = this.toEditableId(substantiveElement.id);
-          this.$.document.transactionsComplete.then(function() {
-            this.$.editor.open(substantiveElement);
-          }.bind(this));
-        }
+        var substantiveElement = Polymer.dom(event).localTarget;
+        this.editableSubstantiveId = this.toEditableId(substantiveElement.id);
+        this.$.document.transactionsComplete.then(function() {
+          this.$.editor.open(substantiveElement);
+        }.bind(this));
       },
       create: function() {
-        if (this.isEditable) {
-          this.editableSubstantiveId = null;
-          this.$.editor.open();
-        }
+        this.editableSubstantiveId = null;
+        this.$.editor.open();
       },
       commitChange: function(event) {
         var changeCommits;
