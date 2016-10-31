@@ -35,6 +35,9 @@
           case 'delete':
             changeCommits = this.delete();
             break;
+          case 'cancel':
+            changeCommits = this.cancel();
+            break;
           default:
             changeCommits = Promise.resolve();
             break;
@@ -58,6 +61,13 @@
       delete: function() {
         if (!this.$.document.isNew) {
           this.$.document.destroy();
+        }
+        return Promise.resolve();
+      },
+      cancel: function() {
+        if(this.editableSubstantive.english ||
+           this.editableSubstantive.norwegian){
+          this.editableSubstantive = null;
         }
         return Promise.resolve();
       },
