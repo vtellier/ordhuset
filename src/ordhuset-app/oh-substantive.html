@@ -1,6 +1,6 @@
 <link rel="import" href="../../bower_components/paper-styles/shadow.html">
 <link rel="import" href="../../bower_components/paper-styles/typography.html">
-<link rel="import" href="../../bower_components/iron-input/iron-input.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
 
 <dom-module id="oh-substantive">
   <template>
@@ -54,16 +54,22 @@
     </style>
     
     <template is="dom-if" if="[[editable]]">
-      <input
-          is="iron-input"
+      <paper-input
+          label="Type your word"
+          always-float-label
           placeholder="English"
-          bind-value="{{english}}">
-      </input>
-      <input
-          is="iron-input"
+          required auto-validate
+          error-message="Needs some text!"
+          value="{{english}}">
+      </paper-input>
+      <paper-input
+          label="Type the translation"
+          always-float-label
           placeholder="Norwegian"
-          bind-value="{{norwegian}}">
-      </input>
+          required auto-validate
+          error-message="Needs some text!"
+          value="{{norwegian}}">
+      </paper-input>
     </template>
     
     <template is="dom-if" if="[[!editable]]">
