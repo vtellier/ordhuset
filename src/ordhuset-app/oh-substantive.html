@@ -4,7 +4,7 @@
 
 <dom-module id="oh-substantive">
   <template>
-    <style>
+    <style include="shared-styles">
       :host {
         display: block;
         box-sizing: border-box;
@@ -14,12 +14,8 @@
         @apply(--paper-font-common-base);
         @apply(--shadow-elevation-2dp);
         border-radius: 2px;
-        --iron-autogrow-textarea: {
-          margin: 0;
-          padding: 0;
-          font-family: 'Roboto Slab', Times New Roman, serif;
-          white-space: pre-wrap;
-        }
+        clear:both;
+        display: table-row;
       }
       .hidden {
         display: none;
@@ -54,33 +50,24 @@
     </style>
     
     <template is="dom-if" if="[[editable]]">
-      <paper-input
-          label="Type your word"
-          always-float-label
-          placeholder="English"
-          required auto-validate
-          error-message="Needs some text!"
-          value="{{english}}">
-      </paper-input>
-      <paper-input
-          label="Type the translation"
-          always-float-label
-          placeholder="Norwegian"
-          required auto-validate
-          error-message="Needs some text!"
-          value="{{norwegian}}">
-      </paper-input>
+      
     </template>
     
     <template is="dom-if" if="[[!editable]]">
-      <tr>
-        <td>{{english}}</td>
-        <td>{{norwegian}}</td>
-        <td>
-          <iron-icon icon="icons:cancel" on-tap="delete"></iron-icon>
-          <iron-icon icon="icons:create" on-tap="edit"></iron-icon>
-        </td>
-      </tr>
+      <div class="cell">{{english}}</div>
+      <div class="cell">{{norwegian}}</div>
+      <div class="cell">
+        <paper-icon-button
+            icon="icons:cancel"
+            title="remove"
+            on-tap="delete">
+        </paper-icon-button>
+        <paper-icon-button
+            icon="icons:create"
+            title="create"
+            on-tap="edit">
+        </paper-icon-button>
+      </div>
     </template>
 
   </template>
@@ -107,6 +94,24 @@
           type: Number,
           value: 0
         }
+      },
+      edit: function() {
+        this.fire('edit',
+          {
+            "english":this.english,
+            "norwegian":this.norwegian
+          },
+          { bubbles: false }
+        );
+      },
+      delete: function() {
+        this.fire('delete',
+          {
+            "english":this.english,
+            "norwegian":this.norwegian
+          },
+          { bubbles: false }
+        );
       },
       emptyClass: function(content) {
         return !content ? 'hidden' : '';

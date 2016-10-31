@@ -29,12 +29,22 @@
     </style>
     
     <div class="card">
-      <oh-substantive
-          id="substantive"
-          english="{{substantive.english}}"
-          norwegian="{{substantive.norwegian}}"
-          editable>
-      </oh-substantive>
+      <paper-input
+          label="Type your word"
+          always-float-label
+          placeholder="English"
+          required auto-validate
+          error-message="Needs some text!"
+          value="{{substantive.english}}">
+      </paper-input>
+      <paper-input
+          label="Type the translation"
+          always-float-label
+          placeholder="Norwegian"
+          required auto-validate
+          error-message="Needs some text!"
+          value="{{substantive.norwegian}}">
+      </paper-input>
       <div class="controls">
         <paper-button on-tap="save">Done</paper-button>
         <paper-button on-tap="cancel">Cancel</paper-button>

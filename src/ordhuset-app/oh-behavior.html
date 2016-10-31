@@ -10,7 +10,7 @@
         }
       },
       get substantivesPath() {
-        return '';
+        return '/substantives/';
       },
       toEditableSubstantiveId: function(substantiveId) {
         return substantiveId;
@@ -33,7 +33,7 @@
             changeCommits = this.save();
             break;
           case 'delete':
-            changeCommits = this.delete();
+            changeCommits = this.delete(event.detail);
             break;
           case 'cancel':
             changeCommits = this.cancel();
@@ -52,14 +52,16 @@
         if (this.$.document.isNew &&
             (this.editableSubstantive.english ||
              this.editableSubstantive.norwegian)) {
-          return this.$.document.save(this.substantivesPath).then(function() {
+          return this.$.document.save(this.substantivesPath, this.editableSubstantive.norwegian).then(function() {
             this.$.document.reset();
           }.bind(this));
         }
         return Promise.resolve();
       },
-      delete: function() {
-        if (!this.$.document.isNew) {
+      delete: function(word) {
+        this.editableSubstantiveId = this.substantivesPath + word.norwgian;
+        alert(JSON.stringify(word));
+        if (word && !this.$.document.isNew) {
           this.$.document.destroy();
         }
         return Promise.resolve();

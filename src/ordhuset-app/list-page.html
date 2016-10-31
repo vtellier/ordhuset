@@ -38,22 +38,21 @@
     </div>
     
     <div class="card">
-      <table>
-        <tr>
-          <th>English</th>
-          <th>Norwegian</th>
-        </tr>
+      <div class="table">
+        <div class=row>
+          <div class="cell">English</div>
+          <div class="cell">Norwegian</div>
+          <div class="cell">Action</div>
+        </div>
         <template is="dom-repeat" items="{{data}}" as="substantive">
-          <tr>
-            <td>{{substantive.english}}</td>
-            <td>{{substantive.norwegian}}</td>
-            <td>
-              <iron-icon icon="icons:cancel" on-tap="delete"></iron-icon>
-              <iron-icon icon="icons:create" on-tap="edit"></iron-icon>
-            </td>
-          </tr>
+          <oh-substantive
+              english="{{substantive.english}}"
+              norwegian="{{substantive.norwegian}}"
+              on-edit="commitChange"
+              on-delete="commitChange">
+          </oh-substantive>
         </template>
-      </table>
+      </div>
     </div>
     
     <oh-substantive-editor
@@ -93,10 +92,6 @@
           alert("created");
           this.$.query.refresh();
         }
-      },
-      
-      get substantivesPath() {
-        return '/substantives/'/* + this.user.uid*/;
       },
   
       toEditableId: function(substantiveId) {
