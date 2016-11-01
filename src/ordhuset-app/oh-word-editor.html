@@ -22,7 +22,7 @@
       :host(.open) {
         background-color: var(--paper-red-800);
       }
-      :host(.open) oh-substantive {
+      :host(.open) oh-word {
         position: relative;
         margin: auto;
       }
@@ -35,7 +35,7 @@
           placeholder="English"
           required auto-validate
           error-message="Needs some text!"
-          value="{{substantive.english}}">
+          value="{{word.english}}">
       </paper-input>
       <paper-input
           label="Type the translation"
@@ -43,7 +43,7 @@
           placeholder="Norwegian"
           required auto-validate
           error-message="Needs some text!"
-          value="{{substantive.norwegian}}">
+          value="{{word.norwegian}}">
       </paper-input>
       <div class="controls">
         <paper-button on-tap="save">Done</paper-button>
@@ -58,7 +58,7 @@
       is: 'oh-word-editor',
       
       properties: {
-        substantive: {
+        word: {
           type: Object,
           notify: true
         },
@@ -84,8 +84,7 @@
       
       create: function() {
         this._setOpened(true);
-        this.substantive = { english: '', norwegian: '' };
-        //this.transitionInFrom(this.getBoundingClientRect());
+        this.word = { english: '', norwegian: '' };
         Polymer.dom(this).classList.add('open');
       },
       
