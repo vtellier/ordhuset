@@ -45,14 +45,14 @@
           <oh-word
               english="{{word.english}}"
               norwegian="{{word.norwegian}}"
-              on-edit="commitChange"
+              on-edit="edit"
               on-delete="commitChange">
           </oh-word>
         </template>
       </div>
     </div>
     
-    <oh-word-editor id="editor"></oh-word-editor>
+    <oh-word-editor id="editor" word="{{editableWord}}"></oh-word-editor>
     
     <paper-fab
         icon="add"
@@ -90,7 +90,12 @@
       create: function() {
         this.$.editor.open('create');
       },
-  
+      
+      edit: function(event) {
+        this.editableWord = event.detail;
+        this.$.editor.open('edit');
+      },
+      
       toEditableId: function(substantiveId) {
         return this.substantivesPath + '/' + substantiveId;
       }

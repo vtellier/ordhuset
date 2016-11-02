@@ -103,6 +103,10 @@
         this.muteValidation = true;
       },
       
+      edit: function() {
+        this.editableWord = this.word;
+      },
+      
       save: function() {
         if (this.$.document.isNew &&
             (this.word.english ||
@@ -125,6 +129,10 @@
       
       cancel: function() {
         this.close('cancel');
+      },
+      
+      wordPath: function() {
+        return '/no-en/' + editableWord.norwegian;
       }
     });
   </script>
