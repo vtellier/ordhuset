@@ -81,9 +81,14 @@
         },
       },
       
-      open: function() {
+      open: function(action) {
+        if(action == 'create')
+          this.create();
+        else if(action == 'edit')
+          this.edit();
+        
         this._setOpened(true);
-        this.create();
+        Polymer.dom(this).classList.add('open');
       },
       
       close: function() {
@@ -92,12 +97,10 @@
       },
       
       create: function() {
-        this._setOpened(true);
         this.muteValidation = false;
         this.set('word.norwegian', '');
         this.set('word.english', '');
         this.muteValidation = true;
-        Polymer.dom(this).classList.add('open');
       },
       
       save: function() {

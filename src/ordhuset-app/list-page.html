@@ -15,6 +15,10 @@
         display: block;
         padding: 10px;
       }
+      
+      .table {
+        width: 100%;
+      }
     </style>
     
     <firebase-query
@@ -33,9 +37,9 @@
     <div class="card">
       <div class="table">
         <div class=row>
-          <div class="cell">English</div>
-          <div class="cell">Norwegian</div>
-          <div class="cell">Action</div>
+          <div class="cell center">English</div>
+          <div class="cell center">Norwegian</div>
+          <div class="cell center">Action</div>
         </div>
         <template is="dom-repeat" items="{{data}}" as="word">
           <oh-word
@@ -84,7 +88,7 @@
       },
       
       create: function() {
-        this.$.editor.open();
+        this.$.editor.open('create');
       },
   
       toEditableId: function(substantiveId) {
