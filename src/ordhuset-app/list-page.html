@@ -37,10 +37,10 @@
           <div class="cell">Norwegian</div>
           <div class="cell">Action</div>
         </div>
-        <template is="dom-repeat" items="{{data}}" as="substantive">
+        <template is="dom-repeat" items="{{data}}" as="word">
           <oh-word
-              english="{{substantive.english}}"
-              norwegian="{{substantive.norwegian}}"
+              english="{{word.english}}"
+              norwegian="{{word.norwegian}}"
               on-edit="commitChange"
               on-delete="commitChange">
           </oh-word>
@@ -48,9 +48,7 @@
       </div>
     </div>
     
-    <oh-word-editor
-        id="editor">
-    </oh-word-editor>
+    <oh-word-editor id="editor"></oh-word-editor>
     
     <paper-fab
         icon="add"
@@ -86,7 +84,6 @@
       },
       
       create: function() {
-        this.editableSubstantiveId = null;
         this.$.editor.open();
       },
   

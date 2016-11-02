@@ -41,7 +41,8 @@
           label="Type your word"
           always-float-label
           placeholder="English"
-          required auto-validate
+          required
+          auto-validate$="[[muteValidation]]"
           error-message="Needs some text!"
           value="{{word.english}}">
       </paper-input>
@@ -49,7 +50,8 @@
           label="Type the translation"
           always-float-label
           placeholder="Norwegian"
-          required auto-validate
+          required
+          auto-validate$="[[muteValidation]]"
           error-message="Needs some text!"
           value="{{word.norwegian}}">
       </paper-input>
@@ -68,7 +70,8 @@
       properties: {
         word: {
           type: Object,
-          notify: true
+          notify: true,
+          value: { norwegian: '', english: '' }
         },
         opened: {
           type: Boolean,
@@ -90,7 +93,10 @@
       
       create: function() {
         this._setOpened(true);
-        this.word = { norwegian: null, english: null };
+        this.muteValidation = false;
+        this.set('word.norwegian', '');
+        this.set('word.english', '');
+        this.muteValidation = true;
         Polymer.dom(this).classList.add('open');
       },
       
@@ -101,6 +107,7 @@
           this.editableWord = this.word;
           return this.$.document.save('/no-en/', this.editableWord.norwegian).then(function() {
             this.$.document.reset().then(function(){
+              this.editableWord = null;
               this.close();
             }.bind(this));
           }.bind(this)).catch(function () {
