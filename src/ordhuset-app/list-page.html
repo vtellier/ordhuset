@@ -17,17 +17,10 @@
       }
     </style>
     
-    <firebase-document
-        id="document"
-        app-name="ordhuset"
-        path="[[editableSubstantiveId]]"
-        data="{{editableSubstantive}}">
-    </firebase-document>
-    
     <firebase-query
         id="query"
         app-name="ordhuset"
-        path="/substantives"
+        path="/no-en"
         data="{{data}}">
     </firebase-query>
     
@@ -56,9 +49,7 @@
     </div>
     
     <oh-word-editor
-        id="editor"
-        word="{{editableSubstantive}}"
-        on-close="commitChange">
+        id="editor">
     </oh-word-editor>
     
     <paper-fab
@@ -92,6 +83,11 @@
           alert("created");
           this.$.query.refresh();
         }
+      },
+      
+      create: function() {
+        this.editableSubstantiveId = null;
+        this.$.editor.open();
       },
   
       toEditableId: function(substantiveId) {

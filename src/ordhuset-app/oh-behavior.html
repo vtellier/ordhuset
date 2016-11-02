@@ -22,10 +22,6 @@
           this.$.editor.open(substantiveElement);
         }.bind(this));
       },
-      create: function() {
-        this.editableSubstantiveId = null;
-        this.$.editor.open();
-      },
       commitChange: function(event) {
         var changeCommits;
         switch (event.detail) {
@@ -48,6 +44,8 @@
           }.bind(this));
         }
       },
+      
+      // todo remove
       save: function() {
         if (this.$.document.isNew &&
             (this.editableSubstantive.english ||

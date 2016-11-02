@@ -28,7 +28,15 @@
       }
     </style>
     
+    <firebase-document
+        id="document"
+        app-name="ordhuset"
+        path="[[wordPath]]"
+        data="{{editableWord}}">
+    </firebase-document>
+    
     <div class="card">
+      <h2>Add a word</h2>
       <paper-input
           label="Type your word"
           always-float-label
@@ -75,21 +83,34 @@
         this.create();
       },
       
-      close: function(detail) {
-        this.fire('close', detail, { bubbles: false });
-        
+      close: function() {
         Polymer.dom(this).classList.remove('open');
         this._setOpened(false);
       },
       
       create: function() {
         this._setOpened(true);
-        this.word = { english: '', norwegian: '' };
+        this.word = { norwegian: null, english: null };
         Polymer.dom(this).classList.add('open');
       },
       
       save: function() {
-        this.close('save');
+        if (this.$.document.isNew &&
+            (this.word.english ||
+             this.word.norwegian)) {
+          this.editableWord = this.word;
+          return this.$.document.save('/no-en/', this.editableWord.norwegian).then(function() {
+            this.$.document.reset().then(function(){
+              this.close();
+            }.bind(this));
+          }.bind(this)).catch(function () {
+            alert("Unable to save the word");
+          });
+        }
+        
+        return Promise.resolve().then(function() {
+              this.close();
+            }.bind(this));
       },
       
       cancel: function() {
