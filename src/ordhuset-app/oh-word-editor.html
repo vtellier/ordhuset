@@ -1,5 +1,6 @@
 
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-a11y-keys/iron-a11y-keys.html">
 <link rel="import" href="oh-word.html">
 <link rel="import" href="shared-style.html">
 
@@ -35,9 +36,13 @@
         data="{{editableWord}}">
     </firebase-document>
     
+    <iron-a11y-keys id="a11y" keys="enter"
+                on-keys-pressed="save"></iron-a11y-keys>
+    
     <div class="card">
       <h2>Add a word</h2>
       <paper-input
+          id"englishInput"
           label="Type your word"
           always-float-label
           placeholder="English"
@@ -118,7 +123,7 @@
               this.close();
             }.bind(this));
           }.bind(this)).catch(function () {
-            alert("Unable to save the word");
+            console.warn("Unable to save the word");
           });
         }
         
