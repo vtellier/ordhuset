@@ -41,7 +41,7 @@
               english="{{word.english}}"
               norwegian="{{word.norwegian}}"
               on-edit="edit"
-              on-delete="commitChange">
+              on-delete="delete">
           </oh-word>
         </template>
       </div>
@@ -67,12 +67,16 @@
           subroute: Object,
           data: {
             type: Object,
-            observer: 'dataChanged'
+          },
+          editableWord: {
+            type: Object,
+            notify: true,
+            //observer: 'dataChanged'
           },
       },
       
       dataChanged: function (newData, oldData) {
-        //alert("data changed! " + JSON.stringify(newData) + " ; " + JSON.stringify(oldData));
+        alert("data changed! " + JSON.stringify(newData) + " ; " + JSON.stringify(oldData));
       },
       
       ready: function() {
@@ -89,6 +93,11 @@
       edit: function(event) {
         this.editableWord = event.detail;
         this.$.editor.open('edit');
+      },
+      
+      delete: function(event) {
+        this.editableWord = event.detail;
+        this.$.editor.delete();
       },
       
       toEditableId: function(substantiveId) {

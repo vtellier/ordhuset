@@ -77,7 +77,11 @@
         word: {
           type: Object,
           notify: true,
-          value: { norwegian: '', english: '' }
+          value: { norwegian: '', english: '' },
+          observer: 'observerWord'
+        },
+        editableWord: {
+          type: Object,
         },
         opened: {
           type: Boolean,
@@ -85,6 +89,12 @@
           readOnly: true,
           value: false
         },
+        wordPath: {
+          type: String,
+          reflectToAttribute: true,
+          computed: 'computeWordPath(word)',
+          observer: 'observerWordPath',
+        }
       },
       
       open: function(action) {
@@ -113,6 +123,18 @@
         this.editableWord = this.word;
       },
       
+      delete: function() {
+        this.editableWord = this.word;
+        return this.$.document.destroy().then(function() {
+          this.$.document.reset().then(function(){
+            this.editableWord = null;
+            this.close();
+          }.bind(this));
+        }.bind(this)).catch(function () {
+          console.warn("Unable to destroy the word");
+        });
+      },
+      
       save: function() {
         if (this.$.document.isNew &&
             (this.word.english ||
@@ -137,8 +159,22 @@
         this.close('cancel');
       },
       
-      wordPath: function() {
-        return '/no-en/' + editableWord.norwegian;
+      // Observers
+      
+      observerWord: function (newData, oldData) {
+        console.log("WORD changed:\nOld: " + JSON.stringify(oldData) + "\nNew: " + JSON.stringify(newData));
+      },
+      
+      observerWordPath: function (newData, oldData) {
+        console.log("WORD PATH changed:\nOld: " + JSON.stringify(oldData) + "\nNew: " + JSON.stringify(newData));
+      },
+      
+      // Compute functions
+      
+      computeWordPath: function(word) {
+        // Never return if the key is null, we don't want to delete the whole tree.
+        if(word.norwegian)
+          return '/no-en/' + word.norwegian;
       }
     });
   </script>
