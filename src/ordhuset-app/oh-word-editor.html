@@ -42,17 +42,7 @@
     <div class="card">
       <h2>Add a word</h2>
       <paper-input
-          id"englishInput"
-          label="Type your word"
-          always-float-label
-          placeholder="English"
-          required
-          autofocus
-          auto-validate$="[[muteValidation]]"
-          error-message="Needs some text!"
-          value="{{word.english}}">
-      </paper-input>
-      <paper-input
+          id="norwegianInput"
           label="Type the translation"
           always-float-label
           placeholder="Norwegian"
@@ -60,6 +50,16 @@
           auto-validate$="[[muteValidation]]"
           error-message="Needs some text!"
           value="{{word.norwegian}}">
+      </paper-input>
+      <paper-input
+          id="englishInput"
+          label="Type your word"
+          always-float-label
+          placeholder="English"
+          required
+          auto-validate$="[[muteValidation]]"
+          error-message="Needs some text!"
+          value="{{word.english}}">
       </paper-input>
       <div class="controls">
         <paper-button on-tap="save">Done</paper-button>
@@ -86,11 +86,13 @@
         opened: {
           type: Boolean,
           reflectToAttribute: true,
+          notify: true,
           readOnly: true,
-          value: false
+          value: false,
         },
         wordPath: {
           type: String,
+          readOnly: true,
           reflectToAttribute: true,
           computed: 'computeWordPath(word)',
           observer: 'observerWordPath',
@@ -104,6 +106,7 @@
           this.edit();
         
         this._setOpened(true);
+        this.$.norwegianInput.$.input.focus();
         Polymer.dom(this).classList.add('open');
       },
       
@@ -114,8 +117,7 @@
       
       create: function() {
         this.muteValidation = false;
-        this.set('word.norwegian', '');
-        this.set('word.english', '');
+        this.word = { norwegian: '', english: '' };
         this.muteValidation = true;
       },
       
@@ -124,8 +126,10 @@
       },
       
       delete: function() {
+        console.log("Removing a word which path is " + this.wordPath);
         this.editableWord = this.word;
         return this.$.document.destroy().then(function() {
+          console.log("deletion seems a success");
           this.$.document.reset().then(function(){
             this.editableWord = null;
             this.close();
@@ -136,18 +140,34 @@
       },
       
       save: function() {
-        if (this.$.document.isNew &&
-            (this.word.english ||
-             this.word.norwegian)) {
-          this.editableWord = this.word;
-          return this.$.document.save('/no-en/', this.editableWord.norwegian).then(function() {
-            this.$.document.reset().then(function(){
-              this.editableWord = null;
-              this.close();
-            }.bind(this));
-          }.bind(this)).catch(function () {
-            console.warn("Unable to save the word");
-          });
+        if (this.word.english ||
+            this.word.norwegian) {
+          if (this.$.document.isNew) {
+            console.log("Inserting a new word: " + this.word.norwegian);
+            this.editableWord = this.word;
+            return this.$.document.save('/no-en/', this.editableWord.norwegian).then(function() {
+              this.$.document.reset().then(function(){
+                this.editableWord = null;
+                this.close();
+              }.bind(this));
+            }.bind(this)).catch(function () {
+              console.warn("Unable to save the word");
+            });
+          }
+          else {
+            console.log("Modifying a word: " + this.editableWord.norwegian + " will becomme " + this.word.norwegian);
+            return this.$.document.destroy().then(function() {
+              this.$.document.reset().then(function(){
+                this.editableWord = this.word;
+                this.save();
+              }.bind(this));
+            }.bind(this)).catch(function () {
+              console.warn("Unable to destroy the word in order to reinsert it updated afterward");
+            });
+          }
+        }
+        else {
+          console.warn("Tried to push an emptyy word in database");
         }
         
         return Promise.resolve().then(function() {

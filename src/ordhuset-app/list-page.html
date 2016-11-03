@@ -13,7 +13,8 @@
     <style include="shared-styles">
       :host {
         display: block;
-        padding: 10px;
+        padding: 8px 8px 68px 8px;
+        
       }
       
       .table {
@@ -30,10 +31,10 @@
     
     <div class="card">
       <h2>List</h2>
-      <div class="table">
+      <div class$="table {{showHideList(editorOpened)}}">
         <div class=row>
-          <div class="cell center">English</div>
           <div class="cell center">Norwegian</div>
+          <div class="cell center">English</div>
           <div class="cell center">Action</div>
         </div>
         <template is="dom-repeat" items="{{data}}" as="word">
@@ -47,7 +48,11 @@
       </div>
     </div>
     
-    <oh-word-editor id="editor" word="{{editableWord}}"></oh-word-editor>
+    <oh-word-editor
+        id="editor"
+        word="{{editableWord}}"
+        opened="{{editorOpened}}">
+    </oh-word-editor>
     
     <paper-fab
         icon="add"
@@ -88,6 +93,10 @@
       
       create: function() {
         this.$.editor.open('create');
+      },
+      
+      showHideList: function(show) {
+        return show ? 'hidden' : '';
       },
       
       edit: function(event) {
