@@ -33,14 +33,13 @@
       <h2>List</h2>
       <div class$="table {{showHideList(editorOpened)}}">
         <div class=row>
-          <div class="cell center">Norwegian</div>
-          <div class="cell center">English</div>
+          <div class="cell center">Word</div>
+          <div class="cell center">Classes</div>
           <div class="cell center">Action</div>
         </div>
         <template is="dom-repeat" items="{{data}}" as="word">
           <oh-word
-              english="{{word.english}}"
-              norwegian="{{word.norwegian}}"
+              word="[[word]]"
               on-edit="edit"
               on-delete="delete">
           </oh-word>
@@ -100,6 +99,7 @@
       },
       
       edit: function(event) {
+        console.log("Gonna edit " + JSON.stringify(event.detail.word));
         this.editableWord = event.detail;
         this.$.editor.open('edit');
       },

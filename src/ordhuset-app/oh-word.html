@@ -49,81 +49,46 @@
       }
     </style>
     
-    <template is="dom-if" if="[[editable]]">
-      
-    </template>
-    
-    <template is="dom-if" if="[[!editable]]">
-      <div class="cell">{{norwegian}}</div>
-      <div class="cell">{{english}}</div>
-      <div class="cell center">
-        <paper-icon-button
-            icon="icons:cancel"
-            title="remove"
-            on-tap="delete">
-        </paper-icon-button>
-        <paper-icon-button
-            icon="icons:create"
-            title="create"
-            on-tap="edit">
-        </paper-icon-button>
-      </div>
-    </template>
+    <div class="cell">{{word.norwegian}}</div>
+    <div class="cell">
+      <template is="dom-if" if="[[word.isSubstantive]]">substantive</template>
+      <template is="dom-if" if="[[word.isVerb]]">verb</template>
+      <template is="dom-if" if="[[word.isAdjective]]">adjective</template>
+    </div>
+    <div class="cell center">
+      <paper-icon-button
+          icon="icons:cancel"
+          title="remove"
+          on-tap="delete">
+      </paper-icon-button>
+      <paper-icon-button
+          icon="icons:create"
+          title="create"
+          on-tap="edit">
+      </paper-icon-button>
+    </div>
 
   </template>
   <script>
     Polymer({
       is: 'oh-word',
       properties: {
-        editable: {
-          type: Boolean,
-          reflectToAttribute: true,
-          value: false
+        word: {
+          type: Object,
+          notify: false,
+          readOnly: false,
         },
-        english: {
-          type: String,
-          notify: true,
-          value: ''
-        },
-        norwegian: {
-          type: String,
-          notify: true,
-          value: ''
-        },
-        lastUpdated: {
-          type: Number,
-          value: 0
-        }
       },
       edit: function() {
-        this.fire('edit',
-          {
-            "english":this.english,
-            "norwegian":this.norwegian
-          },
-          { bubbles: false }
-        );
+        var toEdit = this.word;
+        delete toEdit.$key;
+        this.fire('edit', toEdit, { bubbles: false });
       },
       delete: function() {
-        this.fire('delete',
-          {
-            "english":this.english,
-            "norwegian":this.norwegian
-          },
-          { bubbles: false }
-        );
+        toDelete = this.word;
+        delete toDelete.$key;
+        this.fire('delete', toDelete, { bubbles: false });
       },
-      emptyClass: function(content) {
-        return !content ? 'hidden' : '';
-      },
-      propertiesAreEmpty: function() {
-        for (var i = 0; i < arguments.length; ++i) {
-          if (arguments[i]) {
-            return false;
-          }
-        }
-        return true;
-      }
     })
   </script>
 </dom-module>

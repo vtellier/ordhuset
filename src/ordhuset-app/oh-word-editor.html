@@ -1,6 +1,8 @@
 
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../bower_components/iron-a11y-keys/iron-a11y-keys.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="oh-word.html">
 <link rel="import" href="shared-style.html">
 
@@ -27,6 +29,9 @@
         position: relative;
         margin: auto;
       }
+      .controls {
+        margin: 1em 0 0 0;
+      }
     </style>
     
     <firebase-document
@@ -51,16 +56,11 @@
           error-message="Needs some text!"
           value="{{word.norwegian}}">
       </paper-input>
-      <paper-input
-          id="englishInput"
-          label="Type your word"
-          always-float-label
-          placeholder="English"
-          required
-          auto-validate$="[[muteValidation]]"
-          error-message="Needs some text!"
-          value="{{word.english}}">
-      </paper-input>
+      <div>
+        <paper-checkbox checked="{{word.isSubstantive}}">Substantive</paper-checkbox>
+        <paper-checkbox checked="{{word.isVerb}}">Verb</paper-checkbox>
+        <paper-checkbox checked="{{word.isAdjective}}">Adjective</paper-checkbox>
+      </div>
       <div class="controls">
         <paper-button on-tap="save">Done</paper-button>
         <paper-button on-tap="cancel">Cancel</paper-button>
@@ -78,7 +78,7 @@
           type: Object,
           notify: true,
           value: { norwegian: '', english: '' },
-          observer: 'observerWord'
+          observer: 'observerWord',
         },
         editableWord: {
           type: Object,
@@ -117,7 +117,7 @@
       
       create: function() {
         this.muteValidation = false;
-        this.word = { norwegian: '', english: '' };
+        this.word = { norwegian: '', english: '', isSubstantive: true };
         this.muteValidation = true;
       },
       
@@ -143,9 +143,10 @@
         if (this.word.english ||
             this.word.norwegian) {
           if (this.$.document.isNew) {
-            console.log("Inserting a new word: " + this.word.norwegian);
+            console.log("Inserting a new word: " + JSON.stringify(this.word));
             this.editableWord = this.word;
             return this.$.document.save('/no-en/', this.editableWord.norwegian).then(function() {
+            console.log("Inserted word: " + JSON.stringify(this.editableWord));
               this.$.document.reset().then(function(){
                 this.editableWord = null;
                 this.close();
