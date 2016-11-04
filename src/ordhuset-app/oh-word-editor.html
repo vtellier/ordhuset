@@ -4,6 +4,7 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="oh-word.html">
+<link rel="import" href="oh-substantive-editor.html">
 <link rel="import" href="shared-style.html">
 
 <dom-module id="oh-word-editor">
@@ -58,7 +59,9 @@
       </paper-input>
       <div>
         <paper-toggle-button checked="{{word.isSubstantive}}" noink>Substantive</paper-toggle-button>
-        <!-- TODO insert substantive editor here -->
+        <oh-substantive-editor>
+          
+        </oh-substantive-editor>
       </div>
       <div>
         <paper-toggle-button checked="{{word.isVerb}}">Verb</paper-toggle-button>
@@ -84,7 +87,7 @@
         word: {
           type: Object,
           notify: true,
-          value: { norwegian: '', english: '' },
+          value: { norwegian: '', english: '', isSubstantive: false, isVerb: false, isAdjective: false },
           observer: 'observerWord',
         },
         editableWord: {
@@ -124,7 +127,7 @@
       
       create: function() {
         this.muteValidation = false;
-        this.word = { norwegian: '', english: '', isSubstantive: true };
+        this.word = { norwegian: '', english: '', isSubstantive: false, isVerb: false, isAdjective: false };
         this.muteValidation = true;
       },
       
