@@ -3,34 +3,19 @@
 <link rel="import" href="../../bower_components/iron-a11y-keys/iron-a11y-keys.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
-<link rel="import" href="oh-word.html">
-<link rel="import" href="oh-substantive-editor.html">
 <link rel="import" href="shared-style.html">
+<link rel="import" href="oh-substantive-editor.html">
 
 <dom-module id="oh-word-editor">
   <template>
     <style include="shared-styles">
       :host {
         display: none;
-        position: absolute;
-        overflow: hidden;
-        top: 46px;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 1;
       }
       :host([opened]) {
         display: block;
       }
-      :host(.open) {
-        background-color: var(--paper-red-800);
-      }
-      :host(.open) oh-word {
-        position: relative;
-        margin: auto;
-      }
-      .controls {
+      :controls {
         margin: 1em 0 0 0;
       }
     </style>
@@ -46,7 +31,7 @@
                 on-keys-pressed="save"></iron-a11y-keys>
     
     <div class="card">
-      <h2>Add a word</h2>
+      <h2>{{actionLabel}}</h2>
       <paper-input
           id="norwegianInput"
           label="Type the translation"
@@ -118,11 +103,9 @@
         
         this._setOpened(true);
         this.$.norwegianInput.$.input.focus();
-        Polymer.dom(this).classList.add('open');
       },
       
       close: function() {
-        Polymer.dom(this).classList.remove('open');
         this._setOpened(false);
       },
       
@@ -131,12 +114,14 @@
       },
       
       create: function() {
+        this.actionLabel = 'Add a new word';
         this.muteValidation = false;
         this.word = { norwegian: '', english: '', isSubstantive: false, isVerb: false, isAdjective: false };
         this.muteValidation = true;
       },
       
       edit: function() {
+        this.actionLabel = 'Edit the word ' + this.word.norwegian;
         this.editableWord = this.word;
       },
       
