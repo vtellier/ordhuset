@@ -57,12 +57,13 @@
           error-message="Needs some text!"
           value="{{word.norwegian}}">
       </paper-input>
-      <div>
-        <paper-toggle-button checked="{{word.isSubstantive}}" noink>Substantive</paper-toggle-button>
-        <oh-substantive-editor>
-          
-        </oh-substantive-editor>
+      
+      <paper-toggle-button checked="{{word.isSubstantive}}" noink>Substantive</paper-toggle-button>
+      <div class$="[[showHideClass(word.isSubstantive)]]">
+        <oh-substantive-editor></oh-substantive-editor>
+        <hr>
       </div>
+      
       <div>
         <paper-toggle-button checked="{{word.isVerb}}">Verb</paper-toggle-button>
         <!-- TODO insert verb editor here -->
@@ -123,6 +124,10 @@
       close: function() {
         Polymer.dom(this).classList.remove('open');
         this._setOpened(false);
+      },
+      
+      showHideClass: function(show) {
+        return show ? '' : 'hidden';
       },
       
       create: function() {

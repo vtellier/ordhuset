@@ -28,13 +28,14 @@
         path="/no-en"
         data="{{data}}"
         start-at="[[startAt]]"
-        end-at="[[startAt]]}}}}}}}}}}}}}}}}}}}}}}}}}}"
-        query="{{qerStr}}">
+        end-at="[[startAt]]}}}}}}}}}}}}}}}}}}}}}}}}}}">
     </firebase-query>
     
     <div class="card">
       <paper-input label="Filter" value="{{startAt}}">
         <iron-icon icon="icons:search" prefix></iron-icon>
+        <paper-icon-button suffix on-tap="clearFilter" icon="icons:clear" alt="clear" title="clear">
+        </paper-icon-button>
       </paper-input>
       <div class$="table {{showHideList(editorOpened)}}">
         <div class=row>
@@ -101,6 +102,10 @@
       
       create: function() {
         this.$.editor.open('create');
+      },
+      
+      clearFilter: function() {
+        this.startAt = '';
       },
       
       showHideList: function(show) {
