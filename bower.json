@@ -22,7 +22,7 @@
     "paper-fab": "PolymerElements/paper-fab#^1.2.1",
     "paper-input": "PolymerElements/paper-input#^1.1.20",
     "iron-a11y-keys": "PolymerElements/iron-a11y-keys#^1.0.6",
-    "paper-checkbox": "PolymerElements/paper-checkbox#^1.4.1"
+    "paper-toggle-button": "PolymerElements/paper-toggle-button#^1.2.1"
   },
   "sources": [
     "src/**/*",

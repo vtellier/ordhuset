@@ -2,7 +2,7 @@
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../bower_components/iron-a11y-keys/iron-a11y-keys.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="oh-word.html">
 <link rel="import" href="shared-style.html">
 
@@ -57,9 +57,16 @@
           value="{{word.norwegian}}">
       </paper-input>
       <div>
-        <paper-checkbox checked="{{word.isSubstantive}}">Substantive</paper-checkbox>
-        <paper-checkbox checked="{{word.isVerb}}">Verb</paper-checkbox>
-        <paper-checkbox checked="{{word.isAdjective}}">Adjective</paper-checkbox>
+        <paper-toggle-button checked="{{word.isSubstantive}}" noink>Substantive</paper-toggle-button>
+        <!-- TODO insert substantive editor here -->
+      </div>
+      <div>
+        <paper-toggle-button checked="{{word.isVerb}}">Verb</paper-toggle-button>
+        <!-- TODO insert verb editor here -->
+      </div>
+      <div>
+        <paper-toggle-button checked="{{word.isAdjective}}">Adjective</paper-toggle-button>
+        <!-- TODO insert adjective editor here -->
       </div>
       <div class="controls">
         <paper-button on-tap="save">Done</paper-button>
