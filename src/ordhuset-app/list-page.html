@@ -29,7 +29,7 @@
         path="/no-en"
         data="{{data}}"
         start-at="[[startAt]]"
-        end-at="[[startAt]]}}}}}}}}}}}}}}}}}}}}}}}}}}">
+        end-at="[[endAt]]">
     </firebase-query>
     
     <div class$="card {{showHideList(editorOpened)}}">
@@ -61,6 +61,7 @@
     </oh-word-editor>
     
     <paper-fab
+        class$="{{showHideList(editorOpened)}}"
         icon="add"
         on-tap="create"
         disabled="[[!online]]"
@@ -87,6 +88,11 @@
           startAt: {
             type: String,
             notify: true
+          },
+          endAt: {
+            type: String,
+            notify: true,
+            computed: 'computeEndAt(startAt)',
           }
       },
       
@@ -126,6 +132,10 @@
       
       toEditableId: function(substantiveId) {
         return this.substantivesPath + '/' + substantiveId;
+      },
+      
+      computeEndAt: function(startAt) {
+        return startAt + String.fromCharCode(-1);
       }
     });
   </script>
