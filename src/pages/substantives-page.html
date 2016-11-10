@@ -1,0 +1,207 @@
+
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+
+<link rel="import" href="../components/oh-word.html">
+<link rel="import" href="../components/oh-substantive-editor.html">
+<link rel="import" href="../ordhuset-app/shared-style.html">
+
+
+<dom-module id="substantives-page">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        padding: 0 8px 68px 8px;
+      }
+      
+      .table {
+        width: 100%;
+      }
+      
+      :controls {
+        margin: 1em 0 0 0;
+      }
+    </style>
+    
+    <firebase-query
+        id="wordsQuery"
+        app-name="ordhuset"
+        path="/words"
+        data="{{data}}">
+    </firebase-query>
+    
+    <firebase-document
+        id="documentSubstantive"
+        app-name="ordhuset"
+        path="[[substantivePath]]"
+        data="{{currentSubstantive}}">
+    </firebase-document>
+    
+    <div class$="card {{isNotEditing(editableWord)}}">
+      <h2>Substantives</h2>
+      <!--<div>
+        <paper-input label="Filter" value="{{startAt}}">
+          <iron-icon icon="icons:search" prefix></iron-icon>
+          <paper-icon-button suffix on-tap="clearFilter" icon="icons:clear" alt="clear" title="clear">
+          </paper-icon-button>
+        </paper-input>
+      </div>-->
+      <div class$="table {{isNotEditing(editableWord)}}">
+        <div class=row>
+          <div class="cell center">Word</div>
+          <div class="cell center">Action</div>
+        </div>
+        <template is="dom-repeat" items="{{data}}" as="word" filter="isSubstantive">
+          <oh-word
+              word="[[word]]"
+              on-edit="edit"
+              on-delete="delete">
+          </oh-word>
+        </template>
+      </div>
+    </div>
+    
+    <div id="editorCard" class$="card {{isEditing(editableWord)}}">
+      <h2>Editing {{editableWord.singularIndefinite}}</h2>
+      <oh-substantive-editor
+          id="editor"
+          substantive="[[currentSubstantive]]">
+      </oh-substantive-editor>
+      <div class="controls">
+        <paper-button on-tap="save">Done</paper-button>
+        <paper-button on-tap="cancel">Cancel</paper-button>
+      </div>
+    </div>
+    <!--
+    <paper-fab
+        class$="{{showHideList(editorOpened)}}"
+        icon="add"
+        on-tap="create"
+        disabled="[[!online]]"
+        aria-label="Add a word">
+    </paper-fab>
+    -->
+  </template>
+  <script>
+    Polymer({
+      is: 'substantives-page',
+      
+      behaviors: [Polymer.OrdhusetBehavior],
+      
+      properties: {
+          subroute: Object,
+          data: {
+            type: Object,
+          },
+          substantivePath:{
+            type: String,
+            readOnly: true,
+            reflectToAttribute: true,
+            computed: 'computeSubstantivePath(editableWord)',
+            observer: 'currentSubstantivePathChanged'
+          },
+          editableWord: {
+            type: Object,
+            notify: true,
+            value: null,
+            //observer: 'dataChanged'
+          },
+          currentSubstantive: {
+            type: Object,
+            observer: 'currentSubstantiveChanged'
+          },
+      },
+      
+      ready: function() {
+        if(this.$.wordsQuery && this.$.wordsQuery.refresh) {
+          alert("created");
+          this.$.wordsQuery.refresh();
+        }
+      },
+      
+      // Substantive list controls
+      
+      edit: function(event) {
+        console.log("Gonna edit " + JSON.stringify(event.detail));
+        this.editableWord = event.detail;
+      },
+      
+      // Substantive edition controls
+      
+      save: function() {
+        this.currentSubstantive = this.$.editor.editable;
+        console.log("Editor result: " + JSON.stringify(this.currentSubstantive));
+        
+        //if(this.$.documentSubstantive.isNew) {
+          
+          return this.$.documentSubstantive.save('/substantives/', this.editableWord.norwegian)
+            .then(function () {
+              console.log("Success of insertion");
+              this.$.documentSubstantive.reset().then(function () {
+                this.editableWord = null;
+              }.bind(this));
+            }.bind(this))
+            .catch(function (error) {
+                console.error("Unable to save new substantive in database");
+                console.error(error);
+            });
+        //}
+        //else {
+        //    console.log("Modifying extisting substantive in DB");
+        //}
+      },
+      
+      cancel: function() {
+        console.log("Editor result: " + JSON.stringify(this.$.editor.editable));
+        this.editableWord = null;  
+      },
+      
+      isEditing: function(editable) {
+        return editable == null ? 'hidden' : '';
+      },
+      
+      isNotEditing: function(editable) {
+        return editable == null ? '' : 'hidden';
+      },
+      
+      isSubstantive: function(word) {
+        return word.isSubstantive;
+      },
+      
+      // Observers
+      
+      dataChanged: function (newData, oldData) {
+        console.log("data changed! " + JSON.stringify(newData) + " ; " + JSON.stringify(oldData));
+      },
+      
+      currentSubstantiveChanged: function (newData, oldData) {
+        console.log("currentSubstantive changed!\n" +
+                    "new: " + JSON.stringify(newData) + "\n" +
+                    "old: " + JSON.stringify(oldData));
+      },
+      
+      currentSubstantivePathChanged: function (newData, oldData) {
+        console.log("currentSubstantivePath changed!\n" +
+                    "new: " + JSON.stringify(newData) + "\n" +
+                    "old: " + JSON.stringify(oldData));
+      },
+      
+      // Compute functions
+      
+      computeSubstantivePath: function(editableWord) {
+        // Never return if the key is null, we don't want to delete the whole tree.
+        if(editableWord != null && editableWord.norwegian && editableWord.norwegian != '') {
+          return '/substantives/' + editableWord.norwegian;
+        }
+        else
+          return '';
+      }
+    });
+  </script>
+</dom-module>

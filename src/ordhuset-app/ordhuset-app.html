@@ -22,6 +22,7 @@
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../pages/search-page.html">
 <link rel="import" href="../pages/list-page.html">
+<link rel="import" href="../pages/substantives-page.html">
 <link rel="import" href="shared-style.html">
 
 <dom-module id="ordhuset-app">
@@ -113,7 +114,8 @@
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[routeData.page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="search" href="/search">Dictionary</a>
-          <a name="list" href="/list">List</a>
+          <a name="list" href="/adm-list">List</a>
+          <a name="list" href="/adm-substantives">Substantives</a>
         </iron-selector>
       </app-drawer>
 
@@ -152,9 +154,13 @@
               subroute="[[subroute]]">
           </search-page>
           <list-page
-              name="list"
+              name="adm-list"
               subroute="[[subroute]]">
           </list-page>
+          <substantives-page
+              name="adm-substantives"
+              subroute="[[subroute]]">
+          </substantives-page>
         </iron-pages>
       </app-header-layout>
     </app-drawer-layout>
