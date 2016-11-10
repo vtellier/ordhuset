@@ -3,7 +3,7 @@
 <link rel="import" href="../../bower_components/iron-a11y-keys/iron-a11y-keys.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
-<link rel="import" href="shared-style.html">
+<link rel="import" href="../ordhuset-app/shared-style.html">
 <link rel="import" href="oh-substantive-editor.html">
 
 <dom-module id="oh-word-editor">
@@ -44,10 +44,6 @@
       </paper-input>
       
       <paper-toggle-button checked="{{word.isSubstantive}}" noink>Substantive</paper-toggle-button>
-      <div class$="[[showHideClass(word.isSubstantive)]]">
-        <oh-substantive-editor></oh-substantive-editor>
-        <hr>
-      </div>
       
       <div>
         <paper-toggle-button checked="{{word.isVerb}}">Verb</paper-toggle-button>
@@ -139,13 +135,17 @@
         });
       },
       
+      // Nei, in database the substantive shall be just one entry,
+      // for one key we should have an array o substantives to enable synonms
+      // in the word table, we should just know if this word has at least on entry among the substantives, so just the bool
+      
       save: function() {
         if (this.word.english ||
             this.word.norwegian) {
           if (this.$.document.isNew) {
             console.log("Inserting a new word: " + JSON.stringify(this.word));
             this.editableWord = this.word;
-            return this.$.document.save('/no-en/', this.editableWord.norwegian).then(function() {
+            return this.$.document.save('/words/', this.editableWord.norwegian).then(function() {
             console.log("Inserted word: " + JSON.stringify(this.editableWord));
               this.$.document.reset().then(function(){
                 this.editableWord = null;
@@ -195,7 +195,7 @@
       computeWordPath: function(word) {
         // Never return if the key is null, we don't want to delete the whole tree.
         if(word.norwegian)
-          return '/no-en/' + word.norwegian;
+          return '/words/' + word.norwegian;
       }
     });
   </script>

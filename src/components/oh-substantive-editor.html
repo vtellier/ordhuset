@@ -1,7 +1,7 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-radio-group/paper-radio-group.html">
 <link rel="import" href="../../bower_components/paper-radio-button/paper-radio-button.html">
-<link rel="import" href="shared-style.html">
+<link rel="import" href="../ordhuset-app/shared-style.html">
 
 <dom-module id="oh-substantive-editor">
   <template>
@@ -11,22 +11,22 @@
     <!-- gender -->
     <label id="genderLabel">Gender:</label>
     <paper-radio-group selected="{{substantive.gender}}" aria-labelledby="genderLabel">
-      <paper-radio-button name="female">female</paper-radio-button>
-      <paper-radio-button name="male">male</paper-radio-button>
-      <paper-radio-button name="neutral">neutral</paper-radio-button>
+      <paper-radio-button name="feminine">female</paper-radio-button>
+      <paper-radio-button name="masculine">male</paper-radio-button>
+      <paper-radio-button name="neuter">neutral</paper-radio-button>
     </paper-radio-group>
     
     <!-- singular undefinite -->
-    <paper-input label="Singular indefinite" value="{{substantive.singularIndefinite}}" disabled></paper-input>
+    <paper-input label="Singular indefinite" value="{{substantive.singularIndefinite}}" maxlength="50" disabled></paper-input>
     
     <!-- singular definite -->
-    <paper-input label="Singular definite" value="{{substantive.singularDefinite}}"></paper-input>
+    <paper-input label="Singular definite" value="{{substantive.singularDefinite}}" maxlength="50"></paper-input>
     
     <!-- plural undefinite -->
-    <paper-input label="Plural indefinite" value="{{substantive.pluralIndefinite}}"></paper-input>
+    <paper-input label="Plural indefinite" value="{{substantive.pluralIndefinite}}" maxlength="50"></paper-input>
     
     <!-- plural definite -->
-    <paper-input label="Plural definite" value="{{substantive.pluralDefinite}}"></paper-input>
+    <paper-input label="Plural definite" value="{{substantive.pluralDefinite}}" maxlength="50"></paper-input>
     
   </template>
   <script>
@@ -37,7 +37,7 @@
             type: Object,
             notify: true,
             value: {
-              gender: 'female',
+              gender: 'feminine',
               singularIndefinite: '',
               singularDefinite: '',
               pluralIndefinite: '',

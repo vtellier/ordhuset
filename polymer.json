@@ -8,8 +8,8 @@
     "manifest.json"
   ],
   "fragments": [
-    "src/ordhuset-app/search-page.html",
-    "src/ordhuset-app/list-page.html"
+    "src/pages/search-page.html",
+    "src/pages/list-page.html"
   ],
   "includeDependencies": [
     "bower_components/webcomponentsjs/webcomponents-lite.min.js"
