@@ -24,7 +24,8 @@
     "iron-a11y-keys": "PolymerElements/iron-a11y-keys#^1.0.6",
     "paper-toggle-button": "PolymerElements/paper-toggle-button#^1.2.1",
     "paper-radio-group": "PolymerElements/paper-radio-group#^1.2.1",
-    "paper-radio-button": "PolymerElements/paper-radio-button#^1.2.1"
+    "paper-radio-button": "PolymerElements/paper-radio-button#^1.2.1",
+    "iron-collapse": "PolymerElements/iron-collapse#^1.2.1"
   },
   "sources": [
     "src/**/*",

@@ -1,5 +1,8 @@
 
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../ordhuset-app/shared-style.html">
 
 <dom-module id="search-page">
@@ -9,21 +12,63 @@
         display: block;
         padding: 10px;
       }
+      paper-input {
+        margin:0;
+      }
     </style>
-    
+
+    <firebase-query
+        id="query"
+        app-name="ordhuset"
+        path="/words"
+        data="{{data}}"
+        start-at="[[startAt]]"
+        end-at="[[endAt]]"
+        limit-to-first="5">
+    </firebase-query>
+
+    <!-- Search field -->
     <div class="card">
-      <div class="circle">1</div>
-      <h2>Search page!</h2>
-      <p>You are currently looking for: [[subroute.path]].</p>
+      <paper-input label="Search" value="{{subroute.path}}" no-label-float>
+        <iron-icon icon="icons:search" prefix></iron-icon>
+        <paper-icon-button suffix on-tap="clearFilter" icon="icons:clear" alt="clear" title="clear">
+        </paper-icon-button>
+      </paper-input>
     </div>
-    
+
+    <div class="card">
+      <ul>
+        <template is="dom-repeat" items="{{data}}" as="word">
+          <li>
+            <a href="/word/[[word.norwegian]]"
+              name="View detail of the word [[word.norwegian]]">[[word.norwegian]]</a>
+          </li>
+        </template>
+      </ul>
+    </div>
+
   </template>
-  
+
   <script>
     Polymer({
       is: 'search-page',
       properties: {
-          subroute: Object
+        subroute: Object,
+        startAt: {
+          type: String,
+          notify: true
+        },
+        endAt: {
+          type: String,
+          notify: true,
+          computed: 'computeEndAt(startAt)',
+        },
+      },
+
+      // Computed properties
+
+      computeEndAt: function(startAt) {
+        return startAt + String.fromCharCode(-1);
       }
     });
   </script>

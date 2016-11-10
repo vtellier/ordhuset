@@ -7,21 +7,13 @@
         --app-primary-color: var(--paper-red-800);
         --app-secondary-color: var(--paper-red-50);
       }
-      h2 {
-        color: --paper-blue-grey-900;
-        margin: 0.5ex 0 0.5ex 1ex;
-      }
-      .red-bg {
-        background-color: var(--paper-red-800);
-      }
       :host {
         --paper-fab-background: var(--app-primary-color);
         --paper-fab-keyboard-focus-background: var(--paper-red-900);
       }
-      paper-fab {
-        position: fixed;
-        bottom: 1em;
-        right: 1em;
+      h2 {
+        color: --paper-blue-grey-900;
+        margin: 0.5ex 0 0.5ex 1ex;
       }
       paper-radio-group,
       paper-toggle-button {
@@ -30,7 +22,27 @@
       paper-checkbox {
         margin: 1ex 1ex 1ex 0;
       }
-      
+
+      .red-bg {
+        background-color: var(--paper-red-800);
+      }
+
+      /* Paper fab buttons */
+      .button-box {
+        position: fixed;
+        bottom: 1em;
+        right: 1em;
+      }
+      .button-box paper-fab {
+        float:left;
+        margin-left: 1ex;
+      }
+      paper-fab.grey {
+        --paper-fab-background: var(--paper-blue-grey-200);
+        --paper-fab-keyboard-focus-background: var(--paper-blue-grey-600);
+      }
+
+      /* Fake tables */
       .table {
         display: table;
       }
@@ -41,6 +53,8 @@
         display: table-cell;
         padding: 0.5ex;
       }
+
+      /* Usefull, various */
       .hidden {
         display: none;
       }
@@ -53,7 +67,7 @@
       .right {
         text-align: right;
       }
-      
+
       .card {
         margin: 14px;
         padding: 10px;
@@ -64,14 +78,15 @@
       }
       .circle {
         display: inline-block;
-        width: 64px;
-        height: 64px;
+        width: 32px;
+        height: 32px;
         text-align: center;
         color: #555;
         border-radius: 50%;
         background: #ddd;
-        font-size: 30px;
-        line-height: 64px;
+        font-size: 12px;
+        font-weight: bold;
+        line-height: 32px;
       }
     </style>
   </template>

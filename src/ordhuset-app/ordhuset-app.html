@@ -6,6 +6,11 @@
 <link rel="import" href="oh-behavior.html">
 <link rel="import" href="oh-login.html">
 
+<link rel="import" href="../pages/search-page.html">
+<link rel="import" href="../pages/list-page.html">
+<link rel="import" href="../pages/adm-substantives-page.html">
+<link rel="import" href="../pages/word-page.html">
+
 <link rel="import" href="../../bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
 <link rel="import" href="../../bower_components/app-layout/app-header/app-header.html">
@@ -20,9 +25,6 @@
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../pages/search-page.html">
-<link rel="import" href="../pages/list-page.html">
-<link rel="import" href="../pages/substantives-page.html">
 <link rel="import" href="shared-style.html">
 
 <dom-module id="ordhuset-app">
@@ -30,20 +32,20 @@
     <style include="shared-styles">
       :host {
         display: block;
-        
+
         --app-primary-color: var(--paper-red-800);
         --app-secondary-color: var(--paper-red-50);
-        
-        
+
+
         background-color: var(--app-primary-color);
         color: var(--app-secondary-color);
-        
+
         --app-drawer-content-container: {
           background-color: var(--app-primary-color);
           color: var(--app-secondary-color);
         }
       }
-      
+
       app-header {
         background-color: var(--app-primary-color);
         color: var(--app-secondary-color);
@@ -51,7 +53,7 @@
       app-header paper-icon-button {
         --paper-icon-button-ink-color: var(--app-secondary-color);
       }
-      
+
       .app-drawer {
         color: var(--app-secondary-color);
       }
@@ -70,7 +72,7 @@
         font-weight: bold;
       }
     </style>
-    
+
     <!-- Firebase -->
     <firebase-app
         name="ordhuset"
@@ -85,8 +87,8 @@
         signed-in="{{signedIn}}"
         user="{{user}}">
     </firebase-auth>
-    
-    <!-- Servie worker 
+
+    <!-- Servie worker
     <platinum-sw-register
         auto-register
         skip-waiting
@@ -97,7 +99,7 @@
           default-cache-strategy="networkFirst">
       </platinum-sw-cache>
     </platinum-sw-register>-->
-    
+
     <!-- Routing -->
     <app-location route="{{route}}"></app-location>
     <app-route
@@ -105,8 +107,8 @@
         pattern="/:page"
         data="{{routeData}}"
         tail="{{subroute}}"></app-route>
-    
-    
+
+
     <!-- Shell -->
     <app-drawer-layout fullbleed>
       <!-- Drawer content -->
@@ -114,8 +116,8 @@
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[routeData.page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="search" href="/search">Dictionary</a>
-          <a name="list" href="/adm-list">List</a>
-          <a name="list" href="/adm-substantives">Substantives</a>
+          <a name="adm-list" href="/adm-list">List</a>
+          <a name="adm-substantives" href="/adm-substantives">Substantives</a>
         </iron-selector>
       </app-drawer>
 
@@ -126,7 +128,7 @@
           <app-toolbar>
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
             <div main-title>Ordhuset</div>
-            
+
             <iron-icon icon="cloud" hidden$="[[!online]]"></iron-icon>
             <iron-icon icon="cloud-off" hidden$="[[online]]"></iron-icon>
             <paper-icon-button
@@ -136,7 +138,7 @@
             </paper-icon-button>
           </app-toolbar>
         </app-header>
-        
+
         <oh-login
             on-sign-in="signIn"
             signed-in="[[signedIn]]"
@@ -161,6 +163,10 @@
               name="adm-substantives"
               subroute="[[subroute]]">
           </substantives-page>
+          <word-page
+              name="word"
+              subroute="[[subroute]]">
+          </wod-page>
         </iron-pages>
       </app-header-layout>
     </app-drawer-layout>
@@ -172,7 +178,7 @@
       is: 'ordhuset-app',
 
       behaviors: [Polymer.OrdhusetBehavior],
-      
+
       signIn: function() {
         this.$.auth.signInWithPopup();
       },

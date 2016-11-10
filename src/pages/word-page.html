@@ -1,0 +1,97 @@
+
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../ordhuset-app/shared-style.html">
+
+<dom-module id="word-page">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        padding: 10px;
+      }
+      paper-input {
+        margin:0;
+      }
+    </style>
+
+    <firebase-document
+        id="documentWord"
+        app-name="ordhuset"
+        path="/words/[[wordKey]]"
+        data="{{word}}">
+    </firebase-document>
+
+    <firebase-query
+        id="query"
+        app-name="ordhuset"
+        path="/words"
+        data="{{data}}">
+    </firebase-query>
+
+    <div class="card">
+      <h2>[[wordKey]]</h2>
+      isSubstantive = [[word.isSubstantive]]
+    </div>
+
+    <div class$="card {{hideIfEmpty(data)}}">
+      <div class="table">
+        <div class=row>
+          <div class="cell center">Word</div>
+          <div class="cell center">Translation</div>
+        </div>
+        <template is="dom-repeat" items="{{data}}" as="substantive">
+          <div class="cell">[[substantive.gender]]</div>
+          <div class="cell">TODO</div>
+        </template>
+      </div>
+    </div>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'word-page',
+      properties: {
+        subroute: Object,
+        wordKey: {
+          type: String,
+          notify: true,
+          computed: 'computeWordKey(subroute.path)',
+        },
+        data: Object
+      },
+
+
+      hideIfEmpty: function(data) {
+        var count = 0;
+        if(Array.isArray(data))
+          count = data.length;
+        else
+          count = Object.keys(data).length;
+
+        //console.log(count + " substantives");
+
+        return count > 0 ? '' : 'hidden';
+      },
+
+      // Observers
+
+      substantivesChanged: function(newData, oldData) {
+        //console.log("substantivesChanged\n" +
+        //            "new: " + JSON.stringify(newData) + "\n" +
+        //            "old: " + JSON.stringify(oldData));
+      },
+
+      // Computed properties
+
+      computeWordKey: function(path) {
+        return path.substring(1);
+      }
+    });
+  </script>
+</dom-module>

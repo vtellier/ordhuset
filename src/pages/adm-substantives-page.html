@@ -1,0 +1,318 @@
+
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+
+<link rel="import" href="../components/oh-word.html">
+<link rel="import" href="../components/oh-substantive-editor.html">
+<link rel="import" href="../ordhuset-app/shared-style.html">
+
+
+<dom-module id="substantives-page">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        padding: 0 8px 68px 8px;
+      }
+
+      :controls {
+        margin: 1em 0 0 0;
+      }
+
+      .table {
+        width: 100%;
+      }
+
+      .circle {
+        margin-left: 0;
+        margin-right: 1em;
+      }
+
+      .heading {
+        padding: 10px 15px;
+        margin-top: 20px;
+        background-color: #f3f3f3;
+        border: 1px solid #dedede;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        font-size: 18px;
+        cursor: pointer;
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        width: 100%;
+        text-align: left;
+      }
+      .heading iron-icon {
+        float: right;
+      }
+      .content {
+        padding: 15px;
+        border: 1px solid #dedede;
+        border-top: none;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        @apply(--shadow-elevation-2dp);
+      }
+
+      .substantive-button-box {
+        margin-top: 20px;
+        text-align: center;
+      }
+      .substantive-button-box paper-fab {
+        display: inline-block;
+        margin-left: 1ex;
+      }
+    </style>
+
+    <firebase-query
+        id="wordsQuery"
+        app-name="ordhuset"
+        path="/words"
+        data="{{data}}">
+    </firebase-query>
+
+    <firebase-query
+        id="substantivesQuery"
+        app-name="ordhuset"
+        path="/substantives/[[editableWord.norwegian]]"
+        data="{{currentSubstantives}}">
+    </firebase-query>
+
+    <div class$="card {{isNotEditing(editableWord)}}">
+      <h2>Substantives</h2>
+      <!--<div>
+        <paper-input label="Filter" value="{{startAt}}">
+          <iron-icon icon="icons:search" prefix></iron-icon>
+          <paper-icon-button suffix on-tap="clearFilter" icon="icons:clear" alt="clear" title="clear">
+          </paper-icon-button>
+        </paper-input>
+      </div>-->
+      <div class$="table {{isNotEditing(editableWord)}}">
+        <div class=row>
+          <div class="cell center">Word</div>
+          <div class="cell center">Action</div>
+        </div>
+        <template is="dom-repeat" items="{{data}}" as="word" filter="isSubstantive">
+          <div class="row">
+            <div class="cell">{{word.norwegian}}</div>
+            <div class="cell center">
+              <paper-icon-button
+                  icon="icons:cancel"
+                  title="remove"
+                  on-tap="delete">
+              </paper-icon-button>
+              <paper-icon-button
+                  icon="icons:create"
+                  title="create"
+                  on-tap="edit">
+              </paper-icon-button>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+
+    <div class$="{{isEditing(editableWord)}}">
+      <div class="card">
+        <h2>Editing the word <em>[[editableWord.norwegian]]</em></h2>
+        <p>This word has [[currentSubstantives.length]] subtantives.</p>
+      </div>
+
+      <div class="card">
+        <h3>Substantives</h3>
+        <template is="dom-repeat" items="[[currentSubstantives]]" as="substantive" indexAs="index">
+
+          <button class="heading" ident$="subs[[index]]" on-tap="toggle">
+            <div class="circle">[[plusOne(index)]]</div>
+            [[editableWord.norwegian]], [[substantive.singularDefinite]], [[substantive.pluralIndefinite]], [[substantive.pluralDefinite]]
+            <iron-icon icon="expand-more"></iron-icon>
+          </button>
+          <iron-collapse ident$="subs[[index]]">
+            <div class="content">
+              <oh-substantive-editor
+                  key="[[substantive.$key]]"
+                  norwegian="[[editableWord.norwegian]]"
+                  on-saved="onSaved">
+              </oh-substantive-editor>
+            </div>
+          </iron-collapse>
+        </template>
+
+        <hr>
+        <iron-collapse opened$="[[newSubstantive.opened]]">
+          <div class="content">
+            <oh-substantive-editor
+                id="newSub"
+                key="[[newSubstantive.$key]]"
+                norwegian="[[editableWord.norwegian]]"
+                on-saved="onNewSubstantiveSaved"
+                on-canceled="onCancelled">
+            </oh-substantive-editor>
+          </div>
+        </iron-collapse>
+
+        <div class="substantive-button-box">
+          <paper-fab
+              icon="add"
+              on-tap="addSubstantive"
+              disabled="[[!online]]"
+              aria-label="Add a substantive to [[editableWord.norwegian]]"
+              class="substantive-button"
+              mini>
+          </paper-fab>
+        </div>
+      </div>
+    </div>
+
+    <div class$="button-box {{isEditing(editableWord)}}">
+      <!--<paper-fab
+          icon="done"
+          on-tap="save"
+          disabled="[[!online]]"
+          aria-label="Save modifications">
+      </paper-fab>-->
+      <paper-fab
+          class="grey"
+          icon="close"
+          on-tap="cancel"
+          disabled="[[!online]]"
+          aria-label="Cancel">
+      </paper-fab>
+    </div>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'substantives-page',
+
+      behaviors: [Polymer.OrdhusetBehavior],
+
+      properties: {
+          subroute: Object,
+          data: {
+            type: Object,
+          },
+          editableWord: {
+            type: Object,
+            notify: true,
+            value: null,
+            //observer: 'dataChanged'
+          },
+          currentSubstantives: {
+            type: Object,
+          },
+          editableSubstantives: {
+            type: Object,
+          },
+          newSubstantive: {
+            type: Object,
+            notify: true,
+            value: {
+              '$key': '',
+              'opened': false
+            },
+            observer: 'dataChanged'
+          }
+      },
+
+      // Manages the iron-collapse elements
+      toggle: function (event) {
+        var id = event.currentTarget.getAttribute('ident');
+        var collapse = this.$$('iron-collapse[ident="' + id + '"]');
+
+        collapse.toggle();
+      },
+
+      makeArray: function(items) {
+        var arr = Object.keys(items).map(function(key) { return items[key]; });
+
+        console.log("arr = " + JSON.stringify(arr));
+
+        return arr;
+      },
+
+      plusOne: function(number) {
+        return number + 1;
+      },
+
+      // Substantive list controls
+
+      edit: function(event) {
+        var model = event.model;
+        this.editableWord = model.word;
+      },
+
+      // Substantive edition controls
+/*
+      save: function() {
+        console.log("Saving...");
+
+        var editors = Polymer.dom(this.root).querySelectorAll('oh-substantive-editor');
+
+        for(var i=0; i < editors.length; i++) {
+          var current = editors[i];
+          if(current != this.$.newSub)
+            current.save();
+        }
+
+        console.log("Saved!");
+        this.editableWord = null;
+      },*/
+
+      cancel: function() {
+        this.editableWord = null;
+      },
+
+      addSubstantive: function() {
+        this.$.newSub.setToDefault();
+        this.set('newSubstantive.$key', '');
+        this.set('newSubstantive.opened', true);
+      },
+
+      onNewSubstantiveSaved: function(event) {
+        this.set('newSubstantive.$key', '');
+        this.set('newSubstantive.opened', false);
+      },
+
+      onSaved: function(event) {
+        console.log("Substantive saved! key=" + JSON.stringify(event.detail));
+        //this.substantivesQuery.refresh();
+      },
+
+      onCancelled: function(event) {
+        this.set('newSubstantive.opened', false);
+      },
+
+      // CSS class generators
+
+      isEditing: function(editable) {
+        return editable == null ? 'hidden' : '';
+      },
+
+      isNotEditing: function(editable) {
+        return editable == null ? '' : 'hidden';
+      },
+
+      isSubstantive: function(word) {
+        return word.isSubstantive;
+      },
+
+      // Observers
+
+      dataChanged: function (newData, oldData) {
+        console.log("data changed!\n" +
+                    "new: " + JSON.stringify(newData) + "\n" +
+                    "old: " + JSON.stringify(oldData));
+      },
+
+      // Compute functions
+
+
+    });
+  </script>
+</dom-module>

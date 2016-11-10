@@ -17,12 +17,12 @@
         display: block;
         padding: 0 8px 68px 8px;
       }
-      
+
       .table {
         width: 100%;
       }
     </style>
-    
+
     <firebase-query
         id="query"
         app-name="ordhuset"
@@ -31,7 +31,7 @@
         start-at="[[startAt]]"
         end-at="[[endAt]]">
     </firebase-query>
-    
+
     <div class$="card {{showHideList(editorOpened)}}">
       <paper-input label="Filter" value="{{startAt}}">
         <iron-icon icon="icons:search" prefix></iron-icon>
@@ -53,28 +53,28 @@
         </template>
       </div>
     </div>
-    
+
     <oh-word-editor
         id="editor"
         word="{{editableWord}}"
         opened="{{editorOpened}}">
     </oh-word-editor>
-    
+
     <paper-fab
-        class$="{{showHideList(editorOpened)}}"
+        class="button-box"
         icon="add"
         on-tap="create"
         disabled="[[!online]]"
         aria-label="Add a word">
     </paper-fab>
-    
+
   </template>
   <script>
     Polymer({
       is: 'list-page',
-      
+
       behaviors: [Polymer.OrdhusetBehavior],
-      
+
       properties: {
           subroute: Object,
           data: {
@@ -95,45 +95,45 @@
             computed: 'computeEndAt(startAt)',
           }
       },
-      
+
       dataChanged: function (newData, oldData) {
         alert("data changed! " + JSON.stringify(newData) + " ; " + JSON.stringify(oldData));
       },
-      
+
       ready: function() {
         if(this.$.query && this.$.query.refresh) {
           alert("created");
           this.$.query.refresh();
         }
       },
-      
+
       create: function() {
         this.$.editor.open('create');
       },
-      
+
       clearFilter: function() {
         this.startAt = '';
       },
-      
+
       showHideList: function(show) {
         return show ? 'hidden' : '';
       },
-      
+
       edit: function(event) {
         console.log("Gonna edit " + JSON.stringify(event.detail.word));
         this.editableWord = event.detail;
         this.$.editor.open('edit');
       },
-      
+
       delete: function(event) {
         this.editableWord = event.detail;
         this.$.editor.delete();
       },
-      
+
       toEditableId: function(substantiveId) {
         return this.substantivesPath + '/' + substantiveId;
       },
-      
+
       computeEndAt: function(startAt) {
         return startAt + String.fromCharCode(-1);
       }
