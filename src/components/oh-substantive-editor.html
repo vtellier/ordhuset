@@ -6,6 +6,16 @@
 <dom-module id="oh-substantive-editor">
   <template>
     <style include="shared-styles">
+      @media screen and (min-width: 640px){
+        .half-left {
+          width: 50%;
+          float: left;
+        }
+        .single-right {
+          width: 50%;
+          margin-left: 50%;
+        }
+      }
     </style>
 
     <firebase-document
@@ -16,26 +26,29 @@
     </firebase-document>
 
     <!-- gender -->
-    <label id="genderLabel">Gender:</label>
-    <paper-radio-group selected="{{substantive.gender}}" aria-labelledby="genderLabel">
-      <paper-radio-button name="feminine">feminine</paper-radio-button>
-      <paper-radio-button name="masculine">masculine</paper-radio-button>
-      <paper-radio-button name="neuter">neuter</paper-radio-button>
-    </paper-radio-group>
+    <div class="cleared">
+      <label id="genderLabel">Gender:</label>
+      <paper-radio-group selected="{{substantive.gender}}" aria-labelledby="genderLabel">
+        <paper-radio-button name="feminine">feminine</paper-radio-button>
+        <paper-radio-button name="masculine">masculine</paper-radio-button>
+        <paper-radio-button name="neuter">neuter</paper-radio-button>
+      </paper-radio-group>
+    </div>
 
-    <!-- singular undefinite
-    <paper-input label="Singular indefinite" value="{{substantive.singularIndefinite}}" maxlength="50"></paper-input>-->
+    <!-- singular undefinite -->
+    <paper-input class="half-left" label="Singular indefinite" value="{{norwegian}}" maxlength="50" disabled></paper-input>
 
     <!-- singular definite -->
-    <paper-input label="Singular definite" value="{{substantive.singularDefinite}}" maxlength="50"></paper-input>
+    <paper-input class="half-left" label="Singular definite" value="{{substantive.singularDefinite}}" maxlength="50"></paper-input>
 
     <!-- plural undefinite -->
-    <paper-input label="Plural indefinite" value="{{substantive.pluralIndefinite}}" maxlength="50"></paper-input>
+    <paper-input class="half-left" label="Plural indefinite" value="{{substantive.pluralIndefinite}}" maxlength="50"></paper-input>
 
     <!-- plural definite -->
-    <paper-input label="Plural definite" value="{{substantive.pluralDefinite}}" maxlength="50"></paper-input>
+    <paper-input class="half-left" label="Plural definite" value="{{substantive.pluralDefinite}}" maxlength="50"></paper-input>
+    <paper-input class="single-right cleared" label="Alternative plural definite" value="{{substantive.pluralDefiniteAlt}}" maxlength="50"></paper-input>
 
-    <div class="center">
+    <div class="center cleared">
       <paper-button on-tap="save" class$="[[saveClass(key)]]">Save</paper-button>
       <!--<paper-button on-tap="save" disabled$="[[isNotValid(norwegian, substantive)]]">Save</paper-button>-->
       <paper-button on-tap="delete" class$="[[deleteClass(key)]]" disabled$="[[!isDeletable(key)]]">Delete</paper-button>
@@ -73,6 +86,7 @@
               singularDefinite: '',
               pluralIndefinite: '',
               pluralDefinite: '',
+              pluralDefiniteAlt: '',
             };
       },
 
@@ -82,8 +96,9 @@
             && sub
             && (sub.gender == 'feminine' || sub.gender == 'masculine' || sub.gender == 'neuter')
             && sub.singularDefinite != ''
-            && sub.pluralIndefinite != ''
-            && sub.pluralDefinite != '';
+          //  && sub.pluralIndefinite != ''
+          //  && sub.pluralDefinite != ''
+            ;
       },
 
       isNotValid: function(nor, sub) {

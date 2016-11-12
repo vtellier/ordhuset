@@ -18,17 +18,17 @@
         margin: 1em 0 0 0;
       }
     </style>
-    
+
     <firebase-document
         id="document"
         app-name="ordhuset"
         path="[[wordPath]]"
         data="{{editableWord}}">
     </firebase-document>
-    
+
     <iron-a11y-keys id="a11y" keys="enter"
                 on-keys-pressed="save"></iron-a11y-keys>
-    
+
     <div class="card">
       <h2>{{actionLabel}}</h2>
       <paper-input
@@ -41,9 +41,9 @@
           error-message="Needs some text!"
           value="{{word.norwegian}}">
       </paper-input>
-      
+
       <paper-toggle-button checked="{{word.isSubstantive}}" noink>Substantive</paper-toggle-button>
-      
+
       <div>
         <paper-toggle-button checked="{{word.isVerb}}">Verb</paper-toggle-button>
         <!-- TODO insert verb editor here -->
@@ -57,13 +57,13 @@
         <paper-button on-tap="cancel">Cancel</paper-button>
       </div>
     </div>
-    
+
   </template>
-  
+
   <script>
     Polymer({
       is: 'oh-word-editor',
-      
+
       properties: {
         word: {
           type: Object,
@@ -89,37 +89,37 @@
           observer: 'observerWordPath',
         }
       },
-      
+
       open: function(action) {
         if(action == 'create')
           this.create();
         else if(action == 'edit')
           this.edit();
-        
+
         this._setOpened(true);
         this.$.norwegianInput.$.input.focus();
       },
-      
+
       close: function() {
         this._setOpened(false);
       },
-      
+
       showHideClass: function(show) {
         return show ? '' : 'hidden';
       },
-      
+
       create: function() {
         this.actionLabel = 'Add a new word';
         this.muteValidation = false;
-        this.word = { norwegian: '', english: '', isSubstantive: false, isVerb: false, isAdjective: false };
+        this.word = { norwegian: '', isSubstantive: false, isVerb: false, isAdjective: false };
         this.muteValidation = true;
       },
-      
+
       edit: function() {
         this.actionLabel = 'Edit the word ' + this.word.norwegian;
         this.editableWord = this.word;
       },
-      
+
       delete: function() {
         console.log("Removing a word which path is " + this.wordPath);
         this.editableWord = this.word;
@@ -133,11 +133,11 @@
           console.warn("Unable to destroy the word");
         });
       },
-      
+
       // Nei, in database the substantive shall be just one entry,
       // for one key we should have an array o substantives to enable synonms
       // in the word table, we should just know if this word has at least on entry among the substantives, so just the bool
-      
+
       save: function() {
         if (this.word.english ||
             this.word.norwegian) {
@@ -169,28 +169,28 @@
         else {
           console.warn("Tried to push an emptyy word in database");
         }
-        
+
         return Promise.resolve().then(function() {
               this.close();
             }.bind(this));
       },
-      
+
       cancel: function() {
         this.close('cancel');
       },
-      
+
       // Observers
-      
+
       observerWord: function (newData, oldData) {
         console.log("WORD changed:\nOld: " + JSON.stringify(oldData) + "\nNew: " + JSON.stringify(newData));
       },
-      
+
       observerWordPath: function (newData, oldData) {
         console.log("WORD PATH changed:\nOld: " + JSON.stringify(oldData) + "\nNew: " + JSON.stringify(newData));
       },
-      
+
       // Compute functions
-      
+
       computeWordPath: function(word) {
         // Never return if the key is null, we don't want to delete the whole tree.
         if(word.norwegian)

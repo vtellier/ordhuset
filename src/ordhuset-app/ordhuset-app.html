@@ -8,7 +8,6 @@
 
 <link rel="import" href="../pages/search-page.html">
 <link rel="import" href="../pages/list-page.html">
-<link rel="import" href="../pages/adm-substantives-page.html">
 <link rel="import" href="../pages/word-page.html">
 
 <link rel="import" href="../../bower_components/app-layout/app-drawer/app-drawer.html">
@@ -116,8 +115,9 @@
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[routeData.page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="search" href="/search">Dictionary</a>
-          <a name="adm-list" href="/adm-list">List</a>
-          <a name="adm-substantives" href="/adm-substantives">Substantives</a>
+          <template is="dom-if" if="{{adminMode}}">
+            <a name="adm-list" href="/adm-list">List</a>
+          </template>
         </iron-selector>
       </app-drawer>
 
@@ -129,12 +129,18 @@
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
             <div main-title>Ordhuset</div>
 
+            <paper-icon-button
+                icon="[[computeAdminIcon(adminMode)]]"
+                on-tap="swapAdminMode"
+                disabled="[[!signedIn]]"
+                hidden$="[[!isAdmin]]">
+            </paper-icon-button>
             <iron-icon icon="cloud" hidden$="[[!online]]"></iron-icon>
             <iron-icon icon="cloud-off" hidden$="[[online]]"></iron-icon>
             <paper-icon-button
                 icon="[[computeLockIcon(signedIn)]]"
                 disabled="[[!signedIn]]"
-                on-tap="lock">
+                on-tap="signOut">
             </paper-icon-button>
           </app-toolbar>
         </app-header>
@@ -159,10 +165,6 @@
               name="adm-list"
               subroute="[[subroute]]">
           </list-page>
-          <substantives-page
-              name="adm-substantives"
-              subroute="[[subroute]]">
-          </substantives-page>
           <word-page
               name="word"
               subroute="[[subroute]]">
@@ -179,15 +181,13 @@
 
       behaviors: [Polymer.OrdhusetBehavior],
 
-      signIn: function() {
-        this.$.auth.signInWithPopup();
+      computeAdminIcon: function(adminMode) {
+        return adminMode ? 'verified-user' : 'perm-identity';
       },
+
       computeLockIcon: function(signedIn) {
         return signedIn ? 'lock-open' : 'lock';
       },
-      lock: function() {
-        this.fire('sign-out');
-      }
     });
   </script>
 </dom-module>

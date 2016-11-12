@@ -3,6 +3,7 @@
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../ordhuset-app/shared-style.html">
 
 <dom-module id="search-page">
@@ -15,6 +16,10 @@
       paper-input {
         margin:0;
       }
+      paper-item a {
+        color: inherit;
+        text-decoration: none;
+      }
     </style>
 
     <firebase-query
@@ -24,45 +29,58 @@
         data="{{data}}"
         start-at="[[startAt]]"
         end-at="[[endAt]]"
-        limit-to-first="5">
+        limit-to-first="15"
+        disabled$="[[isEmpty(startAt)]]">
     </firebase-query>
 
     <!-- Search field -->
     <div class="card">
-      <paper-input label="Search" value="{{subroute.path}}" no-label-float>
+      <paper-input label="Search" value="{{startAt}}" no-label-float>
         <iron-icon icon="icons:search" prefix></iron-icon>
-        <paper-icon-button suffix on-tap="clearFilter" icon="icons:clear" alt="clear" title="clear">
+        <paper-icon-button
+            suffix on-tap="clearFilter"
+            icon="icons:clear"
+            alt="clear"
+            title="Clear search field"
+            disabled$="[[isEmpty(startAt)]]">
         </paper-icon-button>
       </paper-input>
     </div>
 
-    <div class="card">
-      <ul>
+    <template is="dom-if" if="[[!isEmpty(data.length)]]">
+      <div class="card">
         <template is="dom-repeat" items="{{data}}" as="word">
-          <li>
-            <a href="/word/[[word.norwegian]]"
-              name="View detail of the word [[word.norwegian]]">[[word.norwegian]]</a>
-          </li>
+          <a href="/word/[[word.norwegian]]"
+            name="View detail of the word [[word.norwegian]]"
+            tabindex="-1">
+            <paper-item raised>[[word.norwegian]]</paper-item>
+          </a>
         </template>
-      </ul>
-    </div>
+      </div>
+    </template>
 
   </template>
 
   <script>
     Polymer({
       is: 'search-page',
+      behaviors: [Polymer.OrdhusetBehavior],
+
       properties: {
         subroute: Object,
         startAt: {
           type: String,
-          notify: true
+          notify: true,
         },
         endAt: {
           type: String,
           notify: true,
           computed: 'computeEndAt(startAt)',
         },
+      },
+
+      clearFilter: function(e) {
+        this.startAt = "";
       },
 
       // Computed properties

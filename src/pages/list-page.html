@@ -23,51 +23,52 @@
       }
     </style>
 
-    <firebase-query
-        id="query"
-        app-name="ordhuset"
-        path="/words"
-        data="{{data}}"
-        start-at="[[startAt]]"
-        end-at="[[endAt]]">
-    </firebase-query>
+    <template is="dom-if" if="{{adminMode}}">
+      <firebase-query
+          id="query"
+          app-name="ordhuset"
+          path="/words"
+          data="{{data}}"
+          start-at="[[startAt]]"
+          end-at="[[endAt]]">
+      </firebase-query>
 
-    <div class$="card {{showHideList(editorOpened)}}">
-      <paper-input label="Filter" value="{{startAt}}">
-        <iron-icon icon="icons:search" prefix></iron-icon>
-        <paper-icon-button suffix on-tap="clearFilter" icon="icons:clear" alt="clear" title="clear">
-        </paper-icon-button>
-      </paper-input>
-      <div class$="table {{showHideList(editorOpened)}}">
-        <div class=row>
-          <div class="cell center">Word</div>
-          <div class="cell center">Classes</div>
-          <div class="cell center">Action</div>
+      <div class$="card {{showHideList(editorOpened)}}">
+        <paper-input label="Filter" value="{{startAt}}">
+          <iron-icon icon="icons:search" prefix></iron-icon>
+          <paper-icon-button suffix on-tap="clearFilter" icon="icons:clear" alt="clear" title="clear">
+          </paper-icon-button>
+        </paper-input>
+        <div class$="table {{showHideList(editorOpened)}}">
+          <div class=row>
+            <div class="cell center">Word</div>
+            <div class="cell center">Classes</div>
+            <div class="cell center">Action</div>
+          </div>
+          <template is="dom-repeat" items="{{data}}" as="word">
+            <oh-word
+                word="[[word]]"
+                on-edit="edit"
+                on-delete="delete">
+            </oh-word>
+          </template>
         </div>
-        <template is="dom-repeat" items="{{data}}" as="word">
-          <oh-word
-              word="[[word]]"
-              on-edit="edit"
-              on-delete="delete">
-          </oh-word>
-        </template>
       </div>
-    </div>
 
-    <oh-word-editor
-        id="editor"
-        word="{{editableWord}}"
-        opened="{{editorOpened}}">
-    </oh-word-editor>
+      <oh-word-editor
+          id="editor"
+          word="{{editableWord}}"
+          opened="{{editorOpened}}">
+      </oh-word-editor>
 
-    <paper-fab
-        class="button-box"
-        icon="add"
-        on-tap="create"
-        disabled="[[!online]]"
-        aria-label="Add a word">
-    </paper-fab>
-
+      <paper-fab
+          class="button-box"
+          icon="add"
+          on-tap="create"
+          disabled="[[!online]]"
+          aria-label="Add a word">
+      </paper-fab>
+    </template>
   </template>
   <script>
     Polymer({

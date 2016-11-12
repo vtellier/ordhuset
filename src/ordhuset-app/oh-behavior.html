@@ -2,18 +2,121 @@
 <script>
   (function() {
     'use strict';
-    Polymer.OrdhusetBehaviorImpl = {
+
+    var instances = [];
+
+    Polymer.UserSessionBehaviorImpl = {
       properties: {
+        user: {
+          type: Object,
+          observer: 'onUserChanged',
+        },
+        isAdmin: {
+          type: Boolean,
+          notify: true,
+          value: false,
+          observer: 'isAdminChanged',
+        },
+        adminMode: {
+          type: Boolean,
+          notify: true,
+          value: false,
+        },
+        noSync: {
+          type: Boolean,
+          value: false,
+        },
+      },
+
+      attached: function() {
+        instances.push(this);
+      },
+      detached: function() {
+        this.arrayDelete(instances, this);
+      },
+
+      // Session methods
+
+      signIn: function() {
+        if (this.$.auth) {
+          this.$.auth.signInWithPopup();
+        }
       },
       signOut: function() {
         if (this.$.auth) {
           this.$.auth.signOut();
         }
-      }
+      },
+      swapAdminMode: function() {
+        this.adminMode = !this.adminMode && this.isAdmin;
+        this.syncInstances('adminMode', this.adminMode);
+      },
+
+      // observers:
+
+      syncInstances: function(key, value) {
+        if(!this.noSync) {
+          instances.forEach(function (inst, i) {
+            if(inst != this) {
+              console.log("Synchronizing " + key + " on instance #" + i);
+              inst.noSync = true;
+              inst[key] = value;
+              inst.noSync = false;
+            }
+          }.bind(this));
+        }
+      },
+
+      onUserChanged: function(newData, oldData) {
+        if(newData && newData.hasOwnProperty("email") && newData.email == "vincent.lt.tellier@gmail.com") {
+          console.log("Admin session!");
+          this.isAdmin = true;
+        }
+        else {
+          this.isAdmin = false;
+        }
+
+        this.syncInstances('user', this.user);
+      },
+
+      isAdminChanged: function(newData, oldData) {
+        this.syncInstances('isAdmin', this.isAdmin);
+        this.adminMode = this.isAdmin;
+      },
+
     };
+
+    Polymer.OrdhusetBehaviorImpl = {
+      properties: {
+      },
+
+      // Utility functions
+
+      // Returns true if it's undefined, empty object, empty array or a number equal to 0.
+      isEmpty: function(variable) {
+        if (typeof variable !== 'undefined') {
+          if (Array.isArray(variable)) {
+            return variable.length == 0;
+          }
+          else if(!isNaN(variable)) {
+            return variable == 0;
+          }
+          else if(typeof variable === 'string' || variable instanceof String) {
+            return variable.length == 0;
+          }
+          else {
+            return Object.keys(variable).length === 0;
+          }
+        }
+        else
+          return true;
+      },
+    };
+
     /** @polymerBehavior */
     Polymer.OrdhusetBehavior = [
       Polymer.AppNetworkStatusBehavior,
+      Polymer.UserSessionBehaviorImpl,
       Polymer.OrdhusetBehaviorImpl
     ];
   })();
