@@ -4,25 +4,19 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../ordhuset-app/shared-style.html">
+<link rel="import" href="../components/oh-substantive-editor.html">
 
 <dom-module id="oh-word-editor">
   <template>
     <style include="shared-styles">
       :host {
-        display: none;
-      }
-      :host([opened]) {
-        display: block;
-      }
-      :controls {
-        margin: 1em 0 0 0;
       }
     </style>
 
     <firebase-document
-        id="document"
+        id="documentWord"
         app-name="ordhuset"
-        path="[[wordPath]]"
+        path="/norwegian/[[key]]"
         data="{{editableWord}}">
     </firebase-document>
 
@@ -30,20 +24,27 @@
                 on-keys-pressed="save"></iron-a11y-keys>
 
     <div class="card">
-      <h2>{{actionLabel}}</h2>
+      <h2>{{key}}</h2>
       <paper-input
           id="norwegianInput"
-          label="Type the translation"
+          label="Type your word in Norwegian"
           always-float-label
           placeholder="Norwegian"
-          required
-          auto-validate$="[[muteValidation]]"
-          error-message="Needs some text!"
-          value="{{word.norwegian}}">
+          value="{{key}}">
       </paper-input>
+    </div>
 
-      <paper-toggle-button checked="{{word.isSubstantive}}" noink>Substantive</paper-toggle-button>
+    <div class="card">
+      <h3>Substantives</h3>
 
+      <oh-substantive-list-editor
+          id="substantivesEditor"
+          norwegian="[[key]]"
+          is-new="[[isEmpty(editableWord)]]">
+      </oh-substantive-list-editor>
+    </div>
+
+    <div class="card">
       <div>
         <paper-toggle-button checked="{{word.isVerb}}">Verb</paper-toggle-button>
         <!-- TODO insert verb editor here -->
@@ -52,8 +53,9 @@
         <paper-toggle-button checked="{{word.isAdjective}}">Adjective</paper-toggle-button>
         <!-- TODO insert adjective editor here -->
       </div>
-      <div class="controls">
-        <paper-button on-tap="save">Done</paper-button>
+      <div class="center">
+        <!--<paper-button on-tap="save" disabled$="[[!isEmpty(editableWord)]]">Save</paper-button>-->
+        <paper-button on-tap="save">Save</paper-button>
         <paper-button on-tap="cancel">Cancel</paper-button>
       </div>
     </div>
@@ -64,119 +66,75 @@
     Polymer({
       is: 'oh-word-editor',
 
+      behaviors: [Polymer.OrdhusetBehavior],
+
       properties: {
-        word: {
-          type: Object,
+        /** The key of the word in the database. */
+        key: {
+          type: String,
           notify: true,
-          value: { norwegian: '', english: '', isSubstantive: false, isVerb: false, isAdjective: false },
-          observer: 'observerWord',
+        },
+        /** The word as it is in the database. */
+        word : {
+          type: Object,
         },
         editableWord: {
           type: Object,
         },
-        opened: {
+        /** Wether the word editor is currently editing a word, a new one or an existing one. */
+        isEditing: {
           type: Boolean,
-          reflectToAttribute: true,
-          notify: true,
           readOnly: true,
+          notify: true,
           value: false,
         },
-        wordPath: {
-          type: String,
-          readOnly: true,
-          reflectToAttribute: true,
-          computed: 'computeWordPath(word)',
-          observer: 'observerWordPath',
-        }
       },
 
-      open: function(action) {
-        if(action == 'create')
-          this.create();
-        else if(action == 'edit')
-          this.edit();
+      // Methods
 
-        this._setOpened(true);
-        this.$.norwegianInput.$.input.focus();
-      },
-
-      close: function() {
-        this._setOpened(false);
-      },
-
-      showHideClass: function(show) {
-        return show ? '' : 'hidden';
-      },
-
+      /**
+       * Resets the word potentially currently under edition and set the editor
+       * ready to edit a new one.
+       */
       create: function() {
-        this.actionLabel = 'Add a new word';
-        this.muteValidation = false;
-        this.word = { norwegian: '', isSubstantive: false, isVerb: false, isAdjective: false };
-        this.muteValidation = true;
+        this.$.documentWord.reset();
+        this._setIsEditing(true);
       },
 
-      edit: function() {
-        this.actionLabel = 'Edit the word ' + this.word.norwegian;
-        this.editableWord = this.word;
+      /**
+       * Start the edition of the word which key is given as parameter
+       * @param {String} The key of the word to edit, must be valid.
+       */
+      edit: function(key) {
+        console.log("Starting edition of word " + key);
+        this._setKey(key);
+        this._setIsEditing(true);
       },
 
-      delete: function() {
-        console.log("Removing a word which path is " + this.wordPath);
-        this.editableWord = this.word;
-        return this.$.document.destroy().then(function() {
-          console.log("deletion seems a success");
-          this.$.document.reset().then(function(){
-            this.editableWord = null;
-            this.close();
-          }.bind(this));
-        }.bind(this)).catch(function () {
-          console.warn("Unable to destroy the word");
-        });
-      },
-
-      // Nei, in database the substantive shall be just one entry,
-      // for one key we should have an array o substantives to enable synonms
-      // in the word table, we should just know if this word has at least on entry among the substantives, so just the bool
-
-      save: function() {
-        if (this.word.english ||
-            this.word.norwegian) {
-          if (this.$.document.isNew) {
-            console.log("Inserting a new word: " + JSON.stringify(this.word));
-            this.editableWord = this.word;
-            return this.$.document.save('/words/', this.editableWord.norwegian).then(function() {
-            console.log("Inserted word: " + JSON.stringify(this.editableWord));
-              this.$.document.reset().then(function(){
-                this.editableWord = null;
-                this.close();
-              }.bind(this));
-            }.bind(this)).catch(function () {
-              console.warn("Unable to save the word");
-            });
-          }
-          else {
-            console.log("Modifying a word: " + this.editableWord.norwegian + " will becomme " + this.word.norwegian);
-            return this.$.document.destroy().then(function() {
-              this.$.document.reset().then(function(){
-                this.editableWord = this.word;
-                this.save();
-              }.bind(this));
-            }.bind(this)).catch(function () {
-              console.warn("Unable to destroy the word in order to reinsert it updated afterward");
-            });
-          }
-        }
-        else {
-          console.warn("Tried to push an emptyy word in database");
-        }
-
-        return Promise.resolve().then(function() {
-              this.close();
-            }.bind(this));
-      },
-
+      /**
+       * Abort the current edition, all data enterd by the user are lost.
+       */
       cancel: function() {
-        this.close('cancel');
+        this._setIsEditing(false);
+        this.$.documentWord.reset();
+        this.fire('cancel');
+      },
+
+      /**
+       * Saves the word in database.
+       */
+      save: function() {
+        // TODO this should return a nice promise.
+        var nSubstantives = this.$.substantivesEditor.save();
+
+        this.editableWord.isSubstantive = nSubstantives > 0;
+
+        // But let's consider everything is perfect so far...
+        // We save the word itself in the dictionary
+        this.$.documentWord.save('/norwegian/', this.key)
+          .then(function() {
+            console.log("Word successfully saved in DB.");
+          });
       },
 
       // Observers
@@ -185,17 +143,8 @@
         console.log("WORD changed:\nOld: " + JSON.stringify(oldData) + "\nNew: " + JSON.stringify(newData));
       },
 
-      observerWordPath: function (newData, oldData) {
-        console.log("WORD PATH changed:\nOld: " + JSON.stringify(oldData) + "\nNew: " + JSON.stringify(newData));
-      },
-
       // Compute functions
 
-      computeWordPath: function(word) {
-        // Never return if the key is null, we don't want to delete the whole tree.
-        if(word.norwegian)
-          return '/words/' + word.norwegian;
-      }
     });
   </script>
 </dom-module>

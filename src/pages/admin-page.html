@@ -1,0 +1,72 @@
+
+<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
+
+<link rel="import" href="list-page.html">
+<link rel="import" href="word-edit-page.html">
+
+<dom-module id="admin-page">
+  <style include="shared-styles">
+  </style>
+  <template>
+    <!-- Routing -->
+    <app-route
+        route="{{route}}"
+        pattern="/:page"
+        data="{{routeData}}"
+        tail="{{subroute}}"
+        active="{{active}}"></app-route>
+<!--
+    <div class="card">
+      <p>routeData.page: [[routeData.page]]</p>
+      <p>
+        <h3>route:</h3>
+        prefix: [[route.prefix]]<br>
+        path: [[route.path]]<br>
+        active: [[active]]<br>
+      </p>
+      <p>
+        <h3>routeData:</h3>
+        page: [[routeData.page]]<br>
+      </p>
+    </div>
+-->
+
+    <iron-pages id="pages"
+        role="main"
+        selected="[[routeData.page]]"
+        selected-attribute="active"
+        attr-for-selected="name"
+        fallback-selection="list">
+      <list-page name="list" subroute="{{subroute}}"></list-page>
+      <word-edit-page name="edit" subroute="{{subroute}}" on-finished="onFinishedEdition"></word-edit-page>
+    </iron-pages>
+  </template>
+  <script>
+
+    Polymer({
+      is: 'admin-page',
+      behaviors: [Polymer.OrdhusetBehavior],
+
+      properties: {
+        route: {
+          type: Object,
+          notify: true,
+          observer: 'onRouteChanged'
+        },
+      },
+
+      onRouteChanged: function(newData, oldData) {
+        // WORKAROUND: If the path is blank, redirect to /
+        if (this.route.path == '' && this.route.prefix != '/') {
+          this.set('route.path', '/');
+        }
+      },
+
+      onFinishedEdition: function(e) {
+        // We're done, we go back the admin page.
+        this.set('route.path', '/');
+      },
+    });
+
+  </script>
+</dom-module>

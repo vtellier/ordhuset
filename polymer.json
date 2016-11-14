@@ -10,7 +10,6 @@
   "fragments": [
     "src/pages/search-page.html",
     "src/pages/list-page.html",
-    "src/pages/adm-substantives-page.html",
     "src/pages/word-page.html"
   ],
   "includeDependencies": [

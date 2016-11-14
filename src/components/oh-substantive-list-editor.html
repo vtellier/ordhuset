@@ -1,0 +1,266 @@
+<!--<link rel="import" href="../ordhuset-app/oh-behavior.html">-->
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../ordhuset-app/shared-style.html">
+<link rel="import" href="../components/oh-substantive-editor.html">
+
+<dom-module id="oh-substantive-list-editor">
+  <template>
+    <style include="shared-styles">
+      :host {
+        /*display: block;
+        padding: 10px;*/
+      }
+
+      .heading {
+        padding: 10px 15px;
+        margin-top: 20px;
+        background-color: #f3f3f3;
+        border: 1px solid #dedede;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        font-size: 18px;
+        cursor: pointer;
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        width: 100%;
+        text-align: left;
+      }
+      .heading iron-icon {
+        float: right;
+      }
+      .content {
+        padding: 15px;
+        border: 1px solid #dedede;
+        border-top: none;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        @apply(--shadow-elevation-2dp);
+      }
+
+      .substantive-button-box {
+        margin-top: 20px;
+        text-align: center;
+      }
+      .substantive-button-box paper-fab {
+        display: inline-block;
+        margin-left: 1ex;
+      }
+
+      table.subs-list {
+        width: 100%;
+      }
+    </style>
+
+    <firebase-query
+        id="substantivesQuery"
+        app-name="ordhuset"
+        path="/substantives/[[norwegian]]"
+        data="{{dbSubstantives}}">
+    </firebase-query>
+
+    <!-- substantives from database -->
+    <template is="dom-repeat" items="[[dbSubstantives]]" as="substantive" indexAs="index">
+      <button class="heading" ident$="subsDb[[index]]" on-tap="toggle">
+        <div class="circle">[[plusOne(index)]]</div>
+        [[norwegian]], [[substantive.singularDefinite]], [[substantive.pluralIndefinite]], [[substantive.pluralDefinite]]
+        <iron-icon icon="expand-more"></iron-icon>
+      </button>
+      <iron-collapse ident$="subsDb[[index]]">
+        <div class="content">
+          <oh-substantive-editor
+              key="[[substantive.$key]]"
+              norwegian="[[norwegian]]"
+              on-saved="onSaved"
+              on-cancel="onCancel">
+          </oh-substantive-editor>
+        </div>
+      </iron-collapse>
+    </template>
+
+    <!-- substantives added by the user but not saved -->
+    <template is="dom-repeat" items="[[newSubstantives]]" as="substantive" indexAs="index">
+      <button class="heading" ident$="subsNew[[index]]" on-tap="toggle">
+        <div class="circle">[[plusOne(index)]]</div>
+        [[norwegian]], [[substantive.singularDefinite]], [[substantive.pluralIndefinite]], [[substantive.pluralDefinite]]
+        <iron-icon icon="expand-more"></iron-icon>
+      </button>
+      <iron-collapse ident$="subsNew[[index]]" opened$="[[substantive.opened]]">
+        <div class="content">
+          <oh-substantive-editor
+              ident$="newSubEditor[[index]]"
+              key="[[substantive.$key]]"
+              norwegian="[[norwegian]]"
+              on-done="onDone"
+              on-cancel="onCancel">
+          </oh-substantive-editor>
+        </div>
+      </iron-collapse>
+    </template>
+
+    <hr>
+
+    <div class="substantive-button-box">
+      <paper-fab
+          icon="add"
+          on-tap="addSubstantive"
+          disabled="[[!online]]"
+          aria-label="Add a substantive to the word [[norwegian]]"
+          class="substantive-button"
+          mini>
+      </paper-fab>
+    </div>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'oh-substantive-list-editor',
+
+      behaviors: [Polymer.OrdhusetBehavior],
+
+      properties: {
+        norwegian: {
+          type: String,
+          notify: true,
+        },
+        dbSubstantives: {
+          type: Object,
+          observer: 'onDbSubstantivesChanged',
+        },
+        newSubstantives: {
+          type: Object,
+          value: [],
+          notify: true,
+        },
+        isNew: {
+          type: Boolean,
+        },
+      },
+
+      // Methods for the outside
+
+      /**
+       * Saves the substantives in DB.
+       * @return {number} The number of substantives succcessfully inserted in database.
+       */
+      save: function(i = 0) {
+
+        var items = [];
+
+        for(var i=0; i<n; i++) {
+          //var current = this.newSubstantives[0];
+          var id = 'newSubEditor' + i;
+          items.push(this.$$('oh-substantive-editor[ident="' + id + '"]'));
+        }
+
+        // Loop through our chapter urls
+        items.reduce(function(sequence, editor) {
+          // Add these actions to the end of the sequence
+          return sequence.then(function() {
+            console.log("Gonna save substantive " + editor.getAttribute("ident"));
+            return editor.saveInDB()
+              .then(function() {
+                console.log(editor.getAttribute("ident") + " succcessfully saved in database.");
+              }.bind(this))
+              .catch(function(error) {
+                console.log(error);
+              });
+          }.bind(this));
+        }.bind(this), Promise.resolve())
+
+
+        var n = this.newSubstantives.length;
+        // We parse the array of substantives and sav thm one by one.
+        // TODO return a promise and use the race thingies to do it really nice.
+        for(var i=0; i<n; i++) {
+          //var current = this.newSubstantives[0];
+          var id = 'newSubEditor' + i;
+          var editor = this.$$('oh-substantive-editor[ident="' + id + '"]');
+          console.log("Gonna save substantive " + id);
+          editor.saveInDB()
+            .then(function() {
+              console.log(id + " succcessfully saved in database.");
+            }.bind(this))
+            .catch(function(error) {
+              console.log(error);
+            });
+
+          // Horroble, really need the race thingy
+          this.splice('newSubstantives', i, 1);
+        }
+
+        return n;
+      },
+
+      // Display functions
+
+      toggle: function (event) {
+        var id = event.currentTarget.getAttribute('ident');
+        var collapse = this.$$('iron-collapse[ident="' + id + '"]');
+
+        collapse.toggle();
+      },
+
+      plusOne: function(number) {
+        return number + 1;
+      },
+
+      // Substantive edition functions
+
+      addSubstantive: function() {
+        var sub = {opened:true};
+
+        this.push('newSubstantives', sub);
+        //console.log(JSON.stringify(sub));
+      },
+
+      onSaved: function(event) {
+        console.log("Substantive saved! key=" + JSON.stringify(event.detail));
+        //this.substantivesQuery.refresh();
+        event.target.saveInDB()
+          .then(function () {
+            console.log("Substantive successfully saved in database.");
+          })
+          .catch(function(error) {
+            console.error(error);
+          });
+      },
+
+      onDone: function(event) {
+        console.log("Substantive edition done, will be save in DB later." + JSON.stringify(event.detail));
+      },
+
+      onCancel: function(event) {
+        //event.target.setDefault
+        var id = event.currentTarget.getAttribute('ident');
+        var pref = id.substr(0, 3);
+
+        if(pref == "sub") {
+          console.log("We cancel the edition of a substantive that exists in database. " + id);
+        }
+        else if(pref == "new") {
+          console.log("We cancel the edition of a new substantive. "+ id);
+        }
+        else {
+          console.warn("Non implemented use case for " + id);
+        }
+
+      },
+
+      // computed properties
+
+      computeNorwegian: function(path) {
+        return path.substring(1);
+      },
+
+      onDbSubstantivesChanged:function (newData, oldData) {
+        console.log("onDbSubstantivesChanged:\nnew: " + JSON.stringify(newData) + "\nold: " + JSON.stringify(oldData));
+      },
+    });
+  </script>
+</dom-module>

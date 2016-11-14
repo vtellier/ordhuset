@@ -5,8 +5,6 @@
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
-<link rel="import" href="../components/oh-word.html">
-<link rel="import" href="../components/oh-word-editor.html">
 <link rel="import" href="../ordhuset-app/shared-style.html">
 
 
@@ -23,52 +21,62 @@
       }
     </style>
 
-    <template is="dom-if" if="{{adminMode}}">
-      <firebase-query
-          id="query"
-          app-name="ordhuset"
-          path="/words"
-          data="{{data}}"
-          start-at="[[startAt]]"
-          end-at="[[endAt]]">
-      </firebase-query>
+    <firebase-query
+        id="query"
+        app-name="ordhuset"
+        path="/norwegian"
+        data="{{data}}"
+        start-at="[[startAt]]"
+        end-at="[[endAt]]">
+    </firebase-query>
 
-      <div class$="card {{showHideList(editorOpened)}}">
-        <paper-input label="Filter" value="{{startAt}}">
-          <iron-icon icon="icons:search" prefix></iron-icon>
-          <paper-icon-button suffix on-tap="clearFilter" icon="icons:clear" alt="clear" title="clear">
-          </paper-icon-button>
-        </paper-input>
-        <div class$="table {{showHideList(editorOpened)}}">
-          <div class=row>
-            <div class="cell center">Word</div>
-            <div class="cell center">Classes</div>
-            <div class="cell center">Action</div>
-          </div>
-          <template is="dom-repeat" items="{{data}}" as="word">
-            <oh-word
-                word="[[word]]"
-                on-edit="edit"
-                on-delete="delete">
-            </oh-word>
-          </template>
+    <div class="card">
+      <paper-input label="Filter" value="{{startAt}}">
+        <iron-icon icon="icons:search" prefix></iron-icon>
+        <paper-icon-button suffix on-tap="clearFilter" icon="icons:clear" alt="clear" title="clear">
+        </paper-icon-button>
+      </paper-input>
+      <div class="table">
+        <div class=row>
+          <div class="cell center">Word</div>
+          <div class="cell center">Classes</div>
+          <div class="cell center">Action</div>
         </div>
+        <template is="dom-repeat" items="{{data}}" as="word">
+          <div class="row">
+            <div class="cell">{{word.$key}}</div>
+            <div class="cell">
+              <template is="dom-if" if="[[word.isSubstantive]]">substantive</template>
+              <template is="dom-if" if="[[word.isVerb]]">verb</template>
+              <template is="dom-if" if="[[word.isAdjective]]">adjective</template>
+            </div>
+            <div class="cell center">
+              <paper-icon-button
+                  icon="icons:cancel"
+                  title="remove"
+                  on-tap="delete">
+              </paper-icon-button>
+              <a href="[[subroute.prefix]]edit/[[word.$key]]">
+                <paper-icon-button
+                    icon="icons:create"
+                    title="Edit the word [[word.$key]]">
+                </paper-icon-button>
+              </a>
+            </div>
+          </div>
+        </template>
       </div>
+    </div>
 
-      <oh-word-editor
-          id="editor"
-          word="{{editableWord}}"
-          opened="{{editorOpened}}">
-      </oh-word-editor>
-
+    <a href="[[stripLastSlash(subroute.prefix)]]edit" title="Add a new word">
       <paper-fab
           class="button-box"
           icon="add"
-          on-tap="create"
+          on-tap=""
           disabled="[[!online]]"
           aria-label="Add a word">
       </paper-fab>
-    </template>
+    </a>
   </template>
   <script>
     Polymer({
@@ -77,14 +85,12 @@
       behaviors: [Polymer.OrdhusetBehavior],
 
       properties: {
-          subroute: Object,
+          subroute: {
+            type: Object,
+            observer: 'onSubrouteChanged'
+          },
           data: {
             type: Object,
-          },
-          editableWord: {
-            type: Object,
-            notify: true,
-            //observer: 'dataChanged'
           },
           startAt: {
             type: String,
@@ -98,41 +104,28 @@
       },
 
       dataChanged: function (newData, oldData) {
-        alert("data changed! " + JSON.stringify(newData) + " ; " + JSON.stringify(oldData));
+        console.log("data changed! " + JSON.stringify(newData) + " ; " + JSON.stringify(oldData));
       },
 
-      ready: function() {
-        if(this.$.query && this.$.query.refresh) {
-          alert("created");
-          this.$.query.refresh();
-        }
+      onSubrouteChanged: function (newData, oldData) {
+        console.log("onSubrouteChanged\nnew: " + JSON.stringify(newData) + "\nold:" + JSON.stringify(oldData));
       },
-
+/*
       create: function() {
-        this.$.editor.open('create');
+        this.$.editor.create();
       },
-
+*/
       clearFilter: function() {
         this.startAt = '';
       },
-
-      showHideList: function(show) {
-        return show ? 'hidden' : '';
-      },
-
+/*
       edit: function(event) {
-        console.log("Gonna edit " + JSON.stringify(event.detail.word));
-        this.editableWord = event.detail;
-        this.$.editor.open('edit');
+        var model = event.model;
+        this.$.editor.edit(model.word.$key);
       },
-
+*/
       delete: function(event) {
-        this.editableWord = event.detail;
-        this.$.editor.delete();
-      },
-
-      toEditableId: function(substantiveId) {
-        return this.substantivesPath + '/' + substantiveId;
+        console.warn("Not implemented");
       },
 
       computeEndAt: function(startAt) {

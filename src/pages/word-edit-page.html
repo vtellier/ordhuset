@@ -1,0 +1,48 @@
+
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../components/svg-flag-icons.html">
+<link rel="import" href="../components/oh-word-editor.html">
+<link rel="import" href="../ordhuset-app/shared-style.html">
+
+<dom-module id="word-edit-page">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        padding: 10px;
+      }
+
+    </style>
+
+    <oh-word-editor
+        key="[[stripFirstSlash(subroute.path)]]"
+        on-cancel="editionDone">
+    </oh-word-editor>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'word-edit-page',
+
+      behaviors: [Polymer.OrdhusetBehavior],
+
+      properties: {
+        subroute: Object,
+      },
+
+      clearFilter: function(e) {
+        this.startAt = "";
+      },
+
+      editionDone: function(e) {
+        console.log("Edition is done.");
+        this.fire('finished');
+      },
+    });
+  </script>
+</dom-module>

@@ -3,6 +3,7 @@
   (function() {
     'use strict';
 
+    // TODO use just one singleton...
     var instances = [];
 
     Polymer.UserSessionBehaviorImpl = {
@@ -22,17 +23,44 @@
           notify: true,
           value: false,
         },
-        noSync: {
-          type: Boolean,
-          value: false,
-        },
+      },
+
+      get master() {
+        return instances.length == 0 || this == instances[0];
+      },
+
+      created: function() {
+        instances.push(this);
+      /*
+        this.master = instances.length == 0;
+
+        if(this.master) {
+          console.log(this.tagName + " I'm the first!");
+        }
+        else {
+          console.log(this.tagName + " I'm not the first!");
+        }*/
+      },
+
+      ready: function() {
+        //this.master = instances.length == 0;
+
+        if(this.master) {
+          console.log(this.tagName + " I'm the master of baviors!");
+        }
+        else {
+          //console.log(this.tagName + " Getting master's values");
+          this.user = instances[0].user;
+          this.isAdmin = instances[0].isAdmin;
+          this.adminMode = instances[0].adminMode;
+        }
       },
 
       attached: function() {
-        instances.push(this);
+        //instances.push(this);
       },
       detached: function() {
-        this.arrayDelete(instances, this);
+        //this.arrayDelete(instances, this);
       },
 
       // Session methods
@@ -55,21 +83,24 @@
       // observers:
 
       syncInstances: function(key, value) {
-        if(!this.noSync) {
+        if(this.master) {
+          //console.log(this.tagName + " I'm the first, I synchronize " + instances.length + " instances");
           instances.forEach(function (inst, i) {
             if(inst != this) {
-              console.log("Synchronizing " + key + " on instance #" + i);
-              inst.noSync = true;
+              //console.log("Synchronizing " + key + " on instance #" + i + " new value = " + value);
               inst[key] = value;
-              inst.noSync = false;
             }
           }.bind(this));
+        }
+        else
+        {
+          //console.log(this.tagName + " I'm not the first, I don't synchronize");
         }
       },
 
       onUserChanged: function(newData, oldData) {
-        if(newData && newData.hasOwnProperty("email") && newData.email == "vincent.lt.tellier@gmail.com") {
-          console.log("Admin session!");
+        if(newData && newData.hasOwnProperty("uid") && newData.uid == "5rJdiecEz3P5KHZy7IZ0kfGR94i1") {
+          //console.log("Admin session!");
           this.isAdmin = true;
         }
         else {
@@ -80,7 +111,7 @@
       },
 
       isAdminChanged: function(newData, oldData) {
-        this.syncInstances('isAdmin', this.isAdmin);
+        //this.syncInstances('isAdmin', this.isAdmin);
         this.adminMode = this.isAdmin;
       },
 
@@ -90,11 +121,41 @@
       properties: {
       },
 
+
+      // Compound binding
+
+
+      showMe: function(show) {
+        //console.log("showMe(" + JSON.stringify(show) + ")");
+        return show ? '' : 'hidden';
+      },
+
+      hideMe: function(hide) {
+        //console.log("hideMe(" + JSON.stringify(hide) + ")");
+        return hide ? 'hidden' : '';
+      },
+
+
       // Utility functions
+
+      stripFirstSlash: function(path) {
+        if(!this.isEmpty(path) && path[0] == '/')
+          return path.substring(1);
+        else
+          return path;
+      },
+
+// TODO fix it looks like it doesn't work...
+      stripLastSlash: function(path) {
+        if(!this.isEmpty() && path.slice(-1) == '/')
+          return path.substr(0, -1);
+        else
+          return path;
+      },
 
       // Returns true if it's undefined, empty object, empty array or a number equal to 0.
       isEmpty: function(variable) {
-        if (typeof variable !== 'undefined') {
+        if (typeof variable !== 'undefined' && variable != null) {
           if (Array.isArray(variable)) {
             return variable.length == 0;
           }

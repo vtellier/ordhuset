@@ -4,6 +4,7 @@
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../components/svg-flag-icons.html">
 <link rel="import" href="../ordhuset-app/shared-style.html">
 
 <dom-module id="search-page">
@@ -25,7 +26,7 @@
     <firebase-query
         id="query"
         app-name="ordhuset"
-        path="/words"
+        path="/norwegian"
         data="{{data}}"
         start-at="[[startAt]]"
         end-at="[[endAt]]"
@@ -35,7 +36,7 @@
 
     <!-- Search field -->
     <div class="card">
-      <paper-input label="Search" value="{{startAt}}" no-label-float>
+      <paper-input label="Search a norwegian word" value="{{startAt}}" no-label-float>
         <iron-icon icon="icons:search" prefix></iron-icon>
         <paper-icon-button
             suffix on-tap="clearFilter"
@@ -44,16 +45,20 @@
             title="Clear search field"
             disabled$="[[isEmpty(startAt)]]">
         </paper-icon-button>
+        <iron-icon icon="svg-flag-icons:no" suffix></iron-icon>
       </paper-input>
     </div>
 
-    <template is="dom-if" if="[[!isEmpty(data.length)]]">
+    <template is="dom-if" if="[[!isEmpty(startAt)]]">
       <div class="card">
+        <template is="dom-if" if="[[isEmpty(data.length)]]">
+          No match found.
+        </template>
         <template is="dom-repeat" items="{{data}}" as="word">
-          <a href="/word/[[word.norwegian]]"
+          <a href="/word/[[word.$key]]"
             name="View detail of the word [[word.norwegian]]"
             tabindex="-1">
-            <paper-item raised>[[word.norwegian]]</paper-item>
+            <paper-item raised>[[word.$key]]</paper-item>
           </a>
         </template>
       </div>

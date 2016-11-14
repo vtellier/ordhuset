@@ -7,7 +7,7 @@
 <link rel="import" href="oh-login.html">
 
 <link rel="import" href="../pages/search-page.html">
-<link rel="import" href="../pages/list-page.html">
+<link rel="import" href="../pages/admin-page.html">
 <link rel="import" href="../pages/word-page.html">
 
 <link rel="import" href="../../bower_components/app-layout/app-drawer/app-drawer.html">
@@ -87,18 +87,6 @@
         user="{{user}}">
     </firebase-auth>
 
-    <!-- Servie worker
-    <platinum-sw-register
-        auto-register
-        skip-waiting
-        clients-claim
-        reload-on-install
-        href="sw-import.js">
-      <platinum-sw-cache
-          default-cache-strategy="networkFirst">
-      </platinum-sw-cache>
-    </platinum-sw-register>-->
-
     <!-- Routing -->
     <app-location route="{{route}}"></app-location>
     <app-route
@@ -113,10 +101,10 @@
       <!-- Drawer content -->
       <app-drawer id="drawer">
         <app-toolbar>Menu</app-toolbar>
-        <iron-selector selected="[[routeData.page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="search" href="/search">Dictionary</a>
+        <iron-selector selected="[[routeData.page]]" attr-for-selected="name" class="drawer-list" role="navigation" on-iron-select="onSelectPage">
+          <a name="search" href="/search" paper-drawer-toggle>Dictionary</a>
           <template is="dom-if" if="{{adminMode}}">
-            <a name="adm-list" href="/adm-list">List</a>
+            <a name="admin" href="/admin" paper-drawer-toggle>Admin</a>
           </template>
         </iron-selector>
       </app-drawer>
@@ -161,10 +149,10 @@
               name="search"
               subroute="[[subroute]]">
           </search-page>
-          <list-page
-              name="adm-list"
-              subroute="[[subroute]]">
-          </list-page>
+          <admin-page
+              name="admin"
+              route="{{subroute}}">
+          </admin-page>
           <word-page
               name="word"
               subroute="[[subroute]]">
@@ -180,6 +168,10 @@
       is: 'ordhuset-app',
 
       behaviors: [Polymer.OrdhusetBehavior],
+
+      onSelectPage: function(e) {
+        //drawer.toggle();
+      },
 
       computeAdminIcon: function(adminMode) {
         return adminMode ? 'verified-user' : 'perm-identity';
