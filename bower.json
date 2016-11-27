@@ -27,7 +27,8 @@
     "paper-radio-button": "PolymerElements/paper-radio-button#^1.2.1",
     "iron-collapse": "PolymerElements/iron-collapse#^1.2.1",
     "paper-item": "PolymerElements/paper-item#^1.2.1",
-    "iron-iconset-svg": "PolymerElements/iron-iconset-svg#^1.1.0"
+    "iron-iconset-svg": "PolymerElements/iron-iconset-svg#^1.1.0",
+    "iron-dropdown": "PolymerElements/iron-dropdown#^1.5.3"
   },
   "sources": [
     "src/**/*",
