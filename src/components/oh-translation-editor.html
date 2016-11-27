@@ -1,0 +1,70 @@
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+
+<dom-module id="oh-translation-editor">
+  <template>
+    <style include="shared-styles">
+    </style>
+
+    <firebase-query
+        id="query"
+        app-name="ordhuset"
+        path="/english"
+        data="{{data}}"
+        start-at="[[startAt]]"
+        end-at="[[endAt]]">
+    </firebase-query>
+
+    <paper-input label="Filter" value="{{startAt}}">
+      <!--<iron-icon icon="icons:search" prefix></iron-icon>-->
+      <paper-icon-button suffix on-tap="clearFilter" icon="icons:clear" alt="clear" title="clear">
+      </paper-icon-button>
+    </paper-input>
+    <iron-dropdown horizontal-align="right" vertical-align="top" opened$="[[!isEmpty(data)]]">
+      <template is="dom-repeat" items="[[data]]" as="translation">
+        <div class="dropdown-content">[[translation.$key]]</div>
+      </template>
+    </iron-dropdown>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'oh-translation-editor',
+
+      behaviors: [Polymer.OrdhusetBehavior],
+
+      properties: {
+        selectedTranslation: {
+          type: String,
+        },
+
+        isNew: {
+          type: Boolean,
+        },
+        startAt: {
+          type: String,
+          notify: true
+        },
+        endAt: {
+          type: String,
+          notify: true,
+          computed: 'computeEndAt(startAt)',
+        }
+      },
+
+
+      clearFilter: function() {
+        this.startAt = '';
+      },
+
+      computeEndAt: function(startAt) {
+        if(startAt != '')
+          return startAt + String.fromCharCode(-1);
+        else
+          return '';
+      }
+
+    });
+  </script>
+
+</dom-module>
