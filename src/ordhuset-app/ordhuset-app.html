@@ -2,9 +2,10 @@
 <link rel="import" href="../../bower_components/app-layout/app-layout.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../../bower_components/firebase/polymerfire.html">
+<link rel="import" href="../../bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
 <link rel="import" href="oh-style.html">
+<link rel="import" href="pg-default.html">
 
 
 <dom-module id="ordhuset-app">
@@ -53,6 +54,15 @@
       messaging-sender-id="573833858404">
     </firebase-app>
     
+    <!-- Page routing -->
+    <app-location route="{{route}}"></app-location>
+    <app-route
+      route="{{route}}"
+      pattern="/:view"
+      data="{{routeData}}"
+      tail="{{subroute}}">
+    </app-route>
+    
     <app-drawer-layout>
       <app-drawer swipe-open slot="drawer">
         <section>
@@ -73,7 +83,13 @@
             <div main-title>Ordhuset</div>
           </app-toolbar>
         </app-header>
-        <paper-input always-float-label label="Type your word here:"></paper-input>
+        
+        <!-- iron-pages selects the view based on the active route -->
+        <iron-pages selected="[[routeData.view]]" attr-for-selected="name">
+          <pg-default name="" route="{{subroute}}"></pg-default>
+          <!-- Nb.: insert other pages here -->
+        </iron-pages>
+        
       </app-header-layout>
     </app-drawer-layout>
   </template>

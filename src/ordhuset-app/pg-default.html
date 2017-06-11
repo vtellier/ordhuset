@@ -1,0 +1,35 @@
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="oh-style.html">
+
+<dom-module id="pg-default">
+  <template>
+    <style include="oh-style">
+      /* CSS rules for your element */
+    </style>
+
+    <paper-input always-float-label label="Type your word here:"></paper-input>
+    
+  </template>
+
+  <script>
+    class PgDefault extends Polymer.Element {
+
+      static get is() { return 'pg-default'; }
+
+      // Declare properties for the element's public API
+      static get properties() {
+        return {
+          greeting: {
+            type: String,
+            value: "Hello!"
+          }
+        }
+      }
+
+    }
+
+    // Register the x-custom element with the browser
+    customElements.define(PgDefault.is, PgDefault);
+  </script>
+
+</dom-module>
