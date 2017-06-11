@@ -1,3 +1,5 @@
+
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-if.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="oh-style.html">
 
@@ -13,17 +15,20 @@
       id="search-query"
       path="/dictionary"
       start-at="[[_search]]"
-      end-at="[[computeEndAt(_search)]]"
+      end-at="[[_computeEndAt(_search)]]"
       data="{{_searchResult}}"
       limit-to-first="15"
       disabled$="{{isEmpty(_search)}}">
     </firebase-query>
     
-    <ul>
+    <ul class$="{{hideIfEmpty(_searchResult.*)}}">
       <template is="dom-repeat" items="{{_searchResult}}" as="word">
-        <li>{{word}}</li>
+        <li>{{word.$key}}:<br><pre>{{stringify(word)}}</pre></li>
       </template>
     </ul>
+    <p class$="{{hideIfNotEmpty(_searchResult.*)}}">
+      No match
+    </p>
     
   </template>
 
@@ -38,17 +43,19 @@
           greeting: {
             type: String,
             value: "Hello!"
+          },
+          _search: {
+            type: String,
+            value: ""
+          },
+          _searchResult: {
+            type: Array,
+            value: []
           }
         }
       }
-      
-      // A constructor in order to initialize implicitly declared properties
-      constructor() {
-          super();
-          this._search="";
-      }
 
-      computeEndAt(startAt) {
+      _computeEndAt(startAt) {
         return startAt + String.fromCharCode(-1);
       }
       
@@ -69,6 +76,18 @@
         }
         else
           return true;
+      }
+      
+      hideIfEmpty(arrayStar) {
+        return arrayStar.base.length==0 ? "hidden" : "";
+      }
+      
+      hideIfNotEmpty(arrayStar) {
+        return arrayStar.base.length>0 ? "hidden" : "";
+      }
+      
+      stringify(obj) {
+        return JSON.stringify(obj, 2);
       }
 
     }
