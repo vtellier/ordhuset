@@ -7,7 +7,23 @@
       /* CSS rules for your element */
     </style>
 
-    <paper-input always-float-label label="Type your word here:"></paper-input>
+    <paper-input always-float-label label="Type your word here:" value="{{_search}}"></paper-input>
+    
+    <firebase-query
+      id="search-query"
+      path="/dictionary"
+      start-at="[[_search]]"
+      end-at="[[computeEndAt(_search)]]"
+      data="{{_searchResult}}"
+      limit-to-first="15"
+      disabled$="{{isEmpty(_search)}}">
+    </firebase-query>
+    
+    <ul>
+      <template is="dom-repeat" items="{{_searchResult}}" as="word">
+        <li>{{word}}</li>
+      </template>
+    </ul>
     
   </template>
 
@@ -24,6 +40,35 @@
             value: "Hello!"
           }
         }
+      }
+      
+      // A constructor in order to initialize implicitly declared properties
+      constructor() {
+          super();
+          this._search="";
+      }
+
+      computeEndAt(startAt) {
+        return startAt + String.fromCharCode(-1);
+      }
+      
+      isEmpty(variable) {
+        if (typeof variable !== 'undefined' && variable != null) {
+          if (Array.isArray(variable)) {
+            return variable.length == 0;
+          }
+          else if(!isNaN(variable)) {
+            return variable == 0;
+          }
+          else if(typeof variable === 'string' || variable instanceof String) {
+            return variable.length == 0;
+          }
+          else {
+            return Object.keys(variable).length === 0;
+          }
+        }
+        else
+          return true;
       }
 
     }
