@@ -3,6 +3,7 @@
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/firebase/polymerfire.html">
 <link rel="import" href="oh-style.html">
 
 
@@ -42,6 +43,15 @@
         font-size: 2em;
       }
     </style>
+    
+    <!-- Firebase application -->
+    <firebase-app
+      auth-domain="ordhuset-5e76d.firebaseapp.com"
+      database-url="https://ordhuset-5e76d.firebaseio.com"
+      api-key="AIzaSyCh0p0DgdzkdGYn-nmy_KGJkWk9mr9A46w"
+      storage-bucket="ordhuset-5e76d.appspot.com"
+      messaging-sender-id="573833858404">
+    </firebase-app>
     
     <app-drawer-layout>
       <app-drawer swipe-open slot="drawer">
