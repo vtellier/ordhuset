@@ -1,0 +1,7 @@
+{
+  "name": "ordhuset",
+  "short_name": "ordhuset",
+  "description": "A smart Norwegian dictionary",
+  "start_url": "/",
+  "display": "standalone"
+}
