@@ -1,9 +1,0 @@
-{
-  "name": "Ordhuset",
-  "scope": "./",
-  "short_name": "Oh!",
-  "description": "A smart NO-EN / EN-NO dictionary.",
-  "start_url": "index.html",
-  "display": "standalone",
-  "theme_color": "#af3d3d"
-}
