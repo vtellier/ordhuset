@@ -1,3 +1,5 @@
+<script src="mi-utils.js"></script>
+
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/app-layout/app-layout.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
@@ -6,6 +8,7 @@
 <link rel="import" href="../../bower_components/app-route/app-route.html">
 <link rel="import" href="oh-style.html">
 <link rel="import" href="pg-default.html">
+<link rel="import" href="pg-addword.html">
 
 
 <dom-module id="ordhuset-app">
@@ -87,6 +90,7 @@
         <!-- iron-pages selects the view based on the active route -->
         <iron-pages selected="[[routeData.view]]" attr-for-selected="name">
           <pg-default name="" route="{{subroute}}"></pg-default>
+          <pg-addword name="add-word" route="{{subroute}}"></pg-addword>
           <!-- Nb.: insert other pages here -->
         </iron-pages>
         

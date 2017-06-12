@@ -1,0 +1,44 @@
+
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="oh-style.html">
+
+<dom-module id="pg-addword">
+  <template>
+    <style include="oh-style">
+      /* CSS rules for your element */
+    </style>
+
+    <paper-input always-float-label label="The word to add:" value="{{__word}}"></paper-input>
+    
+  </template>
+
+  <script>
+    class PgAddWord extends OhUtils(Polymer.Element) {
+
+      static get is() { return 'pg-addword'; }
+
+      // Declare properties for the element's public API
+      static get properties() {
+        return {
+          greeting: {
+            type: String,
+            value: "Hello!"
+          },
+          __search: {
+            type: String,
+            value: ""
+          },
+          __searchResult: {
+            type: Array,
+            value: []
+          }
+        }
+      }
+
+    }
+
+    // Register the x-custom element with the browser
+    customElements.define(PgAddWord.is, PgAddWord);
+  </script>
+
+</dom-module>
