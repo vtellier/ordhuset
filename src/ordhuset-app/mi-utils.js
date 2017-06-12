@@ -19,23 +19,29 @@ OhUtils = function(superClass) {
     }
     _barChanged(bar) { ... }*/
 
-    isEmpty(variable) {
-      if (typeof variable !== 'undefined' && variable != null) {
-        if (Array.isArray(variable)) {
-          return variable.length == 0;
+    // Returns true if all arguments are empty or undefined
+    isEmpty() {
+      var ret = true;
+      for (var i = 0; ret && i < arguments.length; i++) {
+        var variable = arguments[i];
+        if (typeof variable !== 'undefined' && variable != null) {
+          if (Array.isArray(variable)) {
+            ret = variable.length == 0;
+          }
+          else if(!isNaN(variable)) {
+            ret = variable == 0;
+          }
+          else if(typeof variable === 'string' || variable instanceof String) {
+            ret = variable.length == 0;
+          }
+          else {
+            ret = Object.keys(variable).length === 0;
+          }
         }
-        else if(!isNaN(variable)) {
-          return variable == 0;
-        }
-        else if(typeof variable === 'string' || variable instanceof String) {
-          return variable.length == 0;
-        }
-        else {
-          return Object.keys(variable).length === 0;
-        }
+        else
+          ret = true;
       }
-      else
-        return true;
+      return ret;
     }
     
     stringify(obj) {
