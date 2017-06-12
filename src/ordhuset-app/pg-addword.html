@@ -31,7 +31,7 @@
     </paper-radio-group>
     
     <br>
-    <paper-button raised on-click="__onSubmit">Submit</paper-button>
+    <paper-button raised on-click="__onSubmit" disabled$="[[!isNotEmpty(__word, __definition)]]">Submit</paper-button>
     
     <firebase-document
       id="wordDocument"
@@ -68,14 +68,18 @@
           if(!this.__wordEntity.hasOwnProperty('defs'))
             this.__wordEntity.defs = [];
           
-          this.__wordEntity.defs.push({
+          var newDef = {
             lang: this.__language,
             class: this.__wordclass,
             definition: this.__definition
-          });
+          };
+          this.__wordEntity.defs.push(newDef);
           
           this.$.wordDocument.saveValue('/dictionary/', this.__word)
-            .then(this.__initForm.bind(this))
+            .then(function() {
+              console.log("New definition of '", this.__word, "' has successfully added:", newDef);
+              this.__initForm();
+            }.bind(this, newDef))
             .catch(function(e) {console.error("Unable to save word:", e)});
       }
 
