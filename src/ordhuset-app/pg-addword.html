@@ -31,7 +31,7 @@
     </paper-radio-group>
     
     <br>
-    <paper-button raised on-click="__onClick">Submit</paper-button>
+    <paper-button raised on-click="__onSubmit">Submit</paper-button>
     
     <firebase-document
       id="wordDocument"
@@ -48,18 +48,22 @@
 
       static get properties() {
         return {
-          __language: {
-            type: String,
-            value: "no"
-          },
-          __wordclass: {
-            type: String,
-            value: "noun"
-          }
         }
       }
       
-      __onClick(e) {
+      constructor() {
+        super();
+        this.__initForm();
+      }
+      
+      __initForm() {
+        this.__language = "no";
+        this.__word = "";
+        this.__definition = "";
+        this.__wordclass = "noun";
+      }
+      
+      __onSubmit(e) {
           
           if(!this.__wordEntity.hasOwnProperty('defs'))
             this.__wordEntity.defs = [];
@@ -70,7 +74,9 @@
             definition: this.__definition
           });
           
-          this.$.wordDocument.saveValue('/dictionary/', this.__word);
+          this.$.wordDocument.saveValue('/dictionary/', this.__word)
+            .then(this.__initForm.bind(this))
+            .catch(function(e) {console.error("Unable to save word:", e)});
       }
 
     }
