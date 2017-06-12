@@ -12,7 +12,7 @@
     </style>
 
     <label id="language">Language:</label>
-    <paper-radio-group aria-labelledby="language" selected="no">
+    <paper-radio-group aria-labelledby="language" selected="{{__language}}">
       <paper-radio-button name="no">Norwegian</paper-radio-button>
       <paper-radio-button name="en">English</paper-radio-button>
     </paper-radio-group>
@@ -21,7 +21,7 @@
     <paper-input always-float-label label="The word to add:" value="{{__word}}"></paper-input>
     
     <br>
-    <paper-input always-float-label label="Definition of the word:" value="{{__definition}}"></paper-input>
+    <paper-input always-float-label label="Definition of the word (write it in the language of the word):" value="{{__definition}}"></paper-input>
     
     <br>
     <label id="wordclass">Word's class:</label>
@@ -41,10 +41,14 @@
       static get is() { return 'pg-addword'; }
 
       static get properties() {
-          return {
-            __wordclass: {
-              type: String,
-              value: ""
+        return {
+          __language: {
+            type: String,
+            value: "no"
+          },
+          __wordclass: {
+            type: String,
+            value: "noun"
           }
         }
       }
