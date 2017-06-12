@@ -2,6 +2,7 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-radio-group/paper-radio-group.html">
 <link rel="import" href="../../bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="oh-style.html">
 
 <dom-module id="pg-addword">
@@ -10,15 +11,27 @@
       /* CSS rules for your element */
     </style>
 
+    <label id="language">Language:</label>
+    <paper-radio-group aria-labelledby="language" selected="no">
+      <paper-radio-button name="no">Norwegian</paper-radio-button>
+      <paper-radio-button name="en">English</paper-radio-button>
+    </paper-radio-group>
+    
+    <br>
     <paper-input always-float-label label="The word to add:" value="{{__word}}"></paper-input>
     
-    <label id="wordclass">Class:</label>
-    <paper-radio-group aria-labelledby="wordclass" selected="noun">
+    <br>
+    <paper-input always-float-label label="Definition of the word:" value="{{__definition}}"></paper-input>
+    
+    <br>
+    <label id="wordclass">Word's class:</label>
+    <paper-radio-group aria-labelledby="wordclass" selected="{{__wordclass}}">
       <paper-radio-button name="noun">Noun</paper-radio-button>
       <paper-radio-button name="verb">Verb</paper-radio-button>
     </paper-radio-group>
     
-    
+    <br>
+    <paper-button raised on-click="__onClick">Submit</paper-button>
     
   </template>
 
@@ -28,8 +41,16 @@
       static get is() { return 'pg-addword'; }
 
       static get properties() {
-        return {
+          return {
+            __wordclass: {
+              type: String,
+              value: ""
+          }
         }
+      }
+      
+      __onClick(e) {
+          console.log(e);
       }
 
     }

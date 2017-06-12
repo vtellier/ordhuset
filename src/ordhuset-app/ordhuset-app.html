@@ -9,6 +9,7 @@
 <link rel="import" href="../../bower_components/app-route/app-location.html">
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="oh-style.html">
 <link rel="import" href="pg-default.html">
 <link rel="import" href="pg-addword.html">
@@ -74,8 +75,8 @@
         <section>
           <h2>Menu</h2>
           <iron-selector attr-for-selected="name" selected="[[routeData.view]]">
-            <a href="/" name="search">Search</a>
-            <a href="/add-word" name="add-word">Add a word</a>
+            <paper-button><a href="/" name="search">Search</a></paper-button>
+            <paper-button><a href="/add-word" name="add-word">Add a word</a></paper-button>
           </iron-selector>
         </section>
       </app-drawer>
