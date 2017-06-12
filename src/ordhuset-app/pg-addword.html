@@ -33,6 +33,12 @@
     <br>
     <paper-button raised on-click="__onClick">Submit</paper-button>
     
+    <firebase-document
+      id="wordDocument"
+      path="/dictionary/{{__word}}"
+      data="{{__wordEntity}}">
+    </firebase-document>
+    
   </template>
 
   <script>
@@ -54,7 +60,17 @@
       }
       
       __onClick(e) {
-          console.log(e);
+          
+          if(!this.__wordEntity.hasOwnProperty('defs'))
+            this.__wordEntity.defs = [];
+          
+          this.__wordEntity.defs.push({
+            lang: this.__language,
+            class: this.__wordclass,
+            definition: this.__definition
+          });
+          
+          this.$.wordDocument.saveValue('/dictionary/', this.__word);
       }
 
     }
