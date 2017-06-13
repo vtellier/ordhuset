@@ -7,23 +7,17 @@
 <dom-module id="pg-default">
   <template>
     <style include="oh-style">
-      ul.suggestions, ul.suggestions .detail {
+      ul.suggestions {
         list-style: none;
         list-style-type: none;
       }
       ul.suggestions li:hover {
         background-color: var(--list-item-bg-hover);
       }
-      ul.suggestions li .detail {
-        display: none;
-      }
-      ul.suggestions li:hover .detail {
-        display: block;
-      }
     </style>
 
-    <paper-input always-float-label label="Type your word here:" value="{{__search}}">
-      <iron-icon icon="icons:search" prefix></iron-icon>
+    <paper-input label="Type your word here" value="{{__search}}">
+      <iron-icon icon="icons:search" slot="prefix"></iron-icon>
     </paper-input>
     
     <firebase-query
@@ -38,15 +32,15 @@
     
     <ul class$="{{_showIfResults(__searchResult.*)}} suggestions">
       <template is="dom-repeat" items="{{__searchResult}}" as="word">
-        <li>
-          <iron-icon icon="svg-flag-icons:{{__wordEntity.lang}}" suffix></iron-icon>
-          {{word.$key}}
-          <ul class="detail">
-            <template is="dom-repeat" items="{{word.defs}}" as="def" index-as="defIndex">
-              <li><a href="/word/{{word.$key}}/[[defIndex]]">{{def.lang}}:{{def.definition}}</a><br><pre>{{stringify(def, 2)}}</pre></li>
-            </template>
-          </ul>
-        </li>
+        <template is="dom-repeat" items="{{word.defs}}" as="def" index-as="defIndex">
+          <li lang="{{def.lang}}">
+            <iron-icon icon="svg-flag-icons:{{def.lang}}"></iron-icon>
+            <a href="/word/{{word.$key}}/[[defIndex]]">
+              {{word.$key}}
+              {{def.definition}}
+            </a>
+          </li>
+        </template>
       </template>
     </ul>
     <p class$="{{_showIfNoResult(__searchResult.*, __search)}}">

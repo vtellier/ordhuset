@@ -69,8 +69,24 @@ OhUtils = function(superClass) {
       return ret;
     }
     
+    areEqual() {
+      var ret = true;
+      if(arguments.length > 0) {
+        var prec = arguments[0];
+        for (var i = 1; ret && i < arguments.length; i++) {
+          ret = prec === arguments[i];
+          prec = arguments[i];
+        }
+      }
+      return ret;
+    }
+    
     stringify(obj, spaces) {
       return JSON.stringify(obj, null, spaces);
+    }
+    
+    _showIfNotEmpty(obj) {
+      return obj !== undefined ? "" : "hidden";
     }
   }
 };
