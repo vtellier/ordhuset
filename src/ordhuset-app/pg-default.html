@@ -22,7 +22,9 @@
       }
     </style>
 
-    <paper-input always-float-label label="Type your word here:" value="{{__search}}"></paper-input>
+    <paper-input always-float-label label="Type your word here:" value="{{__search}}">
+      <iron-icon icon="icons:search" prefix></iron-icon>
+    </paper-input>
     
     <firebase-query
       id="search-query"
@@ -36,10 +38,12 @@
     
     <ul class$="{{_showIfResults(__searchResult.*)}} suggestions">
       <template is="dom-repeat" items="{{__searchResult}}" as="word">
-        <li>{{word.$key}}
+        <li>
+          <iron-icon icon="svg-flag-icons:{{__wordEntity.lang}}" suffix></iron-icon>
+          {{word.$key}}
           <ul class="detail">
-            <template is="dom-repeat" items="{{word.defs}}" as="def">
-              <li>{{def.lang}}:{{def.definition}}</li>
+            <template is="dom-repeat" items="{{word.defs}}" as="def" index-as="defIndex">
+              <li><a href="/word/{{word.$key}}/[[defIndex]]">{{def.lang}}:{{def.definition}}</a><br><pre>{{stringify(def, 2)}}</pre></li>
             </template>
           </ul>
         </li>

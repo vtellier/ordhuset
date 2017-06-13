@@ -69,8 +69,8 @@ OhUtils = function(superClass) {
       return ret;
     }
     
-    stringify(obj) {
-      return JSON.stringify(obj, 2);
+    stringify(obj, spaces) {
+      return JSON.stringify(obj, null, spaces);
     }
   }
 };

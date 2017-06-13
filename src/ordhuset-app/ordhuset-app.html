@@ -11,8 +11,10 @@
 <link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="oh-style.html">
+<link rel="import" href="svg-flags-icons.html">
 <link rel="import" href="pg-default.html">
 <link rel="import" href="pg-addword.html">
+<link rel="import" href="pg-word.html">
 
 
 <dom-module id="ordhuset-app">
@@ -99,6 +101,7 @@
         <iron-pages selected="[[routeData.view]]" attr-for-selected="name" fallback-selection="search">
           <pg-default name="search" route="{{subroute}}"></pg-default>
           <pg-addword name="add-word" route="{{subroute}}"></pg-addword>
+          <pg-word name="word" route="{{subroute}}"></pg-word>
           <!-- Nb.: insert other pages here -->
         </iron-pages>
         
