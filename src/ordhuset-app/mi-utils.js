@@ -72,13 +72,5 @@ OhUtils = function(superClass) {
     stringify(obj) {
       return JSON.stringify(obj, 2);
     }
-    
-    hideIfEmpty(arrayStar) {
-      return arrayStar.base.length==0 ? "hidden" : "";
-    }
-    
-    hideIfNotEmpty(arrayStar) {
-      return arrayStar.base.length>0 ? "hidden" : "";
-    }
   }
 };
