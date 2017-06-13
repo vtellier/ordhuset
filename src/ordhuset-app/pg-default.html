@@ -7,7 +7,19 @@
 <dom-module id="pg-default">
   <template>
     <style include="oh-style">
-      /* CSS rules for your element */
+      ul.suggestions, ul.suggestions .detail {
+        list-style: none;
+        list-style-type: none;
+      }
+      ul.suggestions li:hover {
+        background-color: var(--list-item-bg-hover);
+      }
+      ul.suggestions li .detail {
+        display: none;
+      }
+      ul.suggestions li:hover .detail {
+        display: block;
+      }
     </style>
 
     <paper-input always-float-label label="Type your word here:" value="{{__search}}"></paper-input>
@@ -22,9 +34,15 @@
       disabled$="{{isEmpty(__search)}}">
     </firebase-query>
     
-    <ul class$="{{hideIfEmpty(__searchResult.*)}}">
+    <ul class$="{{hideIfEmpty(__searchResult.*)}} suggestions">
       <template is="dom-repeat" items="{{__searchResult}}" as="word">
-        <li>{{word.$key}}:<br><pre>{{stringify(word)}}</pre></li>
+        <li>{{word.$key}}
+          <ul class="detail">
+            <template is="dom-repeat" items="{{word.defs}}" as="def">
+              <li>{{def.lang}}:{{def.definition}}</li>
+            </template>
+          </ul>
+        </li>
       </template>
     </ul>
     <p class$="{{hideIfNotEmpty(__searchResult.*)}}">
