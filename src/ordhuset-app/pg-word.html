@@ -76,10 +76,39 @@
       </section>
     </template>
     
-    
     <template is="dom-if" if="{{areEqual(__wordEntity.class,'noun')}}">
-      <h2>Declensions</h2>
-      TO DO
+      <section>
+        <h2>Declensions</h2>
+        <ul>
+          <li>
+            Definite
+            <ul>
+              <li>Singular: {{_formatVerbInflection(__wordEntity.declension.definite_singular)}}</li>
+              <li>Plural: {{_formatVerbInflection(__wordEntity.declension.definite_plural)}}</li>
+            </ul>
+          </li>
+          <li>
+            Indefinite
+            <ul>
+              <li>Singular: {{_formatVerbInflection(__wordEntity.declension.indefinite_singular)}}</li>
+              <li>Plural: {{_formatVerbInflection(__wordEntity.declension.indefinite_plural)}}</li>
+            </ul>
+          </li>
+        </ul>
+        <h3>Add a declension</h3>
+        <div class="add-something">
+          <paper-dropdown-menu id="_newDefinitionAndNumberMenu" label="Select declination" value="{{__newDefinitionAndNumber}}">
+            <paper-listbox slot="dropdown-content" class="dropdown-content">
+              <paper-item label="definite_singular">Definite singular</paper-item>
+              <paper-item label="definite_plural">Definite plural</paper-item>
+              <paper-item label="indefinite_singular">Indefinite singular</paper-item>
+              <paper-item label="indefinite_plural">Indefinite plural</paper-item>
+            </paper-listbox>
+          </paper-dropdown-menu>
+          <paper-input label="Declension" value="{{__declension}}"></paper-input>
+          <paper-button raised disabled$="{{!isNotEmpty(__newDefinitionAndNumber, __declension)}}" on-click="__onSubmitNewSubstantiveDeclension">Add</paper-button>
+        </div>
+      </section>
     </template>
     
     <!--<hr>
@@ -133,6 +162,25 @@
       __resetNewVerbInflection() {
         this.__newTense = null;
         this.__inflection = null;
+      }
+      
+      __onSubmitNewSubstantiveDeclension() {
+        if(!this.__wordEntity.hasOwnProperty('declension'))
+          this.__wordEntity.declension = {};
+        if(!this.__wordEntity.declension.hasOwnProperty(this.__newDefinitionAndNumber))
+          this.__wordEntity.declension[this.__newDefinitionAndNumber] = [];
+        this.__wordEntity.declension[this.__newDefinitionAndNumber].push(this.__declension);
+        this.$.wordDocument.saveValue('/dictionary/'+this.routeData.word+'/defs', this.routeData.def)
+          .then(function(){
+            this._success('The declension has successfully been added to the database');
+            this.__resetNewSubstantiveDeclension();
+          }.bind(this))
+          .catch(function(e){this._failure(e);this.__resetNewSubstantiveDeclension();}.bind(this));
+      }
+      
+      __resetNewSubstantiveDeclension() {
+        this.__newDefinitionAndNumber = null;
+        this.__declension = null;
       }
 
     }
