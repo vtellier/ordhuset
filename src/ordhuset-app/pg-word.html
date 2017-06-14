@@ -8,11 +8,11 @@
 <dom-module id="pg-word">
   <template>
     <style include="oh-style">
-      .add-conjugation {
+      .add-something {
         @apply --layout-horizontal;
         @apply --layout-wrap;
       }
-      .add-conjugation * {
+      .add-something * {
         margin: 0 1ex;
       }
     </style>
@@ -36,47 +36,56 @@
     </h1>
     <p lang="{{__wordEntity.lang}}">{{__wordEntity.definition}}</p>
     
-    <template is="dom-if" if="{{areEqual(__wordEntity.class,'verb')}}">
-      <h2>Conjugation</h2>
-      <ul>
-        <li>Infinitive: {{_formatVerbInflection(__wordEntity.conjugation.infinitive)}}</li>
-        <li>Present: {{_formatVerbInflection(__wordEntity.conjugation.present)}}</li>
-        <li>Preterit: {{_formatVerbInflection(__wordEntity.conjugation.preterit)}}</li>
-        <li>Present perfect: {{_formatVerbInflection(__wordEntity.conjugation.present_perfect)}}</li>
-        <li>Imperative: {{_formatVerbInflection(__wordEntity.conjugation.imperative)}}</li>
+    <section>
+      <h2>Translations</h2>
+      <ul class="{{_showIfNotEmpty(__wordEntity.translations)}}">
+        <template is="dom-repeat" items="{{__wordEntity.translations}}" as="trans">
+          <li><pre>{{stringify(trans,2)}}</pre></li>
+        </template>
       </ul>
-      <h3>Add an inflection</h3>
-      <section class="add-conjugation">
-        <paper-dropdown-menu id="_newTenseMenu" label="Select tense" value="{{__newTense}}">
-          <paper-listbox slot="dropdown-content" class="dropdown-content">
-            <paper-item label="infinitive">Infinitive</paper-item>
-            <paper-item label="present">Present</paper-item>
-            <paper-item label="preterit">Preterit</paper-item>
-            <paper-item label="present_perfect">Present perfect</paper-item>
-            <paper-item label="imperative">Imperative</paper-item>
-          </paper-listbox>
-        </paper-dropdown-menu>
-        <paper-input label="Conjugation" value="{{__inflection}}"></paper-input>
-        <paper-button raised disabled$="{{!isNotEmpty(__newTense, __inflection)}}" on-click="__onSubmitNewVerbInflection">Add</paper-button>
+      <h3>Add a translation</h3>
+      <div class="add-something">
+        TODO
+      </div>
+    </section>
+    
+    <template is="dom-if" if="{{areEqual(__wordEntity.class,'verb')}}">
+      <section>
+        <h2>Conjugation</h2>
+        <ul>
+          <li>Infinitive: {{_formatVerbInflection(__wordEntity.conjugation.infinitive)}}</li>
+          <li>Present: {{_formatVerbInflection(__wordEntity.conjugation.present)}}</li>
+          <li>Preterit: {{_formatVerbInflection(__wordEntity.conjugation.preterit)}}</li>
+          <li>Present perfect: {{_formatVerbInflection(__wordEntity.conjugation.present_perfect)}}</li>
+          <li>Imperative: {{_formatVerbInflection(__wordEntity.conjugation.imperative)}}</li>
+        </ul>
+        <h3>Add an inflection</h3>
+        <div class="add-something">
+          <paper-dropdown-menu id="_newTenseMenu" label="Select tense" value="{{__newTense}}">
+            <paper-listbox slot="dropdown-content" class="dropdown-content">
+              <paper-item label="infinitive">Infinitive</paper-item>
+              <paper-item label="present">Present</paper-item>
+              <paper-item label="preterit">Preterit</paper-item>
+              <paper-item label="present_perfect">Present perfect</paper-item>
+              <paper-item label="imperative">Imperative</paper-item>
+            </paper-listbox>
+          </paper-dropdown-menu>
+          <paper-input label="Conjugation" value="{{__inflection}}"></paper-input>
+          <paper-button raised disabled$="{{!isNotEmpty(__newTense, __inflection)}}" on-click="__onSubmitNewVerbInflection">Add</paper-button>
+        </div>
       </section>
     </template>
+    
     
     <template is="dom-if" if="{{areEqual(__wordEntity.class,'noun')}}">
       <h2>Declensions</h2>
       TO DO
     </template>
     
-    <h2>Translations</h2>
-    <ul class="{{_showIfNotEmpty(__wordEntity.translations)}}">
-      <template is="dom-repeat" items="{{__wordEntity.translations}}" as="trans">
-        <li><pre>{{stringify(trans,2)}}</pre></li>
-      </template>
-    </ul>
-    
-    <hr>
+    <!--<hr>
     <h2>Debug</h2>
     <pre>{{stringify(__wordEntity, 2)}}</pre>
-    <pre>{{stringify(__newTense, 2)}}</pre>
+    <pre>{{stringify(__newTense, 2)}}</pre>-->
   </template>
 
   <script>
