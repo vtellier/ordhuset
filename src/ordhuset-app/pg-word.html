@@ -8,7 +8,13 @@
 <dom-module id="pg-word">
   <template>
     <style include="oh-style">
-      /* CSS rules for your element */
+      .add-conjugation {
+        @apply --layout-horizontal;
+        @apply --layout-wrap;
+      }
+      .add-conjugation * {
+        margin: 0 1ex;
+      }
     </style>
 
     <app-route
@@ -32,34 +38,27 @@
     
     <template is="dom-if" if="{{areEqual(__wordEntity.class,'verb')}}">
       <h2>Conjugation</h2>
-      <table>
-        <tr>
-          <th>Infinitive</th>
-          <th>Present</th>
-          <th>Preterit</th>
-          <th>Present perfect</th>
-          <th>Imperative</th>
-        </tr>
-        <tr lang="{{__wordEntity.lang}}">
-          <td>{{stringify(__wordEntity.conjugation.infinitive)}}</td>
-          <td>{{stringify(__wordEntity.conjugation.present)}}</td>
-          <td>{{stringify(__wordEntity.conjugation.preterit)}}</td>
-          <td>{{stringify(__wordEntity.conjugation.present_perfect)}}</td>
-          <td>{{stringify(__wordEntity.conjugation.imperative)}}</td>
-        </tr>
-      </table>
-      <h3>Add a congujation</h3>
-      <paper-dropdown-menu label="Tense">
-        <paper-listbox slot="dropdown-content" class="dropdown-content">
-          <paper-item>Infinitive</paper-item>
-          <paper-item>Present</paper-item>
-          <paper-item>Preterit</paper-item>
-          <paper-item>Present perfect</paper-item>
-          <paper-item>Imperative</paper-item>
-        </paper-listbox>
-      </paper-dropdown-menu>
-      
-      <paper-input label="Form" value="{{__form}}"></paper-input>
+      <ul>
+        <li>Infinitive: {{_formatVerbInflection(__wordEntity.conjugation.infinitive)}}</li>
+        <li>Present: {{_formatVerbInflection(__wordEntity.conjugation.present)}}</li>
+        <li>Preterit: {{_formatVerbInflection(__wordEntity.conjugation.preterit)}}</li>
+        <li>Present perfect: {{_formatVerbInflection(__wordEntity.conjugation.present_perfect)}}</li>
+        <li>Imperative: {{_formatVerbInflection(__wordEntity.conjugation.imperative)}}</li>
+      </ul>
+      <h3>Add an inflection</h3>
+      <section class="add-conjugation">
+        <paper-dropdown-menu id="_newTenseMenu" label="Select tense" value="{{__newTense}}">
+          <paper-listbox slot="dropdown-content" class="dropdown-content">
+            <paper-item label="infinitive">Infinitive</paper-item>
+            <paper-item label="present">Present</paper-item>
+            <paper-item label="preterit">Preterit</paper-item>
+            <paper-item label="present_perfect">Present perfect</paper-item>
+            <paper-item label="imperative">Imperative</paper-item>
+          </paper-listbox>
+        </paper-dropdown-menu>
+        <paper-input label="Conjugation" value="{{__inflection}}"></paper-input>
+        <paper-button raised disabled$="{{!isNotEmpty(__newTense, __inflection)}}" on-click="__onSubmitNewVerbInflection">Add</paper-button>
+      </section>
     </template>
     
     <template is="dom-if" if="{{areEqual(__wordEntity.class,'noun')}}">
@@ -77,6 +76,7 @@
     <hr>
     <h2>Debug</h2>
     <pre>{{stringify(__wordEntity, 2)}}</pre>
+    <pre>{{stringify(__newTense, 2)}}</pre>
   </template>
 
   <script>
@@ -88,12 +88,42 @@
         return {
           route: {
             type: Object
+          },
+          __newTense: {
+            type: String,
+            value: ""
           }
         }
       }
       
       _showIfResults(arrayStar) {
         return arrayStar.base.length==0 ? "hidden" : "";
+      }
+      
+      _formatVerbInflection(inflections) {
+        if(!this.isEmpty(inflections))
+          return inflections.join(', ');
+        else
+          return 'undefined';
+      }
+      
+      __onSubmitNewVerbInflection() {
+        if(!this.__wordEntity.hasOwnProperty('conjugation'))
+          this.__wordEntity.conjugation = {};
+        if(!this.__wordEntity.conjugation.hasOwnProperty(this.__newTense))
+          this.__wordEntity.conjugation[this.__newTense] = [];
+        this.__wordEntity.conjugation[this.__newTense].push(this.__inflection);
+        this.$.wordDocument.saveValue('/dictionary/'+this.routeData.word+'/defs', this.routeData.def)
+          .then(function(){
+            this._success('The inflection has successfully been added to the database');
+            this.__resetNewVerbInflection();
+          }.bind(this))
+          .catch(function(e){this._failure(e);this.__resetNewVerbInflection();}.bind(this));
+      }
+      
+      __resetNewVerbInflection() {
+        this.__newTense = null;
+        this.__inflection = null;
       }
 
     }

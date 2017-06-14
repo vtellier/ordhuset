@@ -88,5 +88,15 @@ OhUtils = function(superClass) {
     _showIfNotEmpty(obj) {
       return obj !== undefined ? "" : "hidden";
     }
+    
+    _success(message) {
+      console.log('I fire success', message);
+      this.dispatchEvent(new CustomEvent('success', {bubbles: true, detail: message}));
+    }
+    
+    _failure(message) {
+      console.log('I fire failure', message);
+      this.dispatchEvent(new CustomEvent('failure', {bubbles: true, detail: message}));
+    }
   }
 };
