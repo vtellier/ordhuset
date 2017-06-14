@@ -84,6 +84,18 @@ OhUtils = function(superClass) {
     stringify(obj, spaces) {
       return JSON.stringify(obj, null, spaces);
     }
+
+    _computeEndAt(startAt) {
+      return startAt + String.fromCharCode(-1);
+    }
+    
+    _showIfResults(arrayStar) {
+      return arrayStar.base.length==0 ? "hidden" : "";
+    }
+    
+    _showIfNoResult(arrayStar, search) {
+      return arrayStar.base.length>0 || this.isEmpty(search) ? "hidden" : "";
+    }
     
     _showIfNotEmpty(obj) {
       return obj !== undefined ? "" : "hidden";

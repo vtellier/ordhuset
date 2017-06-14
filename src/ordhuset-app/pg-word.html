@@ -30,6 +30,16 @@
       data="{{__wordEntity}}">
     </firebase-document>
     
+    <firebase-query
+      id="search-query"
+      path="/dictionary"
+      start-at="[[__newTranslation]]"
+      end-at="[[_computeEndAt(__newTranslation)]]"
+      data="{{__searchResult}}"
+      limit-to-first="5"
+      disabled$="{{isEmpty(__newTranslation)}}">
+    </firebase-query>
+    
     <h1>
       <iron-icon icon="svg-flag-icons:{{__wordEntity.lang}}"></iron-icon>
       {{routeData.word}} [{{__wordEntity.class}}]
@@ -45,8 +55,17 @@
       </ul>
       <h3>Add a translation</h3>
       <div class="add-something">
-        TODO
+        <paper-input label="Translation" value="{{__newTranslation}}"></paper-input>
       </div>
+      <ul class$="{{_showIfResults(__searchResult.*)}} no-chip">
+        <template is="dom-repeat" items="{{__searchResult}}" as="word">
+          <template is="dom-repeat" items="{{word.defs}}" as="def" index-as="defIndex">
+            <li lang="{{def.lang}}">
+              <button><iron-icon icon="svg-flag-icons:{{def.lang}}"></iron-icon> {{word.$key}}</button>
+            </li>
+          </template>
+        </template>
+      </ul>
     </section>
     
     <template is="dom-if" if="{{areEqual(__wordEntity.class,'verb')}}">
@@ -128,6 +147,10 @@
             type: Object
           },
           __newTense: {
+            type: String,
+            value: ""
+          },
+          __newTranslation: {
             type: String,
             value: ""
           }
