@@ -60,9 +60,11 @@
       <ul class$="{{_showIfResults(__searchResult.*)}} no-chip">
         <template is="dom-repeat" items="{{__searchResult}}" as="word">
           <template is="dom-repeat" items="{{word.defs}}" as="def" index-as="defIndex">
-            <li lang="{{def.lang}}">
-              <button><iron-icon icon="svg-flag-icons:{{def.lang}}"></iron-icon> {{word.$key}}</button>
-            </li>
+            <template is="dom-if" if="{{!areEqual(def.lang, __wordEntity.lang)}}">
+              <li lang="{{def.lang}}">
+                <paper-button><iron-icon icon="svg-flag-icons:{{def.lang}}"></iron-icon> {{word.$key}}</paper-button>
+              </li>
+            </template>
           </template>
         </template>
       </ul>
@@ -157,8 +159,17 @@
         }
       }
       
+      // @return hidden if none of the search result is not of the same language as the current word
       _showIfResults(arrayStar) {
-        return arrayStar.base.length==0 ? "hidden" : "";
+        if(arrayStar.base.length>0) {
+          for(var i=0; i<arrayStar.base.length; i++) {
+            for(var j=0; j<arrayStar.base[i].defs.length; j++) {
+              if(arrayStar.base[i].defs[j].lang != this.__wordEntity.lang)
+                return "";
+            }
+          }
+        }
+        return "hidden";
       }
       
       _formatVerbInflection(inflections) {
