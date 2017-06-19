@@ -102,12 +102,12 @@ OhUtils = function(superClass) {
     }
     
     _success(message) {
-      console.log('I fire success', message);
+      console.log('Firing success event:', message);
       this.dispatchEvent(new CustomEvent('success', {bubbles: true, detail: message}));
     }
     
     _failure(message) {
-      console.log('I fire failure', message);
+      console.log('Firing failure event:', message);
       this.dispatchEvent(new CustomEvent('failure', {bubbles: true, detail: message}));
     }
   }

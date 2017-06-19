@@ -62,7 +62,7 @@
           <template is="dom-repeat" items="{{word.defs}}" as="def" index-as="defIndex">
             <template is="dom-if" if="{{!areEqual(def.lang, __wordEntity.lang)}}">
               <li lang="{{def.lang}}">
-                <paper-button on-click="__transSuggestion" word$="{{word.$key}}" def-index$="{{defIndex}}"><iron-icon icon="svg-flag-icons:{{def.lang}}"></iron-icon> {{word.$key}}</paper-button>
+                <paper-button on-click="__addTranslation" word$="{{word.$key}}" def-index$="{{defIndex}}"><iron-icon icon="svg-flag-icons:{{def.lang}}"></iron-icon> {{word.$key}}</paper-button>
               </li>
             </template>
           </template>
@@ -225,7 +225,7 @@
         });
       }
       
-      __transSuggestion(e) {
+      __addTranslation(e) {
         var word = e.path[0].attributes['word'].value;
         var defIndex = e.path[0].attributes['def-index'].value;
         console.log("Clicked on word", word, defIndex);
@@ -234,6 +234,15 @@
           this.__wordEntity.translations = {};
         if(!this.__wordEntity.translations.hasOwnProperty(word))
           this.__wordEntity.translations[word] = [];
+        else {
+          for(var i=0; i<this.__wordEntity.translations[word].length; i++) {
+            if(this.__wordEntity.translations[word][i] == defIndex) {
+              console.warn("Impossible to add a translation twice.");
+              return;
+            }
+          }
+        }
+          
         this.__wordEntity.translations[word].push(defIndex);
         this.$.wordDocument.saveValue('/dictionary/'+this.routeData.word+'/defs', this.routeData.def)
           .then(function(){
