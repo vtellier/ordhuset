@@ -49,7 +49,7 @@
     <section>
       <h2>Translations</h2>
       <ul class="{{_showIfNotEmpty(__wordEntity.translations)}}">
-        <template is="dom-repeat" items="{{__wordEntity.translations}}" as="trans">
+        <template is="dom-repeat" items="{{__translationsToArray(__wordEntity.translations)}}" as="trans">
           <li><pre>{{stringify(trans,2)}}</pre></li>
         </template>
       </ul>
@@ -62,7 +62,7 @@
           <template is="dom-repeat" items="{{word.defs}}" as="def" index-as="defIndex">
             <template is="dom-if" if="{{!areEqual(def.lang, __wordEntity.lang)}}">
               <li lang="{{def.lang}}">
-                <paper-button><iron-icon icon="svg-flag-icons:{{def.lang}}"></iron-icon> {{word.$key}}</paper-button>
+                <paper-button on-click="__transSuggestion" word$="{{word.$key}}" def-index$="{{defIndex}}"><iron-icon icon="svg-flag-icons:{{def.lang}}"></iron-icon> {{word.$key}}</paper-button>
               </li>
             </template>
           </template>
@@ -206,7 +206,7 @@
         this.__wordEntity.declension[this.__newDefinitionAndNumber].push(this.__declension);
         this.$.wordDocument.saveValue('/dictionary/'+this.routeData.word+'/defs', this.routeData.def)
           .then(function(){
-            this._success('The declension has successfully been added to the database');
+            this._success('The translation has successfully been added to the database');
             this.__resetNewSubstantiveDeclension();
           }.bind(this))
           .catch(function(e){this._failure(e);this.__resetNewSubstantiveDeclension();}.bind(this));
@@ -215,6 +215,32 @@
       __resetNewSubstantiveDeclension() {
         this.__newDefinitionAndNumber = null;
         this.__declension = null;
+      }
+      
+      __translationsToArray(transObject) {
+        if(this.isEmpty(transObject))
+          return [];
+        return Object.keys(transObject).map(function(current) {
+          return {"word": current, "def-index":transObject[current]};
+        });
+      }
+      
+      __transSuggestion(e) {
+        var word = e.path[0].attributes['word'].value;
+        var defIndex = e.path[0].attributes['def-index'].value;
+        console.log("Clicked on word", word, defIndex);
+        
+        if(!this.__wordEntity.hasOwnProperty('translations'))
+          this.__wordEntity.translations = {};
+        if(!this.__wordEntity.translations.hasOwnProperty(word))
+          this.__wordEntity.translations[word] = [];
+        this.__wordEntity.translations[word].push(defIndex);
+        this.$.wordDocument.saveValue('/dictionary/'+this.routeData.word+'/defs', this.routeData.def)
+          .then(function(){
+            this._success('The declension has successfully been added to the database');
+            this.__resetNewSubstantiveDeclension();
+          }.bind(this))
+          .catch(function(e){this._failure(e);this.__resetNewSubstantiveDeclension();}.bind(this));
       }
 
     }
