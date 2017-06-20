@@ -13,8 +13,6 @@
 <link rel="import" href="oh-style.html">
 <link rel="import" href="svg-flags-icons.html">
 <link rel="import" href="pg-default.html">
-<link rel="import" href="pg-addword.html">
-<link rel="import" href="pg-word.html">
 
 
 <dom-module id="ordhuset-app">
@@ -100,7 +98,7 @@
         <!-- iron-pages selects the view based on the active route -->
         <iron-pages selected="[[routeData.view]]" attr-for-selected="name" fallback-selection="search">
           <pg-default name="search" route="{{subroute}}"></pg-default>
-          <pg-addword name="add-word" route="{{subroute}}"></pg-addword>
+          <pg-add-word name="add-word" route="{{subroute}}"></pg-add-word>
           <pg-word name="word" route="{{subroute}}"></pg-word>
           <!-- Nb.: insert other pages here -->
         </iron-pages>
@@ -118,12 +116,42 @@
       static get is() { return 'ordhuset-app'; }
       static get properties() {
         return {
-          prop1: {
+          page: {
             type: String,
-            value: 'ordhuset-app'
+            reflectToAttribute: true,
+            observer: '_pageChanged'
           }
         };
       }
+      static get observers() { return [
+        '_routePageChanged(routeData.view)'
+      ]}
+      
+      ready() {
+        super.ready();
+        this.removeAttribute('unresolved');
+      }
+      
+      _routePageChanged(page) {
+        this.page = page || 'default';
+        // Close the drawer - in case the *route* change came from a link in the drawer.
+        //this.drawerOpened = false;
+      }
+      
+      _pageChanged(page, oldPage) {
+        if (page != null) {
+          // home route is eagerly loaded
+          if (page != 'default') {
+            // When a load failed, it triggered a 404 which means we need to
+            // eagerly load the 404 page definition
+            let cb = null;
+            Polymer.importHref(
+              this.resolveUrl('/src/ordhuset-app/pg-' + page + '.html'),
+              cb, cb, true);
+          }
+        }
+      }
+      
     }
 
     window.customElements.define(OrdhusetApp.is, OrdhusetApp);

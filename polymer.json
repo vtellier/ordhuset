@@ -3,7 +3,7 @@
   "shell": "src/ordhuset-app/ordhuset-app.html",
   "fragments": [
     "src/ordhuset-app/pg-default.html",
-    "src/ordhuset-app/pg-addword.html",
+    "src/ordhuset-app/pg-add-word.html",
     "src/ordhuset-app/pg-word.html"
   ],
   "sources": [
