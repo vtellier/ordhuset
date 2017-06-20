@@ -44,7 +44,8 @@
     
     <h1>
       <iron-icon icon="svg-flag-icons:{{__wordEntity.lang}}"></iron-icon>
-      {{routeData.word}} [{{__wordEntity.class}}]
+      {{_prettifyWord(routeData.word,__wordEntity)}}
+      <i>[{{__wordEntity.class}}]</i>
     </h1>
     <p lang="{{__wordEntity.lang}}">{{__wordEntity.definition}}</p>
     
@@ -64,7 +65,13 @@
           <template is="dom-repeat" items="{{word.defs}}" as="def" index-as="defIndex">
             <template is="dom-if" if="{{!areEqual(def.lang, __wordEntity.lang)}}">
               <li lang="{{def.lang}}">
-                <paper-button on-click="__addTranslation" word$="{{word.$key}}" def-index$="{{defIndex}}"><iron-icon icon="svg-flag-icons:{{def.lang}}"></iron-icon> {{word.$key}}</paper-button>
+                <paper-button
+                  on-click="__addTranslation"
+                  word$="{{word.$key}}"
+                  def-index$="{{defIndex}}">
+                  <iron-icon icon="svg-flag-icons:{{def.lang}}"></iron-icon>
+                  {{_prettifyWord(word)}}
+                </paper-button>
               </li>
             </template>
           </template>

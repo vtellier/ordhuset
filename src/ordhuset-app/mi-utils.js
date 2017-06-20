@@ -110,5 +110,18 @@ OhUtils = function(superClass) {
       console.log('Firing failure event:', message);
       this.dispatchEvent(new CustomEvent('failure', {bubbles: true, detail: message}));
     }
+    
+    // Return a user friendly version of the given word
+    // ex: speak becomes 'to speak'
+    _prettifyWord(word, def) {
+      var ret = word;
+      if(this.isEmpty(def) && def.class === "verb") {
+        if(def.lang === "en")
+          ret = 'to '+ret;
+        else if(def.lang === "no")
+          ret = 'å '+ret;
+      }
+      return ret;
+    }
   }
 };
