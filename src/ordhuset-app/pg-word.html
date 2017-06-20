@@ -30,6 +30,8 @@
       data="{{__wordEntity}}">
     </firebase-document>
     
+    <firebase-document id="transDocument"></firebase-document>
+    
     <firebase-query
       id="search-query"
       path="/dictionary"
@@ -246,9 +248,16 @@
         this.__wordEntity.translations[word].push(defIndex);
         this.$.wordDocument.saveValue('/dictionary/'+this.routeData.word+'/defs', this.routeData.def)
           .then(function(){
-            this._success('The declension has successfully been added to the database');
-            this.__resetNewSubstantiveDeclension();
-          }.bind(this))
+            
+            // Add the translation in the other direction as well
+            this.$.transDocument.data = this.routeData.def;
+            this.$.transDocument.saveValue('/dictionary/'+word+'/defs/'+defIndex+'/translations', this.routeData.word)
+              .then(function() {
+                this._success('The declension has successfully been added to the database');
+                this.__resetNewSubstantiveDeclension();
+              }.bind(this, word, defIndex))
+              .catch(function(e){this._failure(e);this.__resetNewSubstantiveDeclension();}.bind(this));
+          }.bind(this, word, defIndex))
           .catch(function(e){this._failure(e);this.__resetNewSubstantiveDeclension();}.bind(this));
       }
 
