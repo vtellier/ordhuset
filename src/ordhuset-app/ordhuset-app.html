@@ -36,17 +36,13 @@
         padding: 18px;
         font-size: 18px;
       }
-      app-drawer paper-checkbox {
+      app-drawer paper-button {
         display: block;
         padding: 18px;
       }
       app-header {
         color: #fff;
         background-color: #C62828;
-        --app-header-background-front-layer: {
-          background-image: url(src/img/flam.png);
-          background-position: 50% 10%;
-        };
       }
       [main-title] {
         font-size: 2em;
@@ -76,8 +72,8 @@
         <section>
           <h2>[[localize('app-shell.menu.title')]]</h2>
           <iron-selector attr-for-selected="name" selected="[[routeData.view]]">
-            <paper-button><a href="/" name="search">[[localize('app-shell.menu.Search')]]</a></paper-button>
-            <paper-button><a href="/add-word" name="add-word">[[localize('app-shell.menu.AddAWord')]]</a></paper-button>
+            <a href="/" name="search"><paper-button><iron-icon icon="icons:search"></iron-icon>[[localize('app-shell.menu.Search')]]</paper-button></a>
+            <a href="/add-word" name="add-word"><paper-button><iron-icon icon="icons:add"></iron-icon>[[localize('app-shell.menu.AddAWord')]]</paper-button></a>
           </iron-selector>
         </section>
       </app-drawer>
