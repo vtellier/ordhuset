@@ -34,7 +34,7 @@
         <template is="dom-repeat" items="{{word.defs}}" as="def" index-as="defIndex">
           <li lang="{{def.lang}}">
             <iron-icon icon="svg-flag-icons:{{def.lang}}"></iron-icon>
-            <a href="/word/{{word.$key}}/[[defIndex]]">
+            <a href="/word/{{word.$key}}/[[defIndex]]" on-click="__clearSearch">
               <b>{{_prettifyWord(word.$key, def)}}</b>
             </a>
             <small><i>{{def.definition}}</i></small>
