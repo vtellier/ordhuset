@@ -1,6 +1,7 @@
 
 
 <link rel="import" href="../../bower_components/polymer/lib/elements/dom-if.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="mi-localization.html">
 <link rel="import" href="oh-style.html">
@@ -15,6 +16,7 @@
 
     <paper-input label="[[localize('pg-default.TypeYourWord')]]" value="{{__search}}">
       <iron-icon icon="icons:search" slot="prefix"></iron-icon>
+      <paper-icon-button icon="icons:clear" slot="suffix" on-click="__clearSearch"></paper-icon-button>
     </paper-input>
     
     <firebase-query
@@ -54,10 +56,6 @@
       // Declare properties for the element's public API
       static get properties() {
         return {
-          greeting: {
-            type: String,
-            value: "Hello!"
-          },
           __search: {
             type: String,
             value: ""
@@ -68,7 +66,10 @@
           }
         }
       }
-
+      
+      __clearSearch() {
+        this.__search = "";
+      }
     }
 
     // Register the x-custom element with the browser
