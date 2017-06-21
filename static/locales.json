@@ -83,7 +83,7 @@
     "general.DefiniteSingular" : "Singulier défini",
     "general.IndefiniteSingular" : "Singulier indéfini",
     "general.DefinitePlural" : "Pluriel défini",
-    "general.IndefinitePlural" : "PLuriel indéfini",
+    "general.IndefinitePlural" : "Pluriel indéfini",
     "general.Noun" : "Nom",
     "general.Adjective" : "Adjectif",
     "general.Verb" : "Verbe",
@@ -92,5 +92,52 @@
     "general.English" : "Anglais",
     "general.Add" : "Ajouter",
     "general.Submit" : "Envoyer"
+  },
+  "en" : {
+    "app-shell.menu.title" : "Menu",
+    "app-shell.menu.Search" : "Search",
+    "app-shell.menu.AddAWord" : "Add a word",
+    
+    "pg-default.TypeYourWord" : "Type your word",
+    "pg-default.NoMatch" : "No match",
+    
+    "pg-word.Translations" : "Translations",
+    "pg-word.AddATranslation" : "Add a translation",
+    "pg-word.Translation" : "Translation",
+    "pg-word.Conjugation" : "Conjugation",
+    "pg-word.AddAnInflection" : "Add an inflection",
+    "pg-word.SelectTense" : "Select tense",
+    "pg-word.Inflection" : "Inflection",
+    "pg-word.Declensions" : "Declensions",
+    "pg-word.AddADeclension" : "Add a declension",
+    "pg-word.SelectDeclension" : "Select declension",
+    "pg-word.Declension" : "Declension",
+    
+    "pg-add-word.Language" : "Language",
+    "pg-add-word.TheWordToAdd" : "The word to add",
+    "pg-add-word.DefinitionOfTheWord" : "Definition of the word",
+    "pg-add-word.WordsClass" : "Word's class",
+    
+    "general.Infinitive" : "Infinitive",
+    "general.Present" : "Present",
+    "general.Preterit" : "Preterit",
+    "general.PresentPerfect" : "Present perfect",
+    "general.Imperative" : "Imperative",
+    "general.Definite" : "Definite",
+    "general.Indefinite" : "Indefinite",
+    "general.Singular" : "Singular",
+    "general.Plural" : "Plural",
+    "general.DefiniteSingular" : "Singular definite",
+    "general.IndefiniteSingular" : "Singulier indefinite",
+    "general.DefinitePlural" : "Plural definite",
+    "general.IndefinitePlural" : "Plural indefinite",
+    "general.Noun" : "Noun",
+    "general.Adjective" : "Adjective",
+    "general.Verb" : "Verb",
+    
+    "general.Norwegian" : "Norwegian",
+    "general.English" : "English",
+    "general.Add" : "Add",
+    "general.Submit" : "Submit"
   }
 }
