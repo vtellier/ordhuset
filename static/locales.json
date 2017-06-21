@@ -1,5 +1,5 @@
 {
-  "no" : {
+  "no-bm" : {
     "app-shell.menu.title" : "Meny",
     "app-shell.menu.Search" : "Søk",
     "app-shell.menu.AddAWord" : "Legge til et nytt ord",

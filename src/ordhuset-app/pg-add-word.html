@@ -13,7 +13,7 @@
 
     <label id="language">Language:</label>
     <paper-radio-group aria-labelledby="language" selected="{{__language}}">
-      <paper-radio-button name="no">Norwegian</paper-radio-button>
+      <paper-radio-button name="no-bm">Norwegian</paper-radio-button>
       <paper-radio-button name="en">English</paper-radio-button>
     </paper-radio-group>
     
@@ -58,7 +58,7 @@
       }
       
       __initForm() {
-        this.__language = "no";
+        this.__language = "no-bm";
         this.__word = "";
         this.__definition = "";
         this.__wordclass = "noun";

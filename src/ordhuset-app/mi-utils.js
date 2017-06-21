@@ -118,7 +118,7 @@ OhUtils = function(superClass) {
       if(!this.isEmpty(def) && def.class === "verb") {
         if(def.lang === "en")
           ret = 'to '+ret;
-        else if(def.lang === "no")
+        else if(def.lang === "no-bm")
           ret = 'å '+ret;
       }
       return ret;
