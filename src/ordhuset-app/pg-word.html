@@ -42,7 +42,7 @@
       disabled$="{{isEmpty(__newTranslation)}}">
     </firebase-query>
     
-    <h1>
+    <h1 lang="[[__wordEntity.lang]]">
       <iron-icon icon="svg-flag-icons:{{__wordEntity.lang}}"></iron-icon>
       {{_prettifyWord(routeData.word,__wordEntity)}}
       <i>[{{__wordEntity.class}}]</i>
@@ -50,15 +50,15 @@
     <p lang="{{__wordEntity.lang}}">{{__wordEntity.definition}}</p>
     
     <section>
-      <h2>Translations</h2>
+      <h2>[[localize('pg-word.Translations')]]</h2>
       <ul class="{{_showIfNotEmpty(__wordEntity.translations)}}">
         <template is="dom-repeat" items="{{__translationsToArray(__wordEntity.translations)}}" as="trans">
           <li>'{{__transEntity.lang}}'<pre>{{stringify(trans,2)}}</pre></li>
         </template>
       </ul>
-      <h3>Add a translation</h3>
+      <h3>[[localize('pg-word.AddATranslation')]]</h3>
       <div class="add-something">
-        <paper-input label="Translation" value="{{__newTranslation}}"></paper-input>
+        <paper-input label="[[localize('pg-word.Translation')]]" value="{{__newTranslation}}"></paper-input>
       </div>
       <ul class$="{{_showIfResults(__searchResult.*)}} no-chip">
         <template is="dom-repeat" items="{{__searchResult}}" as="word">
@@ -81,62 +81,67 @@
     
     <template is="dom-if" if="{{areEqual(__wordEntity.class,'verb')}}">
       <section>
-        <h2>Conjugation</h2>
+        <h2>[[localize('pg-word.Conjugation')]]</h2>
         <ul>
-          <li>Infinitive: {{_formatVerbInflection(__wordEntity.conjugation.infinitive)}}</li>
-          <li>Present: {{_formatVerbInflection(__wordEntity.conjugation.present)}}</li>
-          <li>Preterit: {{_formatVerbInflection(__wordEntity.conjugation.preterit)}}</li>
-          <li>Present perfect: {{_formatVerbInflection(__wordEntity.conjugation.present_perfect)}}</li>
-          <li>Imperative: {{_formatVerbInflection(__wordEntity.conjugation.imperative)}}</li>
+          <li>[[localize('general.Infinitive')]]: {{_formatVerbInflection(__wordEntity.conjugation.infinitive)}}</li>
+          <li>[[localize('general.Present')]]: {{_formatVerbInflection(__wordEntity.conjugation.present)}}</li>
+          <li>[[localize('general.Preterit')]]: {{_formatVerbInflection(__wordEntity.conjugation.preterit)}}</li>
+          <li>[[localize('general.PresentPerfect')]]: {{_formatVerbInflection(__wordEntity.conjugation.present_perfect)}}</li>
+          <li>[[localize('general.Imperative')]]: {{_formatVerbInflection(__wordEntity.conjugation.imperative)}}</li>
         </ul>
-        <h3>Add an inflection</h3>
+        <h3>[[localize('pg-word.AddAnInflection')]]</h3>
         <div class="add-something">
-          <paper-dropdown-menu id="_newTenseMenu" label="Select tense" value="{{__newTense}}">
+          <paper-dropdown-menu id="_newTenseMenu" label="[[localize('pg-word.SelectTense')]]" value="{{__newTense}}">
             <paper-listbox slot="dropdown-content" class="dropdown-content">
-              <paper-item label="infinitive">Infinitive</paper-item>
-              <paper-item label="present">Present</paper-item>
-              <paper-item label="preterit">Preterit</paper-item>
-              <paper-item label="present_perfect">Present perfect</paper-item>
-              <paper-item label="imperative">Imperative</paper-item>
+              <paper-item label="infinitive">[[localize('general.Infinitive')]]</paper-item>
+              <paper-item label="present">[[localize('general.Present')]]</paper-item>
+              <paper-item label="preterit">[[localize('general.Preterit')]]</paper-item>
+              <paper-item label="present_perfect">[[localize('general.PresentPerfect')]]</paper-item>
+              <paper-item label="imperative">[[localize('general.Imperative')]]</paper-item>
             </paper-listbox>
           </paper-dropdown-menu>
-          <paper-input label="Conjugation" value="{{__inflection}}"></paper-input>
-          <paper-button raised disabled$="{{!isNotEmpty(__newTense, __inflection)}}" on-click="__onSubmitNewVerbInflection">Add</paper-button>
+          <paper-input label="[[localize('pg-word.Inflection')]]" value="{{__inflection}}"></paper-input>
+          <paper-button
+            raised disabled$="{{!isNotEmpty(__newTense, __inflection)}}"
+            on-click="__onSubmitNewVerbInflection">[[localize('general.Add')]]</paper-button>
         </div>
       </section>
     </template>
     
     <template is="dom-if" if="{{areEqual(__wordEntity.class,'noun')}}">
       <section>
-        <h2>Declensions</h2>
+        <h2>[[localize('pg-word.Declensions')]]</h2>
         <ul>
           <li>
-            Definite
+            [[localize('general.Definite')]]
             <ul>
-              <li>Singular: {{_formatVerbInflection(__wordEntity.declension.definite_singular)}}</li>
-              <li>Plural: {{_formatVerbInflection(__wordEntity.declension.definite_plural)}}</li>
+              <li>[[localize('general.Singular')]]: {{_formatVerbInflection(__wordEntity.declension.definite_singular)}}</li>
+              <li>[[localize('general.Plural')]]: {{_formatVerbInflection(__wordEntity.declension.definite_plural)}}</li>
             </ul>
           </li>
           <li>
-            Indefinite
+            [[localize('general.Indefinite')]]
             <ul>
-              <li>Singular: {{_formatVerbInflection(__wordEntity.declension.indefinite_singular)}}</li>
-              <li>Plural: {{_formatVerbInflection(__wordEntity.declension.indefinite_plural)}}</li>
+              <li>[[localize('general.Singular')]]: {{_formatVerbInflection(__wordEntity.declension.indefinite_singular)}}</li>
+              <li>[[localize('general.Plural')]]: {{_formatVerbInflection(__wordEntity.declension.indefinite_plural)}}</li>
             </ul>
           </li>
         </ul>
-        <h3>Add a declension</h3>
+        <h3>[[localize('pg-word.AddADeclension')]]</h3>
         <div class="add-something">
-          <paper-dropdown-menu id="_newDefinitionAndNumberMenu" label="Select declination" value="{{__newDefinitionAndNumber}}">
+          <paper-dropdown-menu id="_newDefinitionAndNumberMenu" label="[[localize('pg-word.SelectDeclension')]]" value="{{__newDefinitionAndNumber}}">
             <paper-listbox slot="dropdown-content" class="dropdown-content">
-              <paper-item label="definite_singular">Definite singular</paper-item>
-              <paper-item label="definite_plural">Definite plural</paper-item>
-              <paper-item label="indefinite_singular">Indefinite singular</paper-item>
-              <paper-item label="indefinite_plural">Indefinite plural</paper-item>
+              <paper-item label="definite_singular">[[localize('general.DefiniteSingular')]]</paper-item>
+              <paper-item label="definite_plural">[[localize('general.DefinitePlural')]]</paper-item>
+              <paper-item label="indefinite_singular">[[localize('general.IndefiniteSingular')]]</paper-item>
+              <paper-item label="indefinite_plural">[[localize('general.IndefinitePlural')]]</paper-item>
             </paper-listbox>
           </paper-dropdown-menu>
-          <paper-input label="Declension" value="{{__declension}}"></paper-input>
-          <paper-button raised disabled$="{{!isNotEmpty(__newDefinitionAndNumber, __declension)}}" on-click="__onSubmitNewSubstantiveDeclension">Add</paper-button>
+          <paper-input label="[[localize('pg-word.Declension')]]" value="{{__declension}}"></paper-input>
+          <paper-button
+            raised
+            disabled$="{{!isNotEmpty(__newDefinitionAndNumber, __declension)}}"
+            on-click="__onSubmitNewSubstantiveDeclension">[[localize('general.Add')]]</paper-button>
         </div>
       </section>
     </template>
@@ -148,7 +153,7 @@
   </template>
 
   <script>
-    class PgWord extends OhUtils(Polymer.Element) {
+    class PgWord extends LocalizationMixin(OhUtils(Polymer.Element)) {
 
       static get is() { return 'pg-word'; }
 

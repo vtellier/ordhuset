@@ -74,10 +74,10 @@
     <app-drawer-layout>
       <app-drawer swipe-open slot="drawer">
         <section>
-          <h2>Menu</h2>
+          <h2>[[localize('app-shell.menu.title')]]</h2>
           <iron-selector attr-for-selected="name" selected="[[routeData.view]]">
-            <paper-button><a href="/" name="search">Search</a></paper-button>
-            <paper-button><a href="/add-word" name="add-word">Add a word</a></paper-button>
+            <paper-button><a href="/" name="search">[[localize('app-shell.menu.Search')]]</a></paper-button>
+            <paper-button><a href="/add-word" name="add-word">[[localize('app-shell.menu.AddAWord')]]</a></paper-button>
           </iron-selector>
         </section>
       </app-drawer>
@@ -103,10 +103,6 @@
           <pg-word name="word" route="{{subroute}}"></pg-word>
           <!-- Nb.: insert other pages here -->
         </iron-pages>
-        
-        <hr>
-        <div>Test translation: [[__translation]]</div>
-        <pre>{{resources}}</pre>
       </app-header-layout>
     </app-drawer-layout>
   </template>
@@ -120,10 +116,6 @@
       static get is() { return 'ordhuset-app'; }
       static get properties() {
         return {
-          __translation: {
-            type: String,
-            value: 'no translation :('
-          },
           page: {
             type: String,
             reflectToAttribute: true,
@@ -136,12 +128,6 @@
       ]}
       
       ready() {
-        this.addEventListener('app-localize-resources-loaded', function(e){
-          this.__translation = this.getLabel('app.title');
-        }.bind(this));
-        
-        // Call the super.ready method after having set the listener
-        // so i'm sure it is here before the resources arrive.
         super.ready();
         this.removeAttribute('unresolved');
       }

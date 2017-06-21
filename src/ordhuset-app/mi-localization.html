@@ -9,41 +9,21 @@ LocalizationMixin = function(superClass) {
     connectedCallback() {
       super.connectedCallback();
       
-      console.log("Add a listener to app-localize-resources-loaded");
-      this.addEventListener('app-localize-resources-loaded', function(e){
-        console.log('app-localize-resources-loaded', this.resources);
-      }.bind(this));
+      //console.log("Add a listener to app-localize-resources-loaded");
+      //this.addEventListener('app-localize-resources-loaded', function(e){
+      //  console.log('app-localize-resources-loaded', this.resources);
+      //}.bind(this));
       
-      console.log('Calling this.loadResources()...');
+      //console.log('Calling this.loadResources()...');
       this.loadResources(this.resolveUrl('/static/locales.json'));
     }
 
     static get properties() {
       return {
         language: {
-          value: 'es'
-        },
-        formats: {
-          type: Object,
-          value: function() {
-            return {
-              number: { MXN: { style: 'currency', currency: 'MXN' } }
-            };
-          }
+          value: 'no'
         }
       }
-    }
-
-    getLabel(a) {
-      
-      console.log('getLabel() is called... this.resources is', this.resources);
-      var args = Array.prototype.slice.call(arguments);
-      var prop = args.join('');
-      var label = prop;
-      if(this.localize)
-        label = this.localize(prop);
-
-      return label;
     }
 
   }

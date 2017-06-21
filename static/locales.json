@@ -1,5 +1,34 @@
 {
-  "es" : {
-    "apptitle" : "Doctos. Legales"
+  "no" : {
+    "app-shell.menu.title" : "Meny",
+    "app-shell.menu.Search" : "Søk",
+    "app-shell.menu.AddAWord" : "Legge til et nytt ord",
+    "pg-word.Translations" : "Oversettelser",
+    "pg-word.AddATranslation" : "Legge til en oversettelse",
+    "pg-word.Translation" : "Oversettelse",
+    "pg-word.Conjugation" : "Konjugasjon",
+    "pg-word.AddAnInflection" : "Legge til en bøyning",
+    "pg-word.SelectTense" : "Velg verbformen ut",
+    "pg-word.Inflection" : "Bøyning",
+    "pg-word.Declensions" : "Bøyninger",
+    "pg-word.AddADeclension" : "Legge til en bøyning",
+    "pg-word.SelectDeclension" : "Velg bøyningen ut",
+    "pg-word.Declension" : "Bøyning",
+    
+    "general.Infinitive" : "Infinitiv",
+    "general.Present" : "Nåtid",
+    "general.Preterit" : "Preteritum",
+    "general.PresentPerfect" : "Presens perfektum",
+    "general.Imperative" : "Imperativ",
+    "general.Definite" : "Bestemt",
+    "general.Indefinite" : "Ubestemt",
+    "general.Singular" : "Entall",
+    "general.Plural" : "Flertall",
+    "general.DefiniteSingular" : "TODO",
+    "general.IndefiniteSingular" : "TODO",
+    "general.DefinitePlural" : "TODO",
+    "general.IndefinitePlural" : "TODO",
+    
+    "general.Add" : "Legg til"
   }
 }
