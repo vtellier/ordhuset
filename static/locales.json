@@ -3,6 +3,10 @@
     "app-shell.menu.title" : "Meny",
     "app-shell.menu.Search" : "Søk",
     "app-shell.menu.AddAWord" : "Legge til et nytt ord",
+    
+    "pg-default.TypeYourWord" : "Skrive ordet her",
+    "pg-default.NoMatch" : "Ingen treff",
+    
     "pg-word.Translations" : "Oversettelser",
     "pg-word.AddATranslation" : "Legge til en oversettelse",
     "pg-word.Translation" : "Oversettelse",
@@ -15,6 +19,11 @@
     "pg-word.SelectDeclension" : "Velg bøyningen ut",
     "pg-word.Declension" : "Bøyning",
     
+    "pg-add-word.Language" : "Språk",
+    "pg-add-word.TheWordToAdd" : "Ordet å legge til",
+    "pg-add-word.DefinitionOfTheWord" : "Definisjonen til ordet",
+    "pg-add-word.WordsClass" : "Ordets klass",
+    
     "general.Infinitive" : "Infinitiv",
     "general.Present" : "Nåtid",
     "general.Preterit" : "Preteritum",
@@ -24,11 +33,17 @@
     "general.Indefinite" : "Ubestemt",
     "general.Singular" : "Entall",
     "general.Plural" : "Flertall",
-    "general.DefiniteSingular" : "TODO",
-    "general.IndefiniteSingular" : "TODO",
-    "general.DefinitePlural" : "TODO",
-    "general.IndefinitePlural" : "TODO",
+    "general.DefiniteSingular" : "Bestemt entall",
+    "general.IndefiniteSingular" : "Ubestemt entall",
+    "general.DefinitePlural" : "Bestemt flertall",
+    "general.IndefinitePlural" : "Ubestemt flertall",
+    "general.Noun" : "Substantiv",
+    "general.Adjective" : "Adjektiv",
+    "general.Verb" : "Verb",
     
-    "general.Add" : "Legg til"
+    "general.Norwegian" : "Norsk",
+    "general.English" : "Engelsk",
+    "general.Add" : "Legg til",
+    "general.Submit" : "Sende inn"
   }
 }

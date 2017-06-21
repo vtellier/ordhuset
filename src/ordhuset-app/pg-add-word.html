@@ -11,28 +11,28 @@
       /* CSS rules for your element */
     </style>
 
-    <label id="language">Language:</label>
+    <label id="language">[[localize('pg-add-word.Language')]]:</label>
     <paper-radio-group aria-labelledby="language" selected="{{__language}}">
-      <paper-radio-button name="no-bm">Norwegian</paper-radio-button>
-      <paper-radio-button name="en">English</paper-radio-button>
+      <paper-radio-button name="no-bm">[[localize('general.Norwegian')]]</paper-radio-button>
+      <paper-radio-button name="en">[[localize('general.English')]]</paper-radio-button>
     </paper-radio-group>
     
     <br>
-    <paper-input always-float-label label="The word to add:" value="{{__word}}"></paper-input>
+    <paper-input always-float-label label="[[localize('pg-add-word.TheWordToAdd')]]" value="{{__word}}"></paper-input>
     
     <br>
-    <paper-input always-float-label label="Definition of the word (write it in the language of the word):" value="{{__definition}}"></paper-input>
+    <paper-input always-float-label label="[[localize('pg-add-word.DefinitionOfTheWord')]]" value="{{__definition}}"></paper-input>
     
     <br>
-    <label id="wordclass">Word's class:</label>
+    <label id="wordclass">[[localize('pg-add-word.WordsClass')]]:</label>
     <paper-radio-group aria-labelledby="wordclass" selected="{{__wordclass}}">
-      <paper-radio-button name="noun">Noun</paper-radio-button>
-      <paper-radio-button name="adjective">Adjective</paper-radio-button>
-      <paper-radio-button name="verb">Verb</paper-radio-button>
+      <paper-radio-button name="noun">[[localize('general.Noun')]]</paper-radio-button>
+      <paper-radio-button name="adjective">[[localize('general.Adjective')]]</paper-radio-button>
+      <paper-radio-button name="verb">[[localize('general.Verb')]]</paper-radio-button>
     </paper-radio-group>
     
     <br>
-    <paper-button raised on-click="__onSubmit" disabled$="[[!isNotEmpty(__word, __definition)]]">Submit</paper-button>
+    <paper-button raised on-click="__onSubmit" disabled$="[[!isNotEmpty(__word, __definition)]]">[[localize('general.Submit')]]</paper-button>
     
     <firebase-document
       id="wordDocument"
@@ -43,7 +43,7 @@
   </template>
 
   <script>
-    class PgAddWord extends OhUtils(Polymer.Element) {
+    class PgAddWord extends LocalizationMixin(OhUtils(Polymer.Element)) {
 
       static get is() { return 'pg-add-word'; }
 

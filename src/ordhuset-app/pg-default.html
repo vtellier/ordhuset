@@ -2,6 +2,7 @@
 
 <link rel="import" href="../../bower_components/polymer/lib/elements/dom-if.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="mi-localization.html">
 <link rel="import" href="oh-style.html">
 
 <dom-module id="pg-default">
@@ -12,7 +13,7 @@
       }
     </style>
 
-    <paper-input label="Type your word here" value="{{__search}}">
+    <paper-input label="[[localize('pg-default.TypeYourWord')]]" value="{{__search}}">
       <iron-icon icon="icons:search" slot="prefix"></iron-icon>
     </paper-input>
     
@@ -40,13 +41,13 @@
       </template>
     </ul>
     <p class$="{{_showIfNoResult(__searchResult.*, __search)}}">
-      No match
+      [[localize('pg-default.NoMatch')]]
     </p>
     
   </template>
 
   <script>
-    class PgDefault extends OhUtils(Polymer.Element) {
+    class PgDefault extends LocalizationMixin(OhUtils(Polymer.Element)) {
 
       static get is() { return 'pg-default'; }
 
