@@ -45,5 +45,52 @@
     "general.English" : "Engelsk",
     "general.Add" : "Legg til",
     "general.Submit" : "Sende inn"
+  },
+  "fr" : {
+    "app-shell.menu.title" : "Menu",
+    "app-shell.menu.Search" : "Chercher",
+    "app-shell.menu.AddAWord" : "Ajouter un mot",
+    
+    "pg-default.TypeYourWord" : "Saisir le mot",
+    "pg-default.NoMatch" : "Aucun résultat",
+    
+    "pg-word.Translations" : "Traductions",
+    "pg-word.AddATranslation" : "Ajouter une traduction",
+    "pg-word.Translation" : "Traduction",
+    "pg-word.Conjugation" : "Conjugaison",
+    "pg-word.AddAnInflection" : "Ajouter une inflexion",
+    "pg-word.SelectTense" : "Choisir le temps",
+    "pg-word.Inflection" : "Inflexion",
+    "pg-word.Declensions" : "Déclinaison",
+    "pg-word.AddADeclension" : "Ajouter une déclinaison",
+    "pg-word.SelectDeclension" : "Choisir la déclinaison",
+    "pg-word.Declension" : "Déclinaison",
+    
+    "pg-add-word.Language" : "Langue",
+    "pg-add-word.TheWordToAdd" : "Mot à ajouter",
+    "pg-add-word.DefinitionOfTheWord" : "Définition du mot",
+    "pg-add-word.WordsClass" : "Famille",
+    
+    "general.Infinitive" : "Infinitif",
+    "general.Present" : "Présent",
+    "general.Preterit" : "Prétérit",
+    "general.PresentPerfect" : "Passé composé",
+    "general.Imperative" : "Impératif",
+    "general.Definite" : "Défini",
+    "general.Indefinite" : "Indéfini",
+    "general.Singular" : "Singulier",
+    "general.Plural" : "Pluriel",
+    "general.DefiniteSingular" : "Singulier défini",
+    "general.IndefiniteSingular" : "Singulier indéfini",
+    "general.DefinitePlural" : "Pluriel défini",
+    "general.IndefinitePlural" : "PLuriel indéfini",
+    "general.Noun" : "Nom",
+    "general.Adjective" : "Adjectif",
+    "general.Verb" : "Verbe",
+    
+    "general.Norwegian" : "Norvégien",
+    "general.English" : "Anglais",
+    "general.Add" : "Ajouter",
+    "general.Submit" : "Envoyer"
   }
 }
