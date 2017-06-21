@@ -30,23 +30,53 @@
       data="{{__wordEntity}}">
     </firebase-document>
     
+    <firebase-document id="addTransDocument"></firebase-document>
+    
+    <firebase-query
+      id="search-query"
+      path="/dictionary"
+      start-at="[[__newTranslation]]"
+      end-at="[[_computeEndAt(__newTranslation)]]"
+      data="{{__searchResult}}"
+      limit-to-first="5"
+      disabled$="{{isEmpty(__newTranslation)}}">
+    </firebase-query>
+    
     <h1>
       <iron-icon icon="svg-flag-icons:{{__wordEntity.lang}}"></iron-icon>
-      {{routeData.word}} [{{__wordEntity.class}}]
+      {{_prettifyWord(routeData.word,__wordEntity)}}
+      <i>[{{__wordEntity.class}}]</i>
     </h1>
     <p lang="{{__wordEntity.lang}}">{{__wordEntity.definition}}</p>
     
     <section>
       <h2>Translations</h2>
       <ul class="{{_showIfNotEmpty(__wordEntity.translations)}}">
-        <template is="dom-repeat" items="{{__wordEntity.translations}}" as="trans">
-          <li><pre>{{stringify(trans,2)}}</pre></li>
+        <template is="dom-repeat" items="{{__translationsToArray(__wordEntity.translations)}}" as="trans">
+          <li>'{{__transEntity.lang}}'<pre>{{stringify(trans,2)}}</pre></li>
         </template>
       </ul>
       <h3>Add a translation</h3>
       <div class="add-something">
-        TODO
+        <paper-input label="Translation" value="{{__newTranslation}}"></paper-input>
       </div>
+      <ul class$="{{_showIfResults(__searchResult.*)}} no-chip">
+        <template is="dom-repeat" items="{{__searchResult}}" as="word">
+          <template is="dom-repeat" items="{{word.defs}}" as="def" index-as="defIndex">
+            <template is="dom-if" if="{{!areEqual(def.lang, __wordEntity.lang)}}">
+              <li lang="{{def.lang}}">
+                <paper-button
+                  on-click="__addTranslation"
+                  word$="{{word.$key}}"
+                  def-index$="{{defIndex}}">
+                  <iron-icon icon="svg-flag-icons:{{def.lang}}"></iron-icon>
+                  {{_prettifyWord(word.$key, def)}}
+                </paper-button>
+              </li>
+            </template>
+          </template>
+        </template>
+      </ul>
     </section>
     
     <template is="dom-if" if="{{areEqual(__wordEntity.class,'verb')}}">
@@ -76,10 +106,39 @@
       </section>
     </template>
     
-    
     <template is="dom-if" if="{{areEqual(__wordEntity.class,'noun')}}">
-      <h2>Declensions</h2>
-      TO DO
+      <section>
+        <h2>Declensions</h2>
+        <ul>
+          <li>
+            Definite
+            <ul>
+              <li>Singular: {{_formatVerbInflection(__wordEntity.declension.definite_singular)}}</li>
+              <li>Plural: {{_formatVerbInflection(__wordEntity.declension.definite_plural)}}</li>
+            </ul>
+          </li>
+          <li>
+            Indefinite
+            <ul>
+              <li>Singular: {{_formatVerbInflection(__wordEntity.declension.indefinite_singular)}}</li>
+              <li>Plural: {{_formatVerbInflection(__wordEntity.declension.indefinite_plural)}}</li>
+            </ul>
+          </li>
+        </ul>
+        <h3>Add a declension</h3>
+        <div class="add-something">
+          <paper-dropdown-menu id="_newDefinitionAndNumberMenu" label="Select declination" value="{{__newDefinitionAndNumber}}">
+            <paper-listbox slot="dropdown-content" class="dropdown-content">
+              <paper-item label="definite_singular">Definite singular</paper-item>
+              <paper-item label="definite_plural">Definite plural</paper-item>
+              <paper-item label="indefinite_singular">Indefinite singular</paper-item>
+              <paper-item label="indefinite_plural">Indefinite plural</paper-item>
+            </paper-listbox>
+          </paper-dropdown-menu>
+          <paper-input label="Declension" value="{{__declension}}"></paper-input>
+          <paper-button raised disabled$="{{!isNotEmpty(__newDefinitionAndNumber, __declension)}}" on-click="__onSubmitNewSubstantiveDeclension">Add</paper-button>
+        </div>
+      </section>
     </template>
     
     <!--<hr>
@@ -101,12 +160,25 @@
           __newTense: {
             type: String,
             value: ""
+          },
+          __newTranslation: {
+            type: String,
+            value: ""
           }
         }
       }
       
+      // @return hidden if none of the search result is not of the same language as the current word
       _showIfResults(arrayStar) {
-        return arrayStar.base.length==0 ? "hidden" : "";
+        if(arrayStar.base.length>0) {
+          for(var i=0; i<arrayStar.base.length; i++) {
+            for(var j=0; j<arrayStar.base[i].defs.length; j++) {
+              if(arrayStar.base[i].defs[j].lang != this.__wordEntity.lang)
+                return "";
+            }
+          }
+        }
+        return "hidden";
       }
       
       _formatVerbInflection(inflections) {
@@ -133,6 +205,67 @@
       __resetNewVerbInflection() {
         this.__newTense = null;
         this.__inflection = null;
+      }
+      
+      __onSubmitNewSubstantiveDeclension() {
+        if(!this.__wordEntity.hasOwnProperty('declension'))
+          this.__wordEntity.declension = {};
+        if(!this.__wordEntity.declension.hasOwnProperty(this.__newDefinitionAndNumber))
+          this.__wordEntity.declension[this.__newDefinitionAndNumber] = [];
+        this.__wordEntity.declension[this.__newDefinitionAndNumber].push(this.__declension);
+        this.$.wordDocument.saveValue('/dictionary/'+this.routeData.word+'/defs', this.routeData.def)
+          .then(function(){
+            this._success('The translation has successfully been added to the database');
+            this.__resetNewSubstantiveDeclension();
+          }.bind(this))
+          .catch(function(e){this._failure(e);this.__resetNewSubstantiveDeclension();}.bind(this));
+      }
+      
+      __resetNewSubstantiveDeclension() {
+        this.__newDefinitionAndNumber = null;
+        this.__declension = null;
+      }
+      
+      __translationsToArray(transObject) {
+        if(this.isEmpty(transObject))
+          return [];
+        return Object.keys(transObject).map(function(current) {
+          return {"word": current, "def-index":transObject[current]};
+        });
+      }
+      
+      __addTranslation(e) {
+        var word = e.path[0].attributes['word'].value;
+        var defIndex = e.path[0].attributes['def-index'].value;
+        console.log("Clicked on word", word, defIndex);
+        
+        if(!this.__wordEntity.hasOwnProperty('translations'))
+          this.__wordEntity.translations = {};
+        if(!this.__wordEntity.translations.hasOwnProperty(word))
+          this.__wordEntity.translations[word] = [];
+        else {
+          for(var i=0; i<this.__wordEntity.translations[word].length; i++) {
+            if(this.__wordEntity.translations[word][i] == defIndex) {
+              console.warn("Impossible to add a translation twice.");
+              return;
+            }
+          }
+        }
+          
+        this.__wordEntity.translations[word].push(defIndex);
+        this.$.wordDocument.saveValue('/dictionary/'+this.routeData.word+'/defs', this.routeData.def)
+          .then(function(){
+            
+            // Add the translation in the other direction as well
+            this.$.addTransDocument.data = this.routeData.def;
+            this.$.addTransDocument.saveValue('/dictionary/'+word+'/defs/'+defIndex+'/translations', this.routeData.word)
+              .then(function() {
+                this._success('The declension has successfully been added to the database');
+                this.__resetNewSubstantiveDeclension();
+              }.bind(this, word, defIndex))
+              .catch(function(e){this._failure(e);this.__resetNewSubstantiveDeclension();}.bind(this));
+          }.bind(this, word, defIndex))
+          .catch(function(e){this._failure(e);this.__resetNewSubstantiveDeclension();}.bind(this));
       }
 
     }

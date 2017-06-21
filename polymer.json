@@ -1,7 +1,29 @@
 {
+  "entrypoint": "index.html",
+  "shell": "src/ordhuset-app/ordhuset-app.html",
+  "fragments": [
+    "src/ordhuset-app/pg-default.html",
+    "src/ordhuset-app/pg-add-word.html",
+    "src/ordhuset-app/pg-word.html"
+  ],
+  "sources": [
+   "src/**/*",
+   "static/**/*",
+   "bower.json"
+  ],
+  "extraDependencies": [
+    "manifest.json",
+    "bower_components/webcomponentsjs/webcomponents-lite.js"
+  ],
   "lint": {
     "rules": [
       "polymer-2"
     ]
-  }
+  },
+  "builds": [{
+    "_bundle": true,
+    "_js": {"compile": true, "minify": true},
+    "_css": {"minify": true},
+    "_html": {"minify": true}
+  }]
 }

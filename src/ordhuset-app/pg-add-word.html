@@ -5,7 +5,7 @@
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="oh-style.html">
 
-<dom-module id="pg-addword">
+<dom-module id="pg-add-word">
   <template>
     <style include="oh-style">
       /* CSS rules for your element */
@@ -27,6 +27,7 @@
     <label id="wordclass">Word's class:</label>
     <paper-radio-group aria-labelledby="wordclass" selected="{{__wordclass}}">
       <paper-radio-button name="noun">Noun</paper-radio-button>
+      <paper-radio-button name="adjective">Adjective</paper-radio-button>
       <paper-radio-button name="verb">Verb</paper-radio-button>
     </paper-radio-group>
     
@@ -44,7 +45,7 @@
   <script>
     class PgAddWord extends OhUtils(Polymer.Element) {
 
-      static get is() { return 'pg-addword'; }
+      static get is() { return 'pg-add-word'; }
 
       static get properties() {
         return {
