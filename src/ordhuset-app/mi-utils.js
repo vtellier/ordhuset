@@ -115,7 +115,7 @@ OhUtils = function(superClass) {
     // ex: speak becomes 'to speak'
     _prettifyWord(word, def) {
       var ret = word;
-      if(this.isEmpty(def) && def.class === "verb") {
+      if(!this.isEmpty(def) && def.class === "verb") {
         if(def.lang === "en")
           ret = 'to '+ret;
         else if(def.lang === "no")

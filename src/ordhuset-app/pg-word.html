@@ -70,7 +70,7 @@
                   word$="{{word.$key}}"
                   def-index$="{{defIndex}}">
                   <iron-icon icon="svg-flag-icons:{{def.lang}}"></iron-icon>
-                  {{_prettifyWord(word)}}
+                  {{_prettifyWord(word.$key, def)}}
                 </paper-button>
               </li>
             </template>
