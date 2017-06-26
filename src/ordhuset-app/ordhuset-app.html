@@ -91,16 +91,16 @@
             <div main-title>Ordhuset</div>
             <div>
               <template is="dom-if" if="{{_isLanguage('no-bm', language)}}">
-                <paper-button on-click="__changeLanguage">en</paper-button>
-                <paper-button on-click="__changeLanguage">fr</paper-button>
+                <paper-icon-button icon="svg-flag-icons:en" language="en" on-click="__changeLanguage">en</paper-icon-button>
+                <paper-icon-button icon="svg-flag-icons:fr" language="fr" on-click="__changeLanguage">fr</paper-icon-button>
               </template>
               <template is="dom-if" if="{{_isLanguage('en', language)}}">
-                <paper-button on-click="__changeLanguage">no-bm</paper-button>
-                <paper-button on-click="__changeLanguage">fr</paper-button>
+                <paper-icon-button icon="svg-flag-icons:no-bm" language="no-bm" on-click="__changeLanguage">no-bm</paper-icon-button>
+                <paper-icon-button icon="svg-flag-icons:fr" language="fr" on-click="__changeLanguage">fr</paper-icon-button>
               </template>
               <template is="dom-if" if="{{_isLanguage('fr', language)}}">
-                <paper-button on-click="__changeLanguage">no-bm</paper-button>
-                <paper-button on-click="__changeLanguage">en</paper-button>
+                <paper-icon-button icon="svg-flag-icons:no-bm" language="no-bm" on-click="__changeLanguage">no-bm</paper-icon-button>
+                <paper-icon-button icon="svg-flag-icons:en" language="en" on-click="__changeLanguage">en</paper-icon-button>
               </template>
             </div>
           </app-toolbar>
@@ -167,7 +167,7 @@
       }
       
       __changeLanguage(e) {
-        var lang = e.path[0].firstChild.data;
+        var lang = e.target.attributes['language'].value;
         console.log("Changing to language", lang);
         this.language = lang;
       }

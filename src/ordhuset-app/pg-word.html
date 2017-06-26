@@ -53,7 +53,7 @@
       <h2>[[localize('pg-word.Translations')]]</h2>
       <ul class="{{_showIfNotEmpty(__wordEntity.translations)}}">
         <template is="dom-repeat" items="{{__translationsToArray(__wordEntity.translations)}}" as="trans">
-          <li>'{{__transEntity.lang}}'<pre>{{stringify(trans,2)}}</pre></li>
+          <li>{{trans.word}}<pre>{{stringify(trans,0)}}</pre></li>
         </template>
       </ul>
       <h3>[[localize('pg-word.AddATranslation')]]</h3>

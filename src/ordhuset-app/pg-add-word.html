@@ -31,6 +31,16 @@
       <paper-radio-button name="verb">[[localize('general.Verb')]]</paper-radio-button>
     </paper-radio-group>
     
+    <template is="dom-if" if="{{areEqual(__wordclass, 'noun')}}">
+      <br>
+      <label id="gender">[[localize('pg-add-word.Gender')]]:</label>
+      <paper-radio-group aria-labelledby="gender" selected="{{__gender}}">
+        <paper-radio-button name="neutral">[[localize('general.Neutral')]]</paper-radio-button>
+        <paper-radio-button name="feminine">[[localize('general.Feminine')]]</paper-radio-button>
+        <paper-radio-button name="masculine">[[localize('general.Masculine')]]</paper-radio-button>
+      </paper-radio-group>
+    </template>
+    
     <br>
     <paper-button raised on-click="__onSubmit" disabled$="[[!isNotEmpty(__word, __definition)]]">[[localize('general.Submit')]]</paper-button>
     
@@ -62,26 +72,28 @@
         this.__word = "";
         this.__definition = "";
         this.__wordclass = "noun";
+        this.__gender = "neutral";
       }
       
       __onSubmit(e) {
-          
-          if(!this.__wordEntity.hasOwnProperty('defs'))
-            this.__wordEntity.defs = [];
-          
-          var newDef = {
-            lang: this.__language,
-            class: this.__wordclass,
-            definition: this.__definition
-          };
-          this.__wordEntity.defs.push(newDef);
-          
-          this.$.wordDocument.saveValue('/dictionary/', this.__word)
-            .then(function() {
-              console.log("New definition of '", this.__word, "' has successfully added:", newDef);
-              this.__initForm();
-            }.bind(this, newDef))
-            .catch(function(e) {console.error("Unable to save word:", e)});
+        if(!this.__wordEntity.hasOwnProperty('defs'))
+          this.__wordEntity.defs = [];
+        
+        var newDef = {
+          lang: this.__language,
+          class: this.__wordclass,
+          definition: this.__definition
+        };
+        if(this.__wordclass == 'noun')
+          newDef.gender = this.__gender;
+        this.__wordEntity.defs.push(newDef);
+        
+        this.$.wordDocument.saveValue('/dictionary/', this.__word)
+          .then(function() {
+            console.log("New definition of '", this.__word, "' has successfully added:", newDef);
+            this.__initForm();
+          }.bind(this, newDef))
+          .catch(function(e) {console.error("Unable to save word:", e)});
       }
 
     }

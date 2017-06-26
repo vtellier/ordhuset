@@ -23,6 +23,7 @@
     "pg-add-word.TheWordToAdd" : "Ordet å legge til",
     "pg-add-word.DefinitionOfTheWord" : "Definisjonen til ordet",
     "pg-add-word.WordsClass" : "Ordets klass",
+    "pg-add-word.Gender" : "Kjønn",
     
     "general.Infinitive" : "Infinitiv",
     "general.Present" : "Nåtid",
@@ -40,6 +41,9 @@
     "general.Noun" : "Substantiv",
     "general.Adjective" : "Adjektiv",
     "general.Verb" : "Verb",
+    "general.Neutral" : "Intetkjønn",
+    "general.Feminine" : "Hunkjønn",
+    "general.Masculine" : "Hankjønn",
     
     "general.Norwegian" : "Norsk",
     "general.English" : "Engelsk",
@@ -70,6 +74,7 @@
     "pg-add-word.TheWordToAdd" : "Mot à ajouter",
     "pg-add-word.DefinitionOfTheWord" : "Définition du mot",
     "pg-add-word.WordsClass" : "Famille",
+    "pg-add-word.Gender" : "Genre",
     
     "general.Infinitive" : "Infinitif",
     "general.Present" : "Présent",
@@ -87,6 +92,9 @@
     "general.Noun" : "Nom",
     "general.Adjective" : "Adjectif",
     "general.Verb" : "Verbe",
+    "general.Neutral" : "Neutre",
+    "general.Feminine" : "Féminin",
+    "general.Masculine" : "Masculin",
     
     "general.Norwegian" : "Norvégien",
     "general.English" : "Anglais",
@@ -117,6 +125,7 @@
     "pg-add-word.TheWordToAdd" : "The word to add",
     "pg-add-word.DefinitionOfTheWord" : "Definition of the word",
     "pg-add-word.WordsClass" : "Word's class",
+    "pg-add-word.Gender" : "Gender",
     
     "general.Infinitive" : "Infinitive",
     "general.Present" : "Present",
@@ -134,6 +143,9 @@
     "general.Noun" : "Noun",
     "general.Adjective" : "Adjective",
     "general.Verb" : "Verb",
+    "general.Neutral" : "Neutral",
+    "general.Feminine" : "Femininine",
+    "general.Masculine" : "Masculine",
     
     "general.Norwegian" : "Norwegian",
     "general.English" : "English",
