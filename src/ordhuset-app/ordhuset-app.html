@@ -129,11 +129,6 @@
       static get is() { return 'ordhuset-app'; }
       static get properties() {
         return {
-          page: {
-            type: String,
-            reflectToAttribute: true,
-            observer: '_pageChanged'
-          }
         };
       }
       static get observers() { return [
@@ -143,26 +138,27 @@
       ready() {
         super.ready();
         this.removeAttribute('unresolved');
+        
+        // Load pre-caching Service Worker
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/service-worker.js');
+        }
       }
       
       _routePageChanged(page) {
-        this.page = page || 'default';
+        page = page || 'default';
+        // home route is eagerly loaded
+        if (page != 'default') {
+          // When a load failed, it triggered a 404 which means we need to
+          // eagerly load the 404 page definition
+          let cb = null;
+          Polymer.importHref(
+            this.resolveUrl('/src/ordhuset-app/pg-' + page + '.html'),
+            cb, cb, true);
+        }
+        
         // Close the drawer - in case the *route* change came from a link in the drawer.
         this.menuOpened = false;
-      }
-      
-      _pageChanged(page, oldPage) {
-        if (page != null) {
-          // home route is eagerly loaded
-          if (page != 'default') {
-            // When a load failed, it triggered a 404 which means we need to
-            // eagerly load the 404 page definition
-            let cb = null;
-            Polymer.importHref(
-              this.resolveUrl('/src/ordhuset-app/pg-' + page + '.html'),
-              cb, cb, true);
-          }
-        }
       }
       
       _isLanguage(lang) {
