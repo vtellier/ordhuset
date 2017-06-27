@@ -1,0 +1,68 @@
+<dom-module id="oh-definition">
+  <template>
+    <firebase-document
+      id="document"
+      path="/dictionary/{{word}}/defs/{{defIndex}}"
+      data="{{__entity}}">
+    </firebase-document>
+  </template>
+
+  <script>
+    // Define the element's API using an ES2015 class
+    class OhDefinition extends Polymer.Element {
+
+      static get is() { return 'oh-definition'; }
+
+      // Declare properties for the element's public API
+      static get properties() {
+        return {
+          word: {
+            type: String,
+            value: ""
+          },
+          defIndex: {
+            type: Number,
+            value: -1
+          },
+          class: {
+            readOnly: true,
+            notify: true,
+            type: String,
+            value: ""
+          },
+          definition: {
+            readOnly: true,
+            notify: true,
+            type: String,
+            value: ""
+          },
+          lang: {
+            readOnly: true,
+            notify: true,
+            type: String,
+            value: ""
+          },
+          __entity: {
+            type: Object,
+            observer: '__entityChanged',
+            value: null
+          }
+        }
+      }
+      
+      __entityChanged(newValue, oldValue) {
+        console.log(oldValue, newValue, this.word, this.defIndex);
+        if(newValue != null) {
+          this.class = newValue.class;
+          this.lang = newValue.class;
+          this.definition = newValue;
+        }
+      }
+
+    }
+
+    // Register the x-custom element with the browser
+    customElements.define(OhDefinition.is, OhDefinition);
+  </script>
+
+</dom-module>

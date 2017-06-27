@@ -4,6 +4,7 @@
 <link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="oh-definition.html">
 
 <dom-module id="pg-word">
   <template>
@@ -55,6 +56,7 @@
         <template is="dom-repeat" items="{{__translationsToArray(__wordEntity.translations)}}" as="trans">
           <li>
             <template is="dom-repeat" items="{{trans.def-index}}" as="def">
+              <oh-definition word="{{trans.word}}" def-index="{{def}}"></oh-definition>
               <a href="/word/{{trans.word}}/{{def}}">{{trans.word}}</a>
             </template>
           <pre>{{stringify(trans,0)}}</pre></li>
