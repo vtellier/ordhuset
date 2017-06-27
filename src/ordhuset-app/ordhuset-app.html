@@ -71,7 +71,7 @@
     </app-route>
     
     <app-drawer-layout>
-      <app-drawer swipe-open slot="drawer">
+      <app-drawer swipe-open slot="drawer" opened="{{menuOpened}}">
         <section>
           <h2>[[localize('app-shell.menu.title')]]</h2>
           <iron-selector attr-for-selected="name" selected="[[routeData.view]]">
@@ -148,7 +148,7 @@
       _routePageChanged(page) {
         this.page = page || 'default';
         // Close the drawer - in case the *route* change came from a link in the drawer.
-        //this.drawerOpened = false;
+        this.menuOpened = false;
       }
       
       _pageChanged(page, oldPage) {
