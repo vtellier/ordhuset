@@ -35,9 +35,11 @@
           <li lang="{{def.lang}}">
             <iron-icon icon="svg-flag-icons:{{def.lang}}"></iron-icon>
             <a href="/word/{{word.$key}}/[[defIndex]]" on-click="__clearSearch">
-              <b>{{_prettifyWord(word.$key, def)}}</b>
+              <paper-button>
+                <b>{{_prettifyWord(word.$key, def)}}</b>
+              </paper-button>
+              <small><i>{{def.definition}}</i></small>
             </a>
-            <small><i>{{def.definition}}</i></small>
           </li>
         </template>
       </template>
