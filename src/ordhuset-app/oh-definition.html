@@ -2,7 +2,7 @@
   <template>
     <firebase-document
       id="document"
-      path="/dictionary/{{word}}/defs/{{defIndex}}"
+      path="{{__computePath(word,defIndex)}}"
       data="{{__entity}}">
     </firebase-document>
   </template>
@@ -25,37 +25,44 @@
             value: -1
           },
           class: {
-            readOnly: true,
+            //readOnly: true,
             notify: true,
             type: String,
             value: ""
           },
           definition: {
-            readOnly: true,
+            //readOnly: true,
             notify: true,
             type: String,
             value: ""
           },
           lang: {
-            readOnly: true,
+            //readOnly: true,
             notify: true,
             type: String,
             value: ""
           },
           __entity: {
             type: Object,
-            observer: '__entityChanged',
-            value: null
+            observer: '__entityChanged'
           }
         }
       }
       
+      __computePath(word, defIndex) {
+        if(word !== undefined && word != '' && defIndex != -1)
+          return '/dictionary/'+word+'/defs/'+defIndex;
+      }
+      
       __entityChanged(newValue, oldValue) {
-        console.log(oldValue, newValue, this.word, this.defIndex);
         if(newValue != null) {
-          this.class = newValue.class;
-          this.lang = newValue.class;
-          this.definition = newValue;
+          console.log(oldValue, newValue, this.word, this.defIndex);
+          if(newValue.hasOwnProperty('class'))
+            this.class = newValue.class;
+          if(newValue.hasOwnProperty('lang'))
+            this.lang = newValue.lang;
+          if(newValue.hasOwnProperty('definition'))
+            this.definition = newValue.definition;
         }
       }
 
