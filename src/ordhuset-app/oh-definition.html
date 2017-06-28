@@ -5,6 +5,12 @@
       path="{{__computePath(word,defIndex)}}"
       data="{{__entity}}">
     </firebase-document>
+    <template is="dom-if" if="{{show}}">
+      <template is="dom-if" if="{{show}}">
+        <iron-icon icon="svg-flag-icons:{{__entity.lang}}"></iron-icon>
+      </template>
+      {{word}}
+    </template>
   </template>
 
   <script>
@@ -21,28 +27,19 @@
             value: ""
           },
           defIndex: {
+            // todo readOnly: true,
             type: Number,
             value: -1
           },
-          class: {
-            //readOnly: true,
-            notify: true,
-            type: String,
-            value: ""
+          show: {
+            type: Boolean,
+            value: false
+          },
+          iconLang: {
+            type: Boolean,
+            value: false
           },
           definition: {
-            //readOnly: true,
-            notify: true,
-            type: String,
-            value: ""
-          },
-          lang: {
-            //readOnly: true,
-            notify: true,
-            type: String,
-            value: ""
-          },
-          __entity: {
             type: Object,
             observer: '__entityChanged'
           }

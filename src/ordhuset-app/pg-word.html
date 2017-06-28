@@ -56,10 +56,10 @@
         <template is="dom-repeat" items="{{__translationsToArray(__wordEntity.translations)}}" as="trans">
           <li>
             <template is="dom-repeat" items="{{trans.def-index}}" as="def">
-              <oh-definition word="{{trans.word}}" def-index="{{def}}" lang="{{trans_lang}}"></oh-definition>
-              <a href="/word/{{trans.word}}/{{def}}">{{trans_lang}}: {{trans.word}}</a>
+              <a href="/word/{{trans.word}}/{{def}}">
+                <oh-definition word="{{trans.word}}" def-index="{{def}}" show icon-lang></oh-definition>
+              </a>
             </template>
-          <pre>{{stringify(trans,0)}}</pre></li>
         </template>
       </ul>
       <h3>[[localize('pg-word.AddATranslation')]]</h3>
