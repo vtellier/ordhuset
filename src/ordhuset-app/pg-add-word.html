@@ -31,7 +31,7 @@
       <paper-radio-button name="verb">[[localize('general.Verb')]]</paper-radio-button>
     </paper-radio-group>
     
-    <template is="dom-if" if="{{areEqual(__wordclass, 'noun')}}">
+    <template is="dom-if" if="{{__hasGender(__wordclass)}}">
       <br>
       <label id="gender">[[localize('pg-add-word.Gender')]]:</label>
       <paper-radio-group aria-labelledby="gender" selected="{{__gender}}">
@@ -84,7 +84,7 @@
           class: this.__wordclass,
           definition: this.__definition
         };
-        if(this.__wordclass == 'noun')
+        if(this.__wordclass == 'noun' || this.__wordclass == 'adjective')
           newDef.gender = this.__gender;
         this.__wordEntity.defs.push(newDef);
         
@@ -94,6 +94,10 @@
             this.__initForm();
           }.bind(this, newDef))
           .catch(function(e) {console.error("Unable to save word:", e)});
+      }
+      
+      __hasGender(wordclass) {
+        return wordclass == 'noun' || wordclass == 'adjective';
       }
 
     }
