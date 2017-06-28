@@ -1,5 +1,5 @@
 
-
+/*global OhUtils*/
 OhUtils = function(superClass) {
   return class extends superClass {
     constructor() {
