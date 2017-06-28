@@ -78,6 +78,31 @@
             <a href="/" name="search"><paper-button><iron-icon icon="icons:search"></iron-icon>[[localize('app-shell.menu.Search')]]</paper-button></a>
             <a href="/add-word" name="add-word"><paper-button><iron-icon icon="icons:add"></iron-icon>[[localize('app-shell.menu.AddAWord')]]</paper-button></a>
           </iron-selector>
+          <h2>[[localize('app-shell.menu.Settings')]]</h2>
+          <div>
+            [[localize('app-shell.menu.Language')]]
+            <paper-icon-button
+              icon="svg-flag-icons:no-bm"
+              language="no-bm"
+              on-click="__changeLanguage"
+              disabled$="{{_isLanguage('no-bm', language)}}"
+              title="[[localize('general.Norwegian')]]">
+            </paper-icon-button>
+            <paper-icon-button
+              icon="svg-flag-icons:fr"
+              language="fr"
+              on-click="__changeLanguage"
+              disabled$="{{_isLanguage('fr', language)}}"
+              title="[[localize('general.French')]]">
+            </paper-icon-button>
+            <paper-icon-button
+              icon="svg-flag-icons:en"
+              language="en"
+              on-click="__changeLanguage"
+              disabled$="{{_isLanguage('en', language)}}"
+              title="[[localize('general.English')]]">
+            </paper-icon-button>
+          </div>
         </section>
       </app-drawer>
 
@@ -92,20 +117,6 @@
           <app-toolbar>
             <paper-icon-button icon="icons:menu" drawer-toggle></paper-icon-button>
             <div main-title>Ordhuset</div>
-            <div>
-              <template is="dom-if" if="{{_isLanguage('no-bm', language)}}">
-                <paper-icon-button icon="svg-flag-icons:en" language="en" on-click="__changeLanguage">en</paper-icon-button>
-                <paper-icon-button icon="svg-flag-icons:fr" language="fr" on-click="__changeLanguage">fr</paper-icon-button>
-              </template>
-              <template is="dom-if" if="{{_isLanguage('en', language)}}">
-                <paper-icon-button icon="svg-flag-icons:no-bm" language="no-bm" on-click="__changeLanguage">no-bm</paper-icon-button>
-                <paper-icon-button icon="svg-flag-icons:fr" language="fr" on-click="__changeLanguage">fr</paper-icon-button>
-              </template>
-              <template is="dom-if" if="{{_isLanguage('fr', language)}}">
-                <paper-icon-button icon="svg-flag-icons:no-bm" language="no-bm" on-click="__changeLanguage">no-bm</paper-icon-button>
-                <paper-icon-button icon="svg-flag-icons:en" language="en" on-click="__changeLanguage">en</paper-icon-button>
-              </template>
-            </div>
           </app-toolbar>
         </app-header>
         

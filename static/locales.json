@@ -3,6 +3,8 @@
     "app-shell.menu.title" : "Meny",
     "app-shell.menu.Search" : "Søk",
     "app-shell.menu.AddAWord" : "Legge til et nytt ord",
+    "app-shell.menu.Settings" : "Innstillinger",
+    "app-shell.menu.Language" : "Språk:",
     
     "pg-default.TypeYourWord" : "Skrive ordet her",
     "pg-default.NoMatch" : "Ingen treff",
@@ -46,6 +48,7 @@
     "general.Masculine" : "Hankjønn",
     
     "general.Norwegian" : "Norsk",
+    "general.French" : "Fransk",
     "general.English" : "Engelsk",
     "general.Add" : "Legg til",
     "general.Submit" : "Sende inn"
@@ -54,6 +57,8 @@
     "app-shell.menu.title" : "Menu",
     "app-shell.menu.Search" : "Chercher",
     "app-shell.menu.AddAWord" : "Ajouter un mot",
+    "app-shell.menu.Settings" : "Paramètres",
+    "app-shell.menu.Language" : "Langue:",
     
     "pg-default.TypeYourWord" : "Saisir le mot",
     "pg-default.NoMatch" : "Aucun résultat",
@@ -97,6 +102,7 @@
     "general.Masculine" : "Masculin",
     
     "general.Norwegian" : "Norvégien",
+    "general.French" : "Français",
     "general.English" : "Anglais",
     "general.Add" : "Ajouter",
     "general.Submit" : "Envoyer"
@@ -105,6 +111,8 @@
     "app-shell.menu.title" : "Menu",
     "app-shell.menu.Search" : "Search",
     "app-shell.menu.AddAWord" : "Add a word",
+    "app-shell.menu.Settings" : "Settings",
+    "app-shell.menu.Language" : "Language:",
     
     "pg-default.TypeYourWord" : "Type your word",
     "pg-default.NoMatch" : "No match",
@@ -148,6 +156,7 @@
     "general.Masculine" : "Masculine",
     
     "general.Norwegian" : "Norwegian",
+    "general.French" : "French",
     "general.English" : "English",
     "general.Add" : "Add",
     "general.Submit" : "Submit"
