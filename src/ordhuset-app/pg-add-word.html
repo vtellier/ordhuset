@@ -3,6 +3,7 @@
 <link rel="import" href="../../bower_components/paper-radio-group/paper-radio-group.html">
 <link rel="import" href="../../bower_components/paper-radio-button/paper-radio-button.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="mi-shared.html">
 <link rel="import" href="oh-style.html">
 
 <dom-module id="pg-add-word">
@@ -53,7 +54,7 @@
   </template>
 
   <script>
-    class PgAddWord extends LocalizationMixin(OhUtils(Polymer.Element)) {
+    class PgAddWord extends SharedMixin(LocalizationMixin(OhUtils(Polymer.Element))) {
 
       static get is() { return 'pg-add-word'; }
 

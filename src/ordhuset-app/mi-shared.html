@@ -1,0 +1,56 @@
+
+<script>
+
+let instances = [];
+
+/*global SharedMixin */
+SharedMixin = function(superClass) {
+
+  return class extends superClass {
+
+    static get properties() {
+      return {
+        user: {
+          type: Object,
+          value: null,
+          observer: 'userObserver'
+        }
+      }
+    }
+    
+    constructor() {
+      super();
+      this.__instanceIndex = instances.length;
+      instances.push(this);
+    }
+    
+    ready() {
+      super.ready();
+    }
+    
+    attributeChangedCallback() {
+      super.attributeChangedCallback();
+      console.log("hello:", arguments);
+    }
+
+    userObserver(newValue, oldValue) {
+      if(newValue === oldValue)
+        return;
+        
+      console.log("userObserver called from instance", this.__instanceIndex);
+      
+      // synchronize with the other instances
+      this._synchronize('user', newValue);
+    }
+    
+    _synchronize(property, newValue) {
+      for(var i=0; i<instances.length; i++) {
+        if(i != this.__instanceIndex) {
+          instances[i][property] = newValue;
+        }
+      }
+    }
+
+  }
+}
+</script>

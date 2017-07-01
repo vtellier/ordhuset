@@ -3,6 +3,7 @@
 <link rel="import" href="../../bower_components/polymer/lib/elements/dom-if.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="mi-shared.html">
 <link rel="import" href="mi-localization.html">
 <link rel="import" href="oh-style.html">
 
@@ -51,7 +52,7 @@
   </template>
 
   <script>
-    class PgDefault extends LocalizationMixin(OhUtils(Polymer.Element)) {
+    class PgDefault extends SharedMixin(LocalizationMixin(OhUtils(Polymer.Element))) {
 
       static get is() { return 'pg-default'; }
 
