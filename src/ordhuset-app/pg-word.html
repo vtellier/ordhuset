@@ -152,6 +152,48 @@
         </div>
       </section>
     </template>
+
+    <template is="dom-if" if="{{areEqual(__wordEntity.class,'adjective')}}">
+      <section>
+        <h2>[[localize('pg-word.Declensions')]]</h2>
+        <ul>
+          <li>
+            [[localize('general.Singular')]]
+            <ul>
+              <li>[[localize('general.Neutral')]]: {{_formatVerbInflection(__wordEntity.declension.singular_neutral)}}</li>
+              <li>[[localize('general.Feminine')]]: {{_formatVerbInflection(__wordEntity.declension.singular_feminine)}}</li>
+              <li>[[localize('general.Masculine')]]: {{_formatVerbInflection(__wordEntity.declension.singular_masculine)}}</li>
+            </ul>
+          </li>
+          <li>
+            [[localize('general.Plural')]]
+            <ul>
+              <li>[[localize('general.Neutral')]]: {{_formatVerbInflection(__wordEntity.declension.plural_neutral)}}</li>
+              <li>[[localize('general.Feminine')]]: {{_formatVerbInflection(__wordEntity.declension.plural_feminine)}}</li>
+              <li>[[localize('general.Masculine')]]: {{_formatVerbInflection(__wordEntity.declension.plural_masculine)}}</li>
+            </ul>
+          </li>
+        </ul>
+        <h3>[[localize('pg-word.AddADeclension')]]</h3>
+        <div class="add-something">
+          <paper-dropdown-menu id="_newAjectiveDeclensionMenu" label="[[localize('pg-word.SelectDeclension')]]" value="{{__newAdjectiveDeclensionForm}}">
+            <paper-listbox slot="dropdown-content" class="dropdown-content">
+              <paper-item label="singular_neutral">[[localize('general.SingularNeutral')]]</paper-item>
+              <paper-item label="singular_feminine">[[localize('general.SingularFeminine')]]</paper-item>
+              <paper-item label="singular_masculine">[[localize('general.SingularMasculine')]]</paper-item>
+              <paper-item label="plural_neutral">[[localize('general.PluralNeutral')]]</paper-item>
+              <paper-item label="plural_feminine">[[localize('general.PluralFeminine')]]</paper-item>
+              <paper-item label="plural_masculine">[[localize('general.PluralMasculine')]]</paper-item>
+            </paper-listbox>
+          </paper-dropdown-menu>
+          <paper-input label="[[localize('pg-word.Declension')]]" value="{{__adjectiveDeclension}}"></paper-input>
+          <paper-button
+            raised
+            disabled$="{{!isNotEmpty(__newAdjectiveDeclensionForm, __adjectiveDeclension)}}"
+            on-click="__onSubmitNewAdjectiveDeclension">[[localize('general.Add')]]</paper-button>
+        </div>
+      </section>
+    </template>
     
     <!--<hr>
     <h2>Debug</h2>
@@ -227,7 +269,7 @@
         this.__wordEntity.declension[this.__newDefinitionAndNumber].push(this.__declension);
         this.$.wordDocument.saveValue('/dictionary/'+this.routeData.word+'/defs', this.routeData.def)
           .then(function(){
-            this._success('The translation has successfully been added to the database');
+            this._success('The substantive declension has successfully been added to the database');
             this.__resetNewSubstantiveDeclension();
           }.bind(this))
           .catch(function(e){this._failure(e);this.__resetNewSubstantiveDeclension();}.bind(this));
@@ -236,6 +278,25 @@
       __resetNewSubstantiveDeclension() {
         this.__newDefinitionAndNumber = null;
         this.__declension = null;
+      }
+      
+      __onSubmitNewAdjectiveDeclension() {
+        if(!this.__wordEntity.hasOwnProperty('declension'))
+          this.__wordEntity.declension = {};
+        if(!this.__wordEntity.declension.hasOwnProperty(this.__newAdjectiveDeclensionForm))
+          this.__wordEntity.declension[this.__newAdjectiveDeclensionForm] = [];
+        this.__wordEntity.declension[this.__newAdjectiveDeclensionForm].push(this.__adjectiveDeclension);
+        this.$.wordDocument.saveValue('/dictionary/'+this.routeData.word+'/defs', this.routeData.def)
+          .then(function(){
+            this._success('The adjective declension has successfully been added to the database');
+            this.__resetNewAdjectiveDeclension();
+          }.bind(this))
+          .catch(function(e){this._failure(e);this.__resetNewAdjectiveDeclension();}.bind(this));
+      }
+      
+      __resetNewAdjectiveDeclension() {
+        this.__newAdjectiveDeclensionForm = null;
+        this.__adjectiveDeclension = null;
       }
       
       __translationsToArray(transObject) {

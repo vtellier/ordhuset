@@ -84,7 +84,7 @@
           class: this.__wordclass,
           definition: this.__definition
         };
-        if(this.__wordclass == 'noun' || this.__wordclass == 'adjective')
+        if(this.__wordclass == 'noun')
           newDef.gender = this.__gender;
         this.__wordEntity.defs.push(newDef);
         
@@ -97,7 +97,7 @@
       }
       
       __hasGender(wordclass) {
-        return wordclass == 'noun' || wordclass == 'adjective';
+        return wordclass == 'noun';
       }
 
     }
