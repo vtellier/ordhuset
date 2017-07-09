@@ -60,6 +60,13 @@
       storage-bucket="ordhuset-5e76d.appspot.com"
       messaging-sender-id="573833858404">
     </firebase-app>
+    <firebase-auth
+      id="auth"
+      user="{{user}}"
+      provider="google"
+      on-error="handleError"
+      signed-in="{{__isSignedIn}}">
+    </firebase-auth>
     
     <!-- Page routing -->
     <app-location route="{{route}}"></app-location>
@@ -117,6 +124,12 @@
           <app-toolbar>
             <paper-icon-button icon="icons:menu" drawer-toggle></paper-icon-button>
             <div main-title>Ordhuset</div>
+            <template is="dom-if" if="{{__isSignedIn}}">
+              <button on-click="_signOut">LOG OUT</button>
+            </template>
+            <template is="dom-if" if="{{!__isSignedIn}}">
+              <button on-click="_signIn">AUTHENTICATE</button>
+            </template>
           </app-toolbar>
         </app-header>
         
@@ -136,7 +149,7 @@
      * @customElement
      * @polymer
      */
-    class OrdhusetApp extends LocalizationMixin(Polymer.Element) {
+    class OrdhusetApp extends LocalizationMixin(OhUtils(Polymer.Element)) {
       static get is() { return 'ordhuset-app'; }
       static get properties() {
         return {
@@ -154,6 +167,20 @@
         //if ('serviceWorker' in navigator) {
         //  navigator.serviceWorker.register('/service-worker.js');
         //}
+      }
+      
+      _signIn() {
+        this.$.auth.signInWithPopup()
+          .then(function(response) {
+            // successful authentication response here
+          })
+          .catch(function(error) {
+            // unsuccessful authentication response here
+          });
+      }
+      
+      _signOut() {
+        this.$.auth.signOut();
       }
       
       _routePageChanged(page) {

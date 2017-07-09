@@ -1,9 +1,14 @@
 
+
+let instances = [];
+
 /*global OhUtils*/
 OhUtils = function(superClass) {
   return class extends superClass {
     constructor() {
       super();
+      this.__instanceIndex = instances.length;
+      instances.push(this);
     }
 
     static get properties() {
@@ -11,7 +16,32 @@ OhUtils = function(superClass) {
         /*bar: {
           type: Object
         }*/
+        user: {
+          type: Object,
+          observer: '__userObserver'
+        }
       };
+    }
+    
+    __userObserver(newValue, oldValue) {
+      if(newValue === oldValue)
+        return;
+        
+      console.log("userObserver called from instance", this.__instanceIndex, newValue);
+      
+      // synchronize with the other instances
+      this.__synchronize('user', newValue);
+    }
+    
+    /*
+     * Synchronizes a property among all other instances.
+     */
+    __synchronize(property, newValue) {
+      for(var i=0; i<instances.length; i++) {
+        if(i != this.__instanceIndex) {
+          instances[i][property] = newValue;
+        }
+      }
     }
 
     /*static get observers() {
