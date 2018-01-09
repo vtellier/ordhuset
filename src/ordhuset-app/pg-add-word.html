@@ -42,7 +42,7 @@
     </template>
     
     <br>
-    <paper-button raised on-click="__onSubmit" disabled$="[[!isNotEmpty(__word, __definition)]]">[[localize('general.Submit')]]</paper-button>
+    <paper-button raised on-click="__onSubmit" disabled$="[[!isNotEmpty(__word)]]">[[localize('general.Submit')]]</paper-button>
     
     <firebase-document
       id="wordDocument"
