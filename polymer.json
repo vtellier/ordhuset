@@ -20,10 +20,7 @@
       "polymer-2"
     ]
   },
-  "builds": [{
-    "_bundle": true,
-    "_js": {"compile": true, "minify": true},
-    "_css": {"minify": true},
-    "_html": {"minify": true}
-  }]
+  "builds": [
+    { "preset": "es5-bundled", "addServiceWorker": false }
+  ]
 }
