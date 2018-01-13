@@ -126,10 +126,8 @@
             <paper-icon-button icon="icons:menu" drawer-toggle></paper-icon-button>
             <div main-title>Ordhuset</div>
             <template is="dom-if" if="{{__isSignedIn}}">
-              [[stringify(user.displayName)]]           
-              <paper-icon-button src="[[user.photoURL]]"/></paper-icon-button>
-              <button on-click="_signOut">LOG OUT</button>
-              <img src="[[user.photoUrl]]"/>
+              <!--[[stringify(user.displayName)]]--> 
+              <paper-icon-button on-click="_signOut" src="[[user.photoURL]]"/></paper-icon-button>
             </template>
             <template is="dom-if" if="{{!__isSignedIn}}">
               <button on-click="_signIn">AUTHENTICATE</button>
