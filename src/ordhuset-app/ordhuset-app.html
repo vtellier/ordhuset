@@ -127,7 +127,7 @@
             <div main-title>Ordhuset</div>
             <template is="dom-if" if="{{__isSignedIn}}">
               <!--[[stringify(user.displayName)]]--> 
-              <paper-icon-button on-click="_signOut" src="[[user.photoURL]]"/></paper-icon-button>
+              <paper-icon-button on-click="_signOut" src="[[user.providerData.0.photoURL]]"/></paper-icon-button>
             </template>
             <template is="dom-if" if="{{!__isSignedIn}}">
               <button on-click="_signIn">AUTHENTICATE</button>

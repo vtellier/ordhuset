@@ -7,9 +7,9 @@
     "src/ordhuset-app/pg-word.html"
   ],
   "sources": [
-   "src/**/*",
-   "static/**/*",
-   "bower.json"
+    "src/**/*",
+    "static/**/*",
+    "bower.json"
   ],
   "extraDependencies": [
     "manifest.json",
@@ -21,6 +21,6 @@
     ]
   },
   "builds": [
-    { "preset": "es5-bundled", "addServiceWorker": false }
+    { "preset": "es5-bundled", "addServiceWorker": true }
   ]
 }
