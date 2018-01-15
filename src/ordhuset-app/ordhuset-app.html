@@ -94,6 +94,7 @@
           <iron-selector attr-for-selected="name" selected="[[routeData.view]]">
             <a href="/" name="search"><paper-button><iron-icon icon="icons:search"></iron-icon>[[localize('app-shell.menu.Search')]]</paper-button></a>
             <a href="/add-word" name="add-word"><paper-button><iron-icon icon="icons:add"></iron-icon>[[localize('app-shell.menu.AddAWord')]]</paper-button></a>
+            <a href="/my-list" name="my-list" class$="[[showClass(__isSignedIn)]]"><paper-button><iron-icon icon="icons:list"></iron-icon>[[localize('app-shell.menu.MyList')]]</paper-button></a>
           </iron-selector>
           <h2>[[localize('app-shell.menu.Settings')]]</h2>
           <div>
@@ -157,6 +158,7 @@
           <pg-default name="search" route="{{subroute}}" language$="{{language}}"></pg-default>
           <pg-add-word name="add-word" route="{{subroute}}" language$="{{language}}"></pg-add-word>
           <pg-word name="word" route="{{subroute}}" language$="{{language}}"></pg-word>
+          <pg-my-list name="my-list" route="{{subroute}}" language$="{{language}}"></pg-my-list>
           <!-- Nb.: insert other pages here -->
         </iron-pages>
       </app-header-layout>
@@ -202,6 +204,7 @@
         this.$.auth.signOut().then(()=>{
           console.log('successfully logged out');
           this.$.accountDialog.close();
+          page = 'default';
         }).catch(error=>{
           console.log(`Failed to log out: ${error}`);
         });

@@ -1,0 +1,51 @@
+
+<link rel="import" href="oh-style.html">
+<link rel="import" href="../../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="oh-definition.html">
+
+<dom-module id="pg-my-list">
+  <template>
+    <style include="oh-style">
+      .add-something {
+        @apply --layout-horizontal;
+        @apply --layout-wrap;
+      }
+      .add-something * {
+        margin: 0 1ex;
+      }
+    </style>
+
+    <app-route
+      route="{{route}}"
+      pattern="/:word/:def"
+      data="{{routeData}}"
+      tail="{{subroute}}">
+    </app-route>
+    
+    <h1>[[localize('app-shell.menu.MyList')]]</h1>
+    Under construction.
+  </template>
+
+  <script>
+    class PgMyList extends LocalizationMixin(OhUtils(Polymer.Element)) {
+
+      static get is() { return 'pg-my-list'; }
+
+      static get properties() {
+        return {
+          route: {
+            type: Object
+          }
+        }
+      }
+      
+    }
+
+    // Register the x-custom element with the browser
+    customElements.define(PgMyList.is, PgMyList);
+  </script>
+
+</dom-module>

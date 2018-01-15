@@ -3,6 +3,7 @@
     "app-shell.menu.title" : "Meny",
     "app-shell.menu.Search" : "Søk",
     "app-shell.menu.AddAWord" : "Legge til et nytt ord",
+    "app-shell.menu.MyList" : "Min ordlist",
     "app-shell.menu.Settings" : "Innstillinger",
     "app-shell.menu.Language" : "Språk:",
     
@@ -63,6 +64,7 @@
     "app-shell.menu.title" : "Menu",
     "app-shell.menu.Search" : "Chercher",
     "app-shell.menu.AddAWord" : "Ajouter un mot",
+    "app-shell.menu.MyList" : "Ma liste de mots",
     "app-shell.menu.Settings" : "Paramètres",
     "app-shell.menu.Language" : "Langue:",
     
@@ -123,6 +125,7 @@
     "app-shell.menu.title" : "Menu",
     "app-shell.menu.Search" : "Search",
     "app-shell.menu.AddAWord" : "Add a word",
+    "app-shell.menu.MyList" : "My list",
     "app-shell.menu.Settings" : "Settings",
     "app-shell.menu.Language" : "Language:",
     
