@@ -11,6 +11,7 @@
 <link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="oh-style.html">
 <link rel="import" href="svg-flags-icons.html">
 <link rel="import" href="pg-default.html">
@@ -50,6 +51,14 @@
       }
       iron-pages {
         padding: 0 15px;
+      }
+      .alignedDialog {
+        margin: 0;
+      }
+      #accountDialog {
+        max-width: 200px;
+        max-height: 300px;
+        overflow: auto;
       }
     </style>
     
@@ -106,7 +115,7 @@
             <paper-icon-button
               icon="svg-flag-icons:en"
               language="en"
-              on-click="__changeLanguage"
+              on-tap="__changeLanguage"
               disabled$="{{_isLanguage('en', language)}}"
               title="[[localize('general.English')]]">
             </paper-icon-button>
@@ -125,13 +134,21 @@
           <app-toolbar>
             <paper-icon-button icon="icons:menu" drawer-toggle></paper-icon-button>
             <div main-title>Ordhuset</div>
-            <template is="dom-if" if="{{__isSignedIn}}">
-              <!--[[stringify(user.displayName)]]--> 
-              <paper-icon-button on-click="_signOut" src="[[user.providerData.0.photoURL]]"/></paper-icon-button>
-            </template>
-            <template is="dom-if" if="{{!__isSignedIn}}">
-              <button on-click="_signIn">AUTHENTICATE</button>
-            </template>
+            <paper-icon-button
+              on-click="__openAccountDialog"
+              src="[[user.providerData.0.photoURL]]"
+              class$="[[showClass(__isSignedIn)]]"/></paper-icon-button>
+            <paper-dialog
+              id="accountDialog"
+              class="alignedDialog"
+              no-overlap
+              horizontal-align="right"
+              vertical-align="top">
+              <paper-button on-tap="_signOut">Sign out</paper-button>
+            </paper-dialog>
+            <paper-button on-tap="_signIn" class$="[[hideClass(__isSignedIn)]]">
+              Sign in
+            </paper-button>
           </app-toolbar>
         </app-header>
         
@@ -182,7 +199,12 @@
       }
       
       _signOut() {
-        this.$.auth.signOut();
+        this.$.auth.signOut().then(()=>{
+          console.log('successfully logged out');
+          this.$.accountDialog.close();
+        }).catch(error=>{
+          console.log(`Failed to log out: ${error}`);
+        });
       }
       
       _routePageChanged(page) {
@@ -204,7 +226,12 @@
       _isLanguage(lang) {
         return this.language === lang;
       }
-      
+     
+      __openAccountDialog(evt) {
+        console.log(evt);
+        this.$.accountDialog.positionTarget = evt.target;
+        this.$.accountDialog.open();
+      } 
       __changeLanguage(e) {
         var lang = e.target.attributes['language'].value;
         console.log("Changing to language", lang);

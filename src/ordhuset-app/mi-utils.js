@@ -115,6 +115,16 @@ OhUtils = function(superClass) {
       return JSON.stringify(obj, null, spaces);
     }
 
+    hideClass(hide) {
+      console.log(`hidding = ${hide}`);
+      return hide ? 'hidden' : '';
+    }
+    
+    showClass(show) {
+      console.log(`showing = ${show}`);
+      return show ? '' : 'hidden';
+    }
+
     _computeEndAt(startAt) {
       return startAt + String.fromCharCode(-1);
     }

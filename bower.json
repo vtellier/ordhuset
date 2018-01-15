@@ -20,7 +20,8 @@
     "web-animations-js": "web-animations/web-animations-js#master",
     "paper-item": "PolymerElements/paper-item#master",
     "app-localize-behavior": "PolymerElements/app-localize-behavior#master",
-    "paper-listbox": "PolymerElements/paper-listbox#master"
+    "paper-listbox": "PolymerElements/paper-listbox#master",
+    "paper-dialog": "PolymerElements/paper-dialog#^2.0.1"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#master",
