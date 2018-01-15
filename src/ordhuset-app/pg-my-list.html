@@ -25,8 +25,18 @@
       tail="{{subroute}}">
     </app-route>
     
+    <firebase-document
+      id="userDocument"
+      path="/users/{{user.uid}}"
+      data="{{__userEntity}}">
+    </firebase-document>
+
     <h1>[[localize('app-shell.menu.MyList')]]</h1>
     Under construction.
+    <template is="dom-repeat" items="{{__userEntity.list}}">
+      [[stringify(item)]]
+    </template>
+
   </template>
 
   <script>
@@ -39,6 +49,30 @@
           route: {
             type: Object
           }
+        }
+      }
+
+      static get observers() {
+        return [
+          '__observerUserEntity(__userEntity, user)'
+          ];
+      }
+
+      __observerUserEntity(entity, user) {
+        if(!entity || !user)
+          return;
+
+        // Create the list the first time
+        if(!entity.hasOwnProperty('list')) {
+          var path = `/users/${this.user.uid}/list`;
+          console.log(path);
+          this.$.userDocument.saveValue(path, [])
+            .then(()=>{
+              console.log(`User successfully saved`);
+            })
+            .catch((e)=>{
+              console.error(`Unable to save user`, e);
+            });
         }
       }
       
