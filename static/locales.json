@@ -28,6 +28,8 @@
     "pg-add-word.WordsClass" : "Ordets klass",
     "pg-add-word.Gender" : "Kjønn",
     
+    "pg-my-list.AddAWord" : "Legge et ord til listen din",
+
     "general.Infinitive" : "Infinitiv",
     "general.Present" : "Nåtid",
     "general.Preterit" : "Preteritum",
@@ -89,6 +91,8 @@
     "pg-add-word.WordsClass" : "Famille",
     "pg-add-word.Gender" : "Genre",
     
+    "pg-my-list.AddAWord" : "Ajoutez un mot à votre liste",
+    
     "general.Infinitive" : "Infinitif",
     "general.Present" : "Présent",
     "general.Preterit" : "Prétérit",
@@ -149,6 +153,8 @@
     "pg-add-word.DefinitionOfTheWord" : "Definition of the word",
     "pg-add-word.WordsClass" : "Word's class",
     "pg-add-word.Gender" : "Gender",
+    
+    "pg-my-list.AddAWord" : "Add a word to your list",
     
     "general.Infinitive" : "Infinitive",
     "general.Present" : "Present",

@@ -37,6 +37,37 @@
       [[stringify(item)]]
     </template>
 
+    <paper-input label="[[localize('pg-my-list.AddAWord')]]" value="{{__search}}">
+      <iron-icon icon="icons:search" slot="prefix"></iron-icon>
+      <paper-icon-button icon="icons:clear" slot="suffix" on-click="__clearSearch"></paper-icon-button>
+    </paper-input>
+
+    <firebase-query
+      id="search-query"
+      path="/dictionary"
+      start-at="[[__search]]"
+      end-at="[[_computeEndAt(__search)]]"
+      data="{{__searchResult}}"
+      limit-to-first="15"
+      disabled$="{{isEmpty(__search)}}">
+    </firebase-query>
+    
+    <ul class$="{{_showIfResults(__searchResult.*)}} no-chip">
+      <template is="dom-repeat" items="{{__searchResult}}" as="word">
+        <template is="dom-repeat" items="{{word.defs}}" as="def" index-as="defIndex">
+          <li lang="{{def.lang}}">
+            <iron-icon icon="svg-flag-icons:{{def.lang}}"></iron-icon>
+            <paper-button on-tap="__addWord">
+              <iron-icon icon="icons:add"></iron-icon>
+              <b>{{_prettifyWord(word.$key, def)}}</b>
+            </paper-button>
+          </li>
+        </template>
+      </template>
+    </ul>
+    <p class$="{{_showIfNoResult(__searchResult.*, __search)}}">
+      [[localize('pg-default.NoMatch')]]
+    </p>
   </template>
 
   <script>
@@ -75,7 +106,14 @@
             });
         }
       }
+
+      __addWord() {
+        console.warn("Not implemented");
+      }
       
+      __clearSearch() {
+        console.warn("Not implemented");
+      }
     }
 
     // Register the x-custom element with the browser
