@@ -134,6 +134,8 @@ OhUtils = function(superClass) {
     }
     
     _showIfNoResult(arrayStar, search) {
+      if(!arrayStar || !arrayStar.base)
+        return '';
       return arrayStar.base.length>0 || this.isEmpty(search) ? "hidden" : "";
     }
     
