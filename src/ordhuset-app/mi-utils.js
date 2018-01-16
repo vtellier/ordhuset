@@ -1,6 +1,7 @@
 
 
 let instances = [];
+let synchronizing = { user: false };
 
 /*global OhUtils*/
 OhUtils = function(superClass) {
@@ -26,8 +27,6 @@ OhUtils = function(superClass) {
     __userObserver(newValue, oldValue) {
       if(newValue === oldValue)
         return;
-        
-      console.log("userObserver called from instance", this.__instanceIndex, newValue);
       
       // synchronize with the other instances
       this.__synchronize('user', newValue);
@@ -37,11 +36,17 @@ OhUtils = function(superClass) {
      * Synchronizes a property among all other instances.
      */
     __synchronize(property, newValue) {
+      if(synchronizing[property])
+        return;
+      console.log(`Instance ${this.__instanceIndex} is synchronizing ${property}`);
+      synchronizing[property] = true;
       for(var i=0; i<instances.length; i++) {
         if(i != this.__instanceIndex) {
           instances[i][property] = newValue;
         }
       }
+      synchronizing[property] = false;
+      console.log(`Instance ${this.__instanceIndex} is DONE with synchronizing ${property}`);
     }
 
     /*static get observers() {

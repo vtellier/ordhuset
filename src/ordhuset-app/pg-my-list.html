@@ -57,7 +57,7 @@
         <template is="dom-repeat" items="{{word.defs}}" as="def" index-as="defIndex">
           <li lang="{{def.lang}}">
             <iron-icon icon="svg-flag-icons:{{def.lang}}"></iron-icon>
-            <paper-button on-tap="__addWord">
+            <paper-button on-tap="__addWord" word$="[[word.$key]]" def-index$="[[defIndex]]">
               <iron-icon icon="icons:add"></iron-icon>
               <b>{{_prettifyWord(word.$key, def)}}</b>
             </paper-button>
@@ -99,11 +99,12 @@
 
         // Create the list the first time
         if(!entity.hasOwnProperty('list')) {
-          var path = `/users/${this.user.uid}/list`;
-          console.log(path);
-          this.$.userDocument.saveValue(path, [])
+          entity.list = [];
+          this.set('__userEntity', entity);
+          var path = `/users/${this.user.uid}`;
+          this.$.userDocument.saveValue('/users/', this.user.uid)
             .then(()=>{
-              console.log(`User successfully saved`);
+              console.log(`Instance ${this.__instanceIndex}: user successfully saved`);
             })
             .catch((e)=>{
               console.error(`Unable to save user`, e);
@@ -111,8 +112,11 @@
         }
       }
 
-      __addWord() {
-        console.warn("Not implemented");
+      __addWord(e) {
+        var word = e.currentTarget.attributes['word'].value;
+        var defIndex = e.currentTarget.attributes['def-index'].value;
+        this.set('__userEntity.list.'+word, defIndex);
+        console.warn(`Word=${word}, index=${defIndex}`);
       }
       
       __clearSearch() {
