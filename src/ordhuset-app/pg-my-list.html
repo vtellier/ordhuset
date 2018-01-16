@@ -27,7 +27,7 @@
     
     <firebase-document
       id="userDocument"
-      path="/users/{{user.uid}}"
+      path="[[__computeUserPath(user.uid)]]"
       data="{{__userEntity}}">
     </firebase-document>
 
@@ -89,33 +89,30 @@
 
       static get observers() {
         return [
-          '__observerUserEntity(__userEntity, user)'
+          //'__observerUserEntity(__userEntity, user)'
           ];
       }
 
-      __observerUserEntity(entity, user) {
-        if(!entity || !user)
-          return;
-
-        // Create the list the first time
-        if(!entity.hasOwnProperty('list')) {
-          entity.list = [];
-          this.set('__userEntity', entity);
-          var path = `/users/${this.user.uid}`;
-          this.$.userDocument.saveValue('/users/', this.user.uid)
-            .then(()=>{
-              console.log(`Instance ${this.__instanceIndex}: user successfully saved`);
-            })
-            .catch((e)=>{
-              console.error(`Unable to save user`, e);
-            });
-        }
+      __computeUserPath(uid) {
+        if(!uid) return;
+        return `/users/${uid}`;
       }
 
       __addWord(e) {
         var word = e.currentTarget.attributes['word'].value;
         var defIndex = e.currentTarget.attributes['def-index'].value;
+        if(!this.__userEntity.hasOwnProperty('list')) {
+          console.log('No word list for this user!');
+          this.set('__userEntity.list', {});
+        }
         this.set('__userEntity.list.'+word, defIndex);
+        this.$.userDocument.saveValue('/users/', this.user.uid)
+          .then(()=>{
+            console.log(`Instance ${this.__instanceIndex}: user successfully saved`);
+          })
+          .catch((e)=>{
+            console.error(`Unable to save user`, e);
+          });
         console.warn(`Word=${word}, index=${defIndex}`);
       }
       
