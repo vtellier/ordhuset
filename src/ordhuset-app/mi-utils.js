@@ -130,6 +130,12 @@ OhUtils = function(superClass) {
       return show ? '' : 'hidden';
     }
 
+    _objectKeys(obj) {
+      if(obj === undefined || obj === null)
+        return [];
+      return Object.keys(obj);
+    }
+
     _computeEndAt(startAt) {
       return startAt + String.fromCharCode(-1);
     }

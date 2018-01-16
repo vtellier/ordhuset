@@ -33,7 +33,7 @@
 
     <h1>[[localize('app-shell.menu.MyList')]]</h1>
     Under construction.
-    <template is="dom-repeat" items="{{__userEntity.list}}">
+    <template is="dom-repeat" items="{{_objectKeys(__userEntity.list)}}">
       [[stringify(item)]]
     </template>
 
