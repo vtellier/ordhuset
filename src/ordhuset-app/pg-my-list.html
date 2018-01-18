@@ -30,12 +30,14 @@
       path="[[__computeUserPath(user.uid)]]"
       data="{{__userEntity}}">
     </firebase-document>
+    <firebase-document id="userWord"></firebase-document>
 
     <h1>[[localize('app-shell.menu.MyList')]]</h1>
-    Under construction.
-    <template is="dom-repeat" items="{{_objectKeys(__userEntity.list)}}">
-      [[stringify(item)]]
-    </template>
+    <ul class$="{{_showIfResults(__userWordList.*)}} no-chip">
+      <template is="dom-repeat" items="{{__userWordList}}">
+        <li>[[stringify(item)]]</li>
+      </template>
+    </ul>
 
     <paper-input label="[[localize('pg-my-list.AddAWord')]]" value="{{__search}}">
       <iron-icon icon="icons:search" slot="prefix"></iron-icon>
@@ -83,6 +85,11 @@
           },
           route: {
             type: Object
+          },
+          __userWordList: {
+            type: Array,
+            value: [],
+            computed: '_objectKeys(__userEntity.list)'
           }
         }
       }
@@ -91,6 +98,15 @@
         return [
           //'__observerUserEntity(__userEntity, user)'
           ];
+      }
+
+      __userListToArray(obj) {
+        if(!obj) return [];
+        return Object.keys(obj).reduce((acc,word) => {
+          var item = this.__userEntity.list[word];
+          //if(!(item instanceof Array)
+          //    item = [ item ];
+        }, []);
       }
 
       __computeUserPath(uid) {
@@ -105,9 +121,18 @@
           console.log('No word list for this user!');
           this.set('__userEntity.list', {});
         }
-        this.set('__userEntity.list.'+word, defIndex);
-        this.$.userDocument.saveValue('/users/', this.user.uid)
-          .then(()=>{
+        if(!this.__userEntity.list.hasOwnProperty(word)) {
+          console.log(`The word ${word} is new for this uses`);
+          this.set('__userEntity.list.'+word, []);
+        }
+        this.push('__userEntity.list.'+word, defIndex);
+        
+        this.$.userWord.data = (new Date()).toISOString();
+
+        Promise.all([
+            this.$.userDocument.saveValue('/users/', this.user.uid),
+            this.$.userWord.saveValue(`/dictionary/${word}/defs/${defIndex}/users`, this.user.uid)
+        ]).then(()=>{
             console.log(`Instance ${this.__instanceIndex}: user successfully saved`);
           })
           .catch((e)=>{
