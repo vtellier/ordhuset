@@ -32,11 +32,25 @@
     </firebase-document>
     <firebase-document id="userWord"></firebase-document>
 
+    <firebase-query
+      id="search-user-list"
+      path="/users/[[user.uid]]/list"
+      data="{{__userListResult}}">
+    </firebase-query>
+
     <h1>[[localize('app-shell.menu.MyList')]]</h1>
-    <ul class$="{{_showIfResults(__userWordList.*)}} no-chip">
-      <template is="dom-repeat" items="{{__userWordList}}" as="word">
-        <li>[[stringify(word)]]
-          <paper-icon-button icon="icons:delete" on-tap="__removeWord" def-index="0" word$="[[word]]"></paper-icon-button></li>
+    <ul class$="{{_showIfResults(__userListResult.*)}} no-chip">
+      <template is="dom-repeat" items="{{__userListResult}}" as="word">
+        <template is="dom-repeat" items="{{word}}" as="defIndex">
+          <li>[[word.$key]]
+            <paper-icon-button
+              icon="icons:delete"
+              on-tap="__removeWord"
+              def-index$="[[defIndex]]"
+              word$="[[word.$key]]">
+            </paper-icon-button>
+          </li>
+        </template>
       </template>
     </ul>
 
@@ -145,7 +159,6 @@
       __removeWord(e) {
         var word = e.currentTarget.attributes['word'].value;
         var defIndex = e.currentTarget.attributes['def-index'].value;
-        console.log(`TOTO remove ${word} away from the user's list`);
 
         this.set(`__userEntity.list.${word}`, null);
         //this.$.userWord.data = undefined;
