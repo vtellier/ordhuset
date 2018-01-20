@@ -14,9 +14,6 @@ OhUtils = function(superClass) {
 
     static get properties() {
       return {
-        /*bar: {
-          type: Object
-        }*/
         user: {
           type: Object,
           observer: '__userObserver'
@@ -38,7 +35,7 @@ OhUtils = function(superClass) {
     __synchronize(property, newValue) {
       if(synchronizing[property])
         return;
-      console.log(`Instance ${this.__instanceIndex} is synchronizing ${property}`);
+//      console.log(`Instance ${this.__instanceIndex} is synchronizing ${property}`);
       synchronizing[property] = true;
       for(var i=0; i<instances.length; i++) {
         if(i != this.__instanceIndex) {
@@ -46,13 +43,8 @@ OhUtils = function(superClass) {
         }
       }
       synchronizing[property] = false;
-      console.log(`Instance ${this.__instanceIndex} is DONE with synchronizing ${property}`);
+//      console.log(`Instance ${this.__instanceIndex} is DONE with synchronizing ${property}`);
     }
-
-    /*static get observers() {
-      return [ '_barChanged(bar.*)' ];
-    }
-    _barChanged(bar) { ... }*/
 
     // Returns true if all arguments are empty or undefined
     isEmpty() {
@@ -121,12 +113,10 @@ OhUtils = function(superClass) {
     }
 
     hideClass(hide) {
-      console.log(`hidding = ${hide}`);
       return hide ? 'hidden' : '';
     }
     
     showClass(show) {
-      console.log(`showing = ${show}`);
       return show ? '' : 'hidden';
     }
 

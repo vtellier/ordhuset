@@ -55,7 +55,7 @@
       <ul class="{{_showIfNotEmpty(__wordEntity.translations)}}">
         <template is="dom-repeat" items="{{__translationsToArray(__wordEntity.translations)}}" as="trans">
           <li>
-            <template is="dom-repeat" items="{{trans.def-index}}" as="def">
+            <template is="dom-repeat" items="{{trans.defIndex}}" as="def">
               <a href="/word/{{trans.word}}/{{def}}">
                 <oh-definition word="{{trans.word}}" def-index="{{def}}" show icon-lang></oh-definition>
               </a>
@@ -303,7 +303,7 @@
         if(this.isEmpty(transObject))
           return [];
         return Object.keys(transObject).map(function(current) {
-          return {"word": current, "def-index":transObject[current]};
+          return {"word": current, "defIndex":transObject[current]};
         });
       }
       

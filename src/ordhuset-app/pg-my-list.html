@@ -42,7 +42,9 @@
     <ul class$="{{_showIfResults(__userListResult.*)}} no-chip">
       <template is="dom-repeat" items="{{__userListResult}}" as="word">
         <template is="dom-repeat" items="{{word}}" as="defIndex">
-          <li>[[word.$key]]
+          <li>
+            <oh-definition word="[[word.$key]]" def-index="[[defIndex]]" show icon-lang>
+            </oh-definition>
             <paper-icon-button
               icon="icons:delete"
               on-tap="__removeWord"
