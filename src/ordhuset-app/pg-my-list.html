@@ -43,8 +43,10 @@
       <template is="dom-repeat" items="{{__userListResult}}" as="word">
         <template is="dom-repeat" items="{{word}}" as="defIndex">
           <li>
-            <oh-definition word="[[word.$key]]" def-index="[[defIndex]]" show icon-lang>
-            </oh-definition>
+            <a href="/word/{{word.$key}}/[[defIndex]]">
+              <oh-definition word="[[word.$key]]" def-index="[[defIndex]]" show icon-lang>
+              </oh-definition>
+            </a>
             <paper-icon-button
               icon="icons:delete"
               on-tap="__removeWord"
